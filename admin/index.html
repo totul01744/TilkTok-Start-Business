@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — Creator2Business</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<style>
+body { font-size:14px; }
+.admin-layout { display:flex; min-height:100vh; }
+.sidebar {
+  width:240px; background:var(--card); border-right:1px solid var(--border);
+  position:fixed; top:0; left:0; height:100vh; z-index:50;
+  display:flex; flex-direction:column; overflow-y:auto;
+  transition:transform 0.3s;
+}
+.sidebar-logo { padding:20px 18px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
+.sidebar-logo .logo-icon { width:32px; height:32px; font-size:0.95rem; }
+.sidebar-logo-text { font-family:var(--font-head); font-weight:800; font-size:0.9rem; color:#fff; line-height:1.2; }
+.sidebar-logo-text small { display:block; color:var(--accent); font-size:0.68rem; letter-spacing:1px; text-transform:uppercase; }
+.sidebar-section { padding:8px 10px 4px; font-size:0.65rem; color:var(--text2); text-transform:uppercase; letter-spacing:1px; font-weight:600; }
+.sidebar-link {
+  display:flex; align-items:center; gap:10px; padding:9px 14px;
+  color:var(--text2); border-radius:var(--radius-xs); margin:2px 8px;
+  cursor:pointer; font-size:0.85rem; font-weight:500; transition:all 0.2s;
+  border:none; background:none; width:calc(100% - 16px); text-align:left;
+}
+.sidebar-link:hover { color:var(--text); background:var(--card2); }
+.sidebar-link.active { color:#fff; background:rgba(108,99,255,0.15); }
+.sidebar-link .s-icon { font-size:0.95rem; width:18px; text-align:center; }
+.sidebar-link .s-badge { margin-left:auto; background:var(--accent2); color:#fff; border-radius:10px; font-size:0.65rem; padding:1px 7px; font-weight:700; }
+.main-content { margin-left:240px; flex:1; padding:24px; min-height:100vh; }
+.admin-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; }
+.page-title { font-family:var(--font-head); font-size:1.3rem; font-weight:800; color:#fff; }
+.page-subtitle { font-size:0.82rem; color:var(--text2); margin-top:2px; }
+.stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin-bottom:24px; }
+.stat-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:18px; }
+.stat-num { font-family:var(--font-head); font-size:2rem; font-weight:800; color:#fff; }
+.stat-label { font-size:0.75rem; color:var(--text2); margin-top:3px; }
+.stat-change { font-size:0.72rem; margin-top:5px; }
+.table-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:20px; }
+.table-header { padding:14px 18px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; background:var(--card2); }
+.table-title { font-weight:700; color:#fff; font-size:0.9rem; }
+table { width:100%; border-collapse:collapse; }
+th { text-align:left; padding:10px 16px; font-size:0.72rem; color:var(--text2); text-transform:uppercase; letter-spacing:0.5px; font-weight:600; border-bottom:1px solid var(--border); }
+td { padding:12px 16px; font-size:0.83rem; color:var(--text); border-bottom:1px solid rgba(26,37,64,0.5); vertical-align:top; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:var(--card2); }
+.status-pill { display:inline-flex; align-items:center; gap:4px; border-radius:20px; padding:3px 10px; font-size:0.72rem; font-weight:600; }
+.status-pending { background:rgba(245,197,24,0.12); color:var(--gold); }
+.status-replied { background:rgba(67,233,123,0.12); color:var(--accent3); }
+.status-new { background:rgba(108,99,255,0.12); color:#a78bfa; }
+.status-closed { background:rgba(136,146,176,0.12); color:var(--text2); }
+.action-btn { background:none; border:1px solid var(--border); border-radius:6px; padding:4px 10px; cursor:pointer; font-size:0.72rem; color:var(--text2); font-family:var(--font); transition:all 0.2s; }
+.action-btn:hover { border-color:var(--accent); color:var(--accent); }
+.login-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; }
+.login-box { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:36px; width:100%; max-width:360px; }
+.empty-state { text-align:center; padding:40px 20px; }
+.empty-icon { font-size:2.5rem; margin-bottom:10px; }
+.settings-section { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:16px; }
+.settings-section h3 { margin-bottom:16px; font-size:0.95rem; }
+.toggle-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); }
+.toggle-row:last-child { border-bottom:none; }
+.toggle-row label { font-size:0.86rem; color:var(--text2); }
+.toggle-switch { width:36px; height:20px; background:var(--border2); border-radius:10px; position:relative; cursor:pointer; transition:background 0.2s; border:none; }
+.toggle-switch.on { background:var(--accent); }
+.toggle-switch::after { content:''; position:absolute; top:2px; left:2px; width:16px; height:16px; background:#fff; border-radius:50%; transition:left 0.2s; }
+.toggle-switch.on::after { left:18px; }
+.detail-modal { background:var(--card); border:1px solid var(--border2); border-radius:var(--radius); padding:24px; max-width:600px; width:100%; max-height:85vh; overflow-y:auto; }
+@media(max-width:900px) {
+  .sidebar { transform:translateX(-100%); }
+  .sidebar.open { transform:translateX(0); }
+  .main-content { margin-left:0; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-box">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div class="logo-icon" style="width:48px;height:48px;font-size:1.3rem;margin:0 auto 10px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:14px;display:flex;align-items:center;justify-content:center;">🚀</div>
+      <div style="font-family:var(--font-head);font-weight:800;font-size:1.1rem;color:#fff;">Admin Panel</div>
+      <div style="font-size:0.78rem;color:var(--text2);">Creator2Business</div>
+    </div>
+    <div class="form-group mb-3">
+      <label class="form-label">Admin Password</label>
+      <input type="password" class="form-control" id="adminPass" placeholder="পাসওয়ার্ড দিন" onkeydown="if(event.key==='Enter')adminLogin()">
+    </div>
+    <div class="hidden mb-3" id="loginError"><div class="alert alert-error">❌ ভুল পাসওয়ার্ড</div></div>
+    <button class="btn btn-primary btn-full" onclick="adminLogin()">🔐 লগইন করুন</button>
+  </div>
+</div>
+
+<!-- ADMIN APP -->
+<div id="adminApp" class="admin-layout hidden">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon" style="width:32px;height:32px;font-size:0.9rem;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:9px;display:flex;align-items:center;justify-content:center;">🚀</div>
+      <div class="sidebar-logo-text">Creator2Biz<small>Admin Panel</small></div>
+    </div>
+
+    <div style="padding:10px;">
+      <div class="sidebar-section">ড্যাশবোর্ড</div>
+      <button class="sidebar-link active" data-page="dashboard" onclick="showPage('dashboard',this)"><span class="s-icon">📊</span> ওভারভিউ</button>
+
+      <div class="sidebar-section">ইউজার ম্যানেজমেন্ট</div>
+      <button class="sidebar-link" data-page="help" onclick="showPage('help',this)"><span class="s-icon">🆘</span> হেল্প রিকোয়েস্ট <span class="s-badge" id="sb-help">0</span></button>
+      <button class="sidebar-link" data-page="agency" onclick="showPage('agency',this)"><span class="s-icon">🏢</span> এজেন্সি ইনকোয়ারি <span class="s-badge" id="sb-agency">0</span></button>
+      <button class="sidebar-link" data-page="users" onclick="showPage('users',this)"><span class="s-icon">👥</span> Pro ইউজার</button>
+
+      <div class="sidebar-section">কন্টেন্ট ম্যানেজমেন্ট</div>
+      <button class="sidebar-link" data-page="settings" onclick="showPage('settings',this)"><span class="s-icon">⚙️</span> সেটিংস</button>
+      <button class="sidebar-link" data-page="analytics" onclick="showPage('analytics',this)"><span class="s-icon">📈</span> অ্যানালিটিক্স</button>
+
+      <div style="position:absolute;bottom:16px;left:10px;right:10px;">
+        <button class="sidebar-link" style="color:var(--accent2);" onclick="adminLogout()"><span class="s-icon">🚪</span> লগআউট</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+    <!-- Dashboard Page -->
+    <div id="page-dashboard">
+      <div class="admin-header">
+        <div><div class="page-title">📊 ড্যাশবোর্ড ওভারভিউ</div><div class="page-subtitle" id="dashDate"></div></div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-sm btn-secondary" onclick="refreshData()">🔄 রিফ্রেশ</button>
+          <a href="../index.html" target="_blank" class="btn btn-sm btn-secondary">🌐 সাইট দেখুন</a>
+        </div>
+      </div>
+
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card"><div class="stat-num" id="s-help">0</div><div class="stat-label">মোট হেল্প রিকোয়েস্ট</div><div class="stat-change" style="color:var(--gold);" id="s-help-pending">০টি পেন্ডিং</div></div>
+        <div class="stat-card"><div class="stat-num" id="s-agency">0</div><div class="stat-label">এজেন্সি ইনকোয়ারি</div><div class="stat-change" style="color:var(--accent3);">সম্ভাব্য ক্লায়েন্ট</div></div>
+        <div class="stat-card"><div class="stat-num" id="s-users">0</div><div class="stat-label">Pro ইউজার</div><div class="stat-change" style="color:var(--accent);">সক্রিয়</div></div>
+        <div class="stat-card"><div class="stat-num" id="s-revenue">৳০</div><div class="stat-label">এই মাসের রেভিনিউ</div><div class="stat-change" style="color:var(--accent3);">আনুমানিক</div></div>
+      </div>
+
+      <!-- Recent Help Requests -->
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">🆘 সাম্প্রতিক হেল্প রিকোয়েস্ট</div>
+          <button class="btn btn-sm btn-secondary" onclick="showPage('help',document.querySelector('[data-page=help]'))">সব দেখুন</button>
+        </div>
+        <div id="recentHelpTable"></div>
+      </div>
+
+      <!-- Recent Inquiries -->
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">🏢 সাম্প্রতিক এজেন্সি ইনকোয়ারি</div>
+          <button class="btn btn-sm btn-secondary" onclick="showPage('agency',document.querySelector('[data-page=agency]'))">সব দেখুন</button>
+        </div>
+        <div id="recentAgencyTable"></div>
+      </div>
+    </div>
+
+    <!-- Help Requests Page -->
+    <div id="page-help" class="hidden">
+      <div class="admin-header">
+        <div><div class="page-title">🆘 হেল্প রিকোয়েস্ট</div><div class="page-subtitle">ইউজারদের সব প্রশ্ন ও সমস্যা</div></div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <select class="form-control" id="helpFilter" onchange="renderHelpTable()" style="width:auto;padding:7px 12px;font-size:0.82rem;">
+            <option value="all">সব</option>
+            <option value="pending">পেন্ডিং</option>
+            <option value="replied">রিপ্লাই দেওয়া</option>
+            <option value="closed">বন্ধ</option>
+          </select>
+          <button class="btn btn-sm btn-secondary" onclick="exportData('help')">⬇️ Export</button>
+        </div>
+      </div>
+      <div class="table-card">
+        <div id="helpTable"></div>
+      </div>
+    </div>
+
+    <!-- Agency Page -->
+    <div id="page-agency" class="hidden">
+      <div class="admin-header">
+        <div><div class="page-title">🏢 এজেন্সি ইনকোয়ারি</div><div class="page-subtitle">সম্ভাব্য ক্লায়েন্টদের তালিকা</div></div>
+        <button class="btn btn-sm btn-secondary" onclick="exportData('agency')">⬇️ Export</button>
+      </div>
+      <div class="table-card">
+        <div id="agencyTable"></div>
+      </div>
+    </div>
+
+    <!-- Users Page -->
+    <div id="page-users" class="hidden">
+      <div class="admin-header">
+        <div><div class="page-title">👥 Pro ইউজার ম্যানেজমেন্ট</div></div>
+        <button class="btn btn-sm btn-primary" onclick="showAddUserModal()">+ নতুন Pro ইউজার</button>
+      </div>
+      <div class="table-card">
+        <div id="usersTable"></div>
+      </div>
+    </div>
+
+    <!-- Analytics Page -->
+    <div id="page-analytics" class="hidden">
+      <div class="admin-header">
+        <div><div class="page-title">📈 অ্যানালিটিক্স</div></div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-num" id="a-total-gen">0</div><div class="stat-label">মোট AI জেনারেশন</div></div>
+        <div class="stat-card"><div class="stat-num" id="a-tools">11</div><div class="stat-label">সক্রিয় টুল</div></div>
+        <div class="stat-card"><div class="stat-num" id="a-conv">0%</div><div class="stat-label">কনভার্সন রেট</div></div>
+      </div>
+      <div class="table-card">
+        <div class="table-header"><div class="table-title">সাম্প্রতিক ইভেন্টস</div></div>
+        <div id="eventsTable"></div>
+      </div>
+    </div>
+
+    <!-- Settings Page -->
+    <div id="page-settings" class="hidden">
+      <div class="admin-header">
+        <div><div class="page-title">⚙️ সেটিংস</div></div>
+        <button class="btn btn-sm btn-primary" onclick="saveSettings()">💾 সেভ করুন</button>
+      </div>
+
+      <div class="settings-section">
+        <h3>🔑 Admin সেটিংস</h3>
+        <div class="form-group mb-3">
+          <label class="form-label">Admin পাসওয়ার্ড পরিবর্তন</label>
+          <input type="password" class="form-control" id="newAdminPass" placeholder="নতুন পাসওয়ার্ড">
+        </div>
+        <button class="btn btn-sm btn-secondary" onclick="changePassword()">পাসওয়ার্ড পরিবর্তন করুন</button>
+      </div>
+
+      <div class="settings-section">
+        <h3>💎 Pro প্ল্যান সেটিংস</h3>
+        <div class="form-group mb-3">
+          <label class="form-label">Pro মূল্য (টাকায়)</label>
+          <input type="number" class="form-control" id="setProPrice" value="499">
+        </div>
+        <div class="form-group mb-3">
+          <label class="form-label">ফ্রি দৈনিক লিমিট</label>
+          <input type="number" class="form-control" id="setFreeLimit" value="3">
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3>📞 যোগাযোগ তথ্য</h3>
+        <div class="form-group mb-3">
+          <label class="form-label">WhatsApp নম্বর</label>
+          <input type="text" class="form-control" id="setWhatsapp" placeholder="+880 1XXX-XXXXXX">
+        </div>
+        <div class="form-group mb-3">
+          <label class="form-label">ইমেইল</label>
+          <input type="email" class="form-control" id="setEmail" placeholder="admin@creator2business.com">
+        </div>
+        <div class="form-group mb-3">
+          <label class="form-label">Facebook পেজ লিংক</label>
+          <input type="text" class="form-control" id="setFacebook" placeholder="https://facebook.com/...">
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3>⚡ ফিচার টগল</h3>
+        <div class="toggle-row"><label>Pro আপগ্রেড বাটন দেখাও</label><button class="toggle-switch on" id="tog-pro" onclick="this.classList.toggle('on')"></button></div>
+        <div class="toggle-row"><label>হেল্প উইজেট দেখাও</label><button class="toggle-switch on" id="tog-help" onclick="this.classList.toggle('on')"></button></div>
+        <div class="toggle-row"><label>এজেন্সি পেজ সক্রিয়</label><button class="toggle-switch on" id="tog-agency" onclick="this.classList.toggle('on')"></button></div>
+        <div class="toggle-row"><label>নতুন রেজিস্ট্রেশন বন্ধ</label><button class="toggle-switch" id="tog-reg" onclick="this.classList.toggle('on')"></button></div>
+      </div>
+
+      <div class="settings-section">
+        <h3>🗑️ ডেটা ম্যানেজমেন্ট</h3>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-sm btn-secondary" onclick="exportAll()">⬇️ সব ডেটা Export</button>
+          <button class="btn btn-sm btn-danger" onclick="clearOldData()">🗑️ পুরনো ডেটা মুছুন</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Detail Modal -->
+<div class="modal-overlay hidden" id="detailModal">
+  <div class="detail-modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 id="detailTitle">বিস্তারিত</h3>
+      <button class="modal-close" onclick="Modal.hide('detailModal')">✕</button>
+    </div>
+    <div id="detailBody"></div>
+  </div>
+</div>
+
+<script src="../assets/js/app.js"></script>
+<script>
+// ===== ADMIN AUTH =====
+const ADMIN_PASS_KEY = 'c2b_admin_pass';
+
+function adminLogin() {
+  const pass = document.getElementById('adminPass').value;
+  const savedPass = localStorage.getItem(ADMIN_PASS_KEY) || 'admin123';
+  if (pass === savedPass) {
+    Store.set('c2b_admin_auth', true);
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('adminApp').classList.remove('hidden');
+    initAdmin();
+  } else {
+    document.getElementById('loginError').classList.remove('hidden');
+  }
+}
+
+function adminLogout() {
+  Store.remove('c2b_admin_auth');
+  Store.set('c2b_admin_auth', false);
+  location.reload();
+}
+
+function changePassword() {
+  const newPass = document.getElementById('newAdminPass').value.trim();
+  if (!newPass || newPass.length < 6) { Toast.error('পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে'); return; }
+  localStorage.setItem(ADMIN_PASS_KEY, newPass);
+  Toast.success('পাসওয়ার্ড পরিবর্তন হয়েছে ✅');
+}
+
+// Check auth on load
+document.addEventListener('DOMContentLoaded', () => {
+  Toast.init();
+  document.getElementById('dashDate').textContent = new Date().toLocaleDateString('bn-BD', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  if (Store.isAdmin()) {
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('adminApp').classList.remove('hidden');
+    initAdmin();
+  }
+  document.getElementById('adminPass').addEventListener('keydown', e => { if(e.key==='Enter') adminLogin(); });
+});
+
+// ===== ADMIN INIT =====
+function initAdmin() {
+  refreshData();
+}
+
+function refreshData() {
+  updateStats();
+  renderRecentHelp();
+  renderRecentAgency();
+  updateSidebarBadges();
+}
+
+function updateStats() {
+  const helps = Store.getHelpRequests();
+  const agencies = Store.getServiceInquiries();
+  const d = Store.getData();
+  const proUsers = (d.proUsers || []);
+  const pending = helps.filter(r => r.status === 'pending').length;
+
+  document.getElementById('s-help').textContent = helps.length;
+  document.getElementById('s-help-pending').textContent = `${pending}টি পেন্ডিং`;
+  document.getElementById('s-agency').textContent = agencies.length;
+  document.getElementById('s-users').textContent = proUsers.length;
+  document.getElementById('s-revenue').textContent = `৳${(proUsers.length * 499).toLocaleString('bn-BD')}`;
+
+  // Analytics
+  const totalEvents = (d.events || []).filter(e => e.event === 'generate').length;
+  document.getElementById('a-total-gen').textContent = totalEvents;
+  const convRate = helps.length > 0 ? Math.round((agencies.length / helps.length) * 100) : 0;
+  document.getElementById('a-conv').textContent = convRate + '%';
+}
+
+function updateSidebarBadges() {
+  const helps = Store.getHelpRequests().filter(r => r.status === 'pending');
+  const agencies = Store.getServiceInquiries().filter(r => r.status === 'new');
+  document.getElementById('sb-help').textContent = helps.length;
+  document.getElementById('sb-agency').textContent = agencies.length;
+}
+
+// ===== PAGE NAVIGATION =====
+function showPage(page, btn) {
+  document.querySelectorAll('[id^="page-"]').forEach(p => p.classList.add('hidden'));
+  document.getElementById('page-' + page).classList.remove('hidden');
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+
+  // Load page data
+  if (page === 'help') renderHelpTable();
+  else if (page === 'agency') renderAgencyTable();
+  else if (page === 'users') renderUsersTable();
+  else if (page === 'analytics') renderAnalytics();
+}
+
+// ===== TABLES =====
+function formatDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('bn-BD') + ' ' + d.toLocaleTimeString('bn-BD', { hour:'2-digit', minute:'2-digit' });
+}
+
+function renderRecentHelp() {
+  const helps = Store.getHelpRequests().slice(0, 5);
+  document.getElementById('recentHelpTable').innerHTML = renderHelpRows(helps, true);
+}
+function renderRecentAgency() {
+  const agencies = Store.getServiceInquiries().slice(0, 5);
+  document.getElementById('recentAgencyTable').innerHTML = renderAgencyRows(agencies, true);
+}
+
+function renderHelpTable() {
+  const filter = document.getElementById('helpFilter')?.value || 'all';
+  let helps = Store.getHelpRequests();
+  if (filter !== 'all') helps = helps.filter(r => r.status === filter);
+  document.getElementById('helpTable').innerHTML = renderHelpRows(helps, false);
+}
+
+function renderHelpRows(helps, compact) {
+  if (!helps.length) return `<div class="empty-state"><div class="empty-icon">📭</div><p class="text-muted">কোনো রিকোয়েস্ট নেই</p></div>`;
+  return `<table><thead><tr>
+    <th>তারিখ</th><th>নাম</th><th>ফোন</th><th>ধরন</th><th>নিশ</th>
+    ${!compact?'<th>বার্তা</th>':''}
+    <th>স্ট্যাটাস</th><th>অ্যাকশন</th>
+  </tr></thead><tbody>
+  ${helps.map(h => `<tr>
+    <td style="white-space:nowrap;">${formatDate(h.date)}</td>
+    <td><strong>${h.name}</strong></td>
+    <td><a href="https://wa.me/${h.phone?.replace(/\D/g,'')}" target="_blank" style="color:var(--accent3);">${h.phone}</a></td>
+    <td><span class="tag tag-purple">${{help:'হেল্প',bug:'বাগ',upgrade:'আপগ্রেড',agency:'এজেন্সি'}[h.type]||h.type}</span></td>
+    <td>${h.niche||'—'}</td>
+    ${!compact?`<td style="max-width:200px;word-break:break-word;font-size:0.8rem;">${h.message?.slice(0,80)}${h.message?.length>80?'...':''}</td>`:''}
+    <td><span class="status-pill status-${h.status}">${{pending:'পেন্ডিং',replied:'রিপ্লাই',closed:'বন্ধ'}[h.status]||h.status}</span></td>
+    <td style="white-space:nowrap;">
+      <button class="action-btn" onclick="viewDetail('help',${h.id})">👁️ দেখুন</button>
+      ${h.status==='pending'?`<button class="action-btn" style="margin-left:4px;" onclick="updateStatus('help',${h.id},'replied')">✅ রিপ্লাই</button>`:''}
+    </td>
+  </tr>`).join('')}
+  </tbody></table>`;
+}
+
+function renderAgencyTable() {
+  const agencies = Store.getServiceInquiries();
+  document.getElementById('agencyTable').innerHTML = renderAgencyRows(agencies, false);
+}
+function renderAgencyRows(agencies, compact) {
+  if (!agencies.length) return `<div class="empty-state"><div class="empty-icon">📭</div><p class="text-muted">কোনো ইনকোয়ারি নেই</p></div>`;
+  return `<table><thead><tr>
+    <th>তারিখ</th><th>নাম</th><th>ফোন</th>
+    ${!compact?'<th>সার্ভিস</th><th>ফলোয়ার</th><th>বার্তা</th>':''}
+    <th>স্ট্যাটাস</th><th>অ্যাকশন</th>
+  </tr></thead><tbody>
+  ${agencies.map(a => `<tr>
+    <td style="white-space:nowrap;">${formatDate(a.date)}</td>
+    <td><strong>${a.name}</strong></td>
+    <td><a href="https://wa.me/${a.phone?.replace(/\D/g,'')}" target="_blank" style="color:var(--accent3);">${a.phone}</a></td>
+    ${!compact?`
+      <td><span class="tag tag-gold">${a.service||'—'}</span></td>
+      <td>${a.followers||'—'}</td>
+      <td style="max-width:180px;font-size:0.8rem;">${a.message?.slice(0,70)}...</td>
+    `:''}
+    <td><span class="status-pill status-${a.status}">${{new:'নতুন',contacted:'যোগাযোগ',closed:'বন্ধ'}[a.status]||a.status}</span></td>
+    <td style="white-space:nowrap;">
+      <button class="action-btn" onclick="viewDetail('agency',${a.id})">👁️ দেখুন</button>
+      ${a.status==='new'?`<button class="action-btn" style="margin-left:4px;" onclick="updateStatus('agency',${a.id},'contacted')">📞 যোগাযোগ করা হয়েছে</button>`:''}
+    </td>
+  </tr>`).join('')}
+  </tbody></table>`;
+}
+
+function renderUsersTable() {
+  const d = Store.getData();
+  const users = d.proUsers || [];
+  document.getElementById('usersTable').innerHTML = users.length
+    ? `<table><thead><tr><th>নাম</th><th>ফোন/ইমেইল</th><th>যোগ দেওয়ার তারিখ</th><th>মেয়াদ শেষ</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead><tbody>
+    ${users.map((u,i) => `<tr>
+      <td>${u.name}</td><td>${u.contact}</td>
+      <td>${formatDate(u.joinDate)}</td><td>${u.expiry||'চলমান'}</td>
+      <td><span class="status-pill status-replied">Pro সক্রিয়</span></td>
+      <td><button class="action-btn" onclick="removeProUser(${i})" style="color:var(--accent2);">✕ সরান</button></td>
+    </tr>`).join('')}
+    </tbody></table>`
+    : `<div class="empty-state"><div class="empty-icon">👤</div><p class="text-muted">কোনো Pro ইউজার নেই</p></div>`;
+}
+
+function renderAnalytics() {
+  const d = Store.getData();
+  const events = (d.events || []).slice(-50).reverse();
+  document.getElementById('eventsTable').innerHTML = events.length
+    ? `<table><thead><tr><th>সময়</th><th>ইভেন্ট</th><th>বিস্তারিত</th></tr></thead><tbody>
+    ${events.map(e => `<tr>
+      <td style="white-space:nowrap;">${formatDate(new Date(e.time).toISOString())}</td>
+      <td><span class="tag tag-purple">${e.event}</span></td>
+      <td style="font-size:0.78rem;color:var(--text2);">${JSON.stringify(e.data)}</td>
+    </tr>`).join('')}
+    </tbody></table>`
+    : `<div class="empty-state"><p class="text-muted">কোনো ইভেন্ট নেই</p></div>`;
+}
+
+// ===== DETAIL MODAL =====
+function viewDetail(type, id) {
+  let item;
+  if (type === 'help') item = Store.getHelpRequests().find(r => r.id === id);
+  else item = Store.getServiceInquiries().find(r => r.id === id);
+  if (!item) return;
+
+  document.getElementById('detailTitle').textContent = type === 'help' ? '🆘 হেল্প রিকোয়েস্ট বিস্তারিত' : '🏢 ইনকোয়ারি বিস্তারিত';
+  document.getElementById('detailBody').innerHTML = `
+    <div style="display:grid;gap:12px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="card" style="padding:12px;"><div class="form-label">নাম</div><div style="color:#fff;font-weight:600;">${item.name}</div></div>
+        <div class="card" style="padding:12px;"><div class="form-label">ফোন</div><div><a href="https://wa.me/${item.phone?.replace(/\D/g,'')}" target="_blank" class="btn btn-sm btn-success">📱 WhatsApp</a></div></div>
+        ${item.email?`<div class="card" style="padding:12px;"><div class="form-label">ইমেইল</div><div style="color:#fff;">${item.email}</div></div>`:''}
+        ${item.niche?`<div class="card" style="padding:12px;"><div class="form-label">নিশ</div><div style="color:#fff;">${item.niche}</div></div>`:''}
+        ${item.service?`<div class="card" style="padding:12px;"><div class="form-label">আগ্রহী সার্ভিস</div><div class="tag tag-gold">${item.service}</div></div>`:''}
+        ${item.followers?`<div class="card" style="padding:12px;"><div class="form-label">ফলোয়ার</div><div style="color:#fff;">${item.followers}</div></div>`:''}
+      </div>
+      <div class="card" style="padding:14px;"><div class="form-label mb-1">বার্তা</div><div style="color:var(--text3);font-size:0.88rem;line-height:1.7;white-space:pre-line;">${item.message}</div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        ${item.status!=='replied'?`<button class="btn btn-sm btn-success" onclick="updateStatus('${type}',${id},'replied');Modal.hide('detailModal');">✅ রিপ্লাই দিয়েছি</button>`:''}
+        ${item.status!=='closed'?`<button class="btn btn-sm btn-secondary" onclick="updateStatus('${type}',${id},'closed');Modal.hide('detailModal');">🔒 বন্ধ করুন</button>`:''}
+        <a href="https://wa.me/${item.phone?.replace(/\D/g,'')}" target="_blank" class="btn btn-sm btn-primary">💬 WhatsApp করুন</a>
+      </div>
+    </div>`;
+  Modal.show('detailModal');
+}
+
+function updateStatus(type, id, status) {
+  if (type === 'help') Store.updateHelpRequest(id, { status });
+  else {
+    const d = Store.getData();
+    const idx = (d.serviceInquiries||[]).findIndex(r => r.id === id);
+    if (idx !== -1) { d.serviceInquiries[idx].status = status; Store.setData(d); }
+  }
+  refreshData();
+  if (type === 'help') renderHelpTable();
+  else renderAgencyTable();
+  Toast.success('স্ট্যাটাস আপডেট হয়েছে ✅');
+}
+
+// ===== PRO USER MANAGEMENT =====
+function showAddUserModal() {
+  const name = prompt('Pro ইউজারের নাম:');
+  if (!name) return;
+  const contact = prompt('ফোন বা ইমেইল:');
+  if (!contact) return;
+  const d = Store.getData();
+  if (!d.proUsers) d.proUsers = [];
+  d.proUsers.push({ name, contact, joinDate: new Date().toISOString(), expiry: null });
+  Store.setData(d);
+  renderUsersTable();
+  updateStats();
+  Toast.success('Pro ইউজার যোগ করা হয়েছে ✅');
+}
+
+function removeProUser(index) {
+  if (!confirm('এই ইউজারকে সরাতে চান?')) return;
+  const d = Store.getData();
+  d.proUsers.splice(index, 1);
+  Store.setData(d);
+  renderUsersTable();
+  updateStats();
+  Toast.success('ইউজার সরানো হয়েছে');
+}
+
+// ===== SETTINGS =====
+function saveSettings() {
+  const d = Store.getData();
+  d.settings = {
+    proPrice: document.getElementById('setProPrice').value,
+    freeLimit: document.getElementById('setFreeLimit').value,
+    whatsapp: document.getElementById('setWhatsapp').value,
+    email: document.getElementById('setEmail').value,
+    facebook: document.getElementById('setFacebook').value,
+  };
+  Store.setData(d);
+  Toast.success('সেটিংস সেভ হয়েছে ✅');
+}
+
+// ===== EXPORT =====
+function exportData(type) {
+  const data = type === 'help' ? Store.getHelpRequests() : Store.getServiceInquiries();
+  downloadJSON(data, `${type}_requests_${Date.now()}.json`);
+  Toast.success('ডেটা ডাউনলোড হচ্ছে...');
+}
+
+function exportAll() {
+  downloadJSON(Store.getData(), `c2b_all_data_${Date.now()}.json`);
+  Toast.success('সব ডেটা ডাউনলোড হচ্ছে...');
+}
+
+function clearOldData() {
+  if (!confirm('৩০ দিনের পুরনো ইভেন্ট মুছে ফেলবেন?')) return;
+  const d = Store.getData();
+  const cutoff = Date.now() - (30 * 24 * 60 * 60 * 1000);
+  d.events = (d.events || []).filter(e => e.time > cutoff);
+  Store.setData(d);
+  Toast.success('পুরনো ডেটা মুছা হয়েছে');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>হেল্প নিন — Creator2Business</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+.help-hero { padding:60px 0 40px; text-align:center; }
+.help-layout { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.help-type-btn { background:var(--card); border:1.5px solid var(--border); border-radius:var(--radius); padding:20px; cursor:pointer; text-align:center; transition:all 0.22s; width:100%; }
+.help-type-btn:hover, .help-type-btn.active { border-color:var(--accent); background:rgba(108,99,255,0.08); }
+.help-type-btn .ht-icon { font-size:1.8rem; margin-bottom:8px; display:block; }
+.help-type-btn h3 { color:#fff; font-size:0.95rem; margin-bottom:4px; }
+.help-type-btn p { font-size:0.8rem; color:var(--text2); }
+.form-section { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:28px; }
+.form-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.priority-badge { display:inline-flex; align-items:center; gap:4px; background:rgba(245,197,24,0.1); border:1px solid rgba(245,197,24,0.3); color:var(--gold); padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:600; }
+.status-tracker { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:20px; margin-top:20px; }
+.faq-item { border-bottom:1px solid var(--border); padding:16px 0; cursor:pointer; }
+.faq-item:last-child { border-bottom:none; }
+.faq-q { display:flex; justify-content:space-between; align-items:center; color:#fff; font-weight:600; font-size:0.9rem; }
+.faq-a { font-size:0.85rem; color:var(--text2); margin-top:10px; display:none; line-height:1.7; }
+.faq-item.open .faq-a { display:block; }
+.faq-item.open .faq-arrow { transform:rotate(180deg); }
+.faq-arrow { transition:transform 0.2s; color:var(--text2); }
+@media(max-width:768px) { .help-layout { grid-template-columns:1fr; } .form-grid-2 { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="logo"><div class="logo-icon">🚀</div><span class="logo-text">Creator<span>2</span>Business</span></a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" class="nav-link">🛠️ টুলস</a>
+      <a href="agency.html" class="nav-link">🏢 এজেন্সি</a>
+      <a href="help.html" class="nav-link active">💬 হেল্প নিন</a>
+    </nav>
+    <button class="hamburger" id="hamburger">☰</button>
+  </div>
+</header>
+
+<section class="help-hero">
+  <div class="container">
+    <h1>কিভাবে সাহায্য করতে পারি? 👋</h1>
+    <p class="text-muted" style="max-width:480px;margin:12px auto;">টুল ব্যবহারে সমস্যা হচ্ছে? কন্টেন্ট নিয়ে কনফিউজড? বা প্রফেশনাল সার্ভিস দরকার?</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="container">
+
+    <!-- Request Type -->
+    <div style="margin-bottom:24px;">
+      <div style="font-size:0.8rem;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">আপনার চাহিদা বেছে নিন:</div>
+      <div class="help-layout">
+        <button class="help-type-btn active" id="type-help" onclick="selectType('help')">
+          <span class="ht-icon">🆘</span>
+          <h3>টুল ও কন্টেন্ট হেল্প</h3>
+          <p>টুল ব্যবহার বুঝতে সমস্যা, কন্টেন্ট কৌশল বা যেকোনো প্রশ্ন</p>
+        </button>
+        <button class="help-type-btn" id="type-agency" onclick="selectType('agency')">
+          <span class="ht-icon">🏢</span>
+          <h3>এজেন্সি সার্ভিস</h3>
+          <p>প্রফেশনাল গাইডেন্স, মেন্টরশিপ বা সম্পূর্ণ বিজনেস সেটআপ</p>
+        </button>
+        <button class="help-type-btn" id="type-upgrade" onclick="selectType('upgrade')">
+          <span class="ht-icon">🚀</span>
+          <h3>Pro আপগ্রেড</h3>
+          <p>আনলিমিটেড AI জেনারেশন ও সব ফিচার আনলক করুন</p>
+        </button>
+        <button class="help-type-btn" id="type-bug" onclick="selectType('bug')">
+          <span class="ht-icon">🐛</span>
+          <h3>বাগ রিপোর্ট</h3>
+          <p>কোনো ফিচার কাজ করছে না বা ভুল আউটপুট আসছে</p>
+        </button>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <div class="form-section" id="helpForm">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+        <div style="width:4px;height:22px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;"></div>
+        <h2 style="font-size:1.1rem;" id="formTitle">টুল ও কন্টেন্ট হেল্প রিকোয়েস্ট</h2>
+        <span class="priority-badge">⚡ ২৪ ঘণ্টায় রিপ্লাই</span>
+      </div>
+
+      <div class="form-grid-2 mb-3">
+        <div class="form-group">
+          <label class="form-label">আপনার নাম *</label>
+          <input type="text" class="form-control" id="helpName" placeholder="আপনার পুরো নাম">
+        </div>
+        <div class="form-group">
+          <label class="form-label">WhatsApp / ফোন *</label>
+          <input type="tel" class="form-control" id="helpPhone" placeholder="+880 1XXX-XXXXXX">
+        </div>
+        <div class="form-group">
+          <label class="form-label">ইমেইল</label>
+          <input type="email" class="form-control" id="helpEmail" placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">আপনার নিশ</label>
+          <input type="text" class="form-control" id="helpNiche" placeholder="যেমন: ফিটনেস, রান্না, টেক">
+        </div>
+      </div>
+
+      <div id="agencyFields" class="hidden">
+        <div class="form-grid-2 mb-3">
+          <div class="form-group">
+            <label class="form-label">আগ্রহী সার্ভিস</label>
+            <select class="form-control" id="helpService">
+              <option value="">বেছে নিন...</option>
+              <option value="content-strategy">Content Strategy (৳৩,৯৯৯/মাস)</option>
+              <option value="creator-to-business">Creator to Business (৳৯,৯৯৯)</option>
+              <option value="course-launch">Course Launch (৳১৪,৯৯৯)</option>
+              <option value="social-growth">Social Media Growth (৳৪,৯৯৯/মাস)</option>
+              <option value="freelance">Freelance Setup (৳৫,৯৯৯)</option>
+              <option value="mentorship">১-এর-১ মেন্টরশিপ (৳৭,৯৯৯/মাস)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">বর্তমান ফলোয়ার সংখ্যা</label>
+            <input type="text" class="form-control" id="helpFollowers" placeholder="যেমন: ৫০০০">
+          </div>
+        </div>
+      </div>
+
+      <div id="upgradeFields" class="hidden">
+        <div class="form-group mb-3">
+          <label class="form-label">পেমেন্ট পছন্দ</label>
+          <select class="form-control" id="helpPayment">
+            <option value="bkash">bKash</option>
+            <option value="nagad">Nagad</option>
+            <option value="card">Credit/Debit Card</option>
+            <option value="bank">Bank Transfer</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group mb-3">
+        <label class="form-label">আপনার সমস্যা বা প্রশ্ন *</label>
+        <textarea class="form-control" id="helpMessage" rows="5" placeholder="বিস্তারিত লিখুন — যত বেশি তথ্য দেবেন, তত ভালো সাহায্য পাবেন..."></textarea>
+      </div>
+
+      <div class="form-group mb-3">
+        <label class="form-label">আগে কন্টেন্ট বানানোর অভিজ্ঞতা আছে?</label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.88rem;">
+            <input type="radio" name="experience" value="none"> না, একদম নতুন
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.88rem;">
+            <input type="radio" name="experience" value="some"> কিছুদিন করছি
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.88rem;">
+            <input type="radio" name="experience" value="experienced"> ১+ বছর ধরে
+          </label>
+        </div>
+      </div>
+
+      <div id="formStatus" class="hidden mb-3"></div>
+
+      <button class="btn btn-primary btn-full btn-lg" onclick="submitHelp()">
+        📨 রিকোয়েস্ট পাঠান
+      </button>
+      <div style="text-align:center;margin-top:10px;font-size:0.78rem;color:var(--text2);">
+        আমরা ২৪ ঘণ্টার মধ্যে WhatsApp বা ইমেইলে যোগাযোগ করব
+      </div>
+    </div>
+
+    <!-- Success Message (hidden by default) -->
+    <div class="hidden" id="successMsg" style="text-align:center;padding:40px 20px;">
+      <div style="font-size:3rem;margin-bottom:16px;">✅</div>
+      <h2 style="margin-bottom:8px;">রিকোয়েস্ট পাঠানো হয়েছে!</h2>
+      <p class="text-muted" style="margin-bottom:24px;">আমরা শীঘ্রই আপনার সাথে WhatsApp বা ইমেইলে যোগাযোগ করব।</p>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px;max-width:400px;margin:0 auto 24px;">
+        <div style="font-size:0.85rem;color:var(--text2);">আপনার টিকেট নম্বর</div>
+        <div id="ticketNum" style="font-family:var(--font-head);font-size:1.4rem;font-weight:800;color:var(--accent);margin-top:4px;"></div>
+      </div>
+      <a href="index.html" class="btn btn-primary">🛠️ টুলস ব্যবহার করুন</a>
+    </div>
+
+    <!-- FAQ -->
+    <div style="margin-top:48px;">
+      <h2 style="margin-bottom:20px;">সচরাচর জিজ্ঞাসা</h2>
+      <div id="faqList">
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>API Key কোথায় পাব?</span><span class="faq-arrow">▼</span>
+          </div>
+          <div class="faq-a">console.anthropic.com এ গিয়ে ফ্রি একাউন্ট খুলুন। প্রথমে কিছু ফ্রি ক্রেডিট পাবেন। Settings → API Key → Create Key করুন। তারপর আমাদের টুলের Settings এ পেস্ট করুন।</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>ফ্রি প্ল্যানে কতগুলো জেনারেশন পাব?</span><span class="faq-arrow">▼</span>
+          </div>
+          <div class="faq-a">ফ্রি প্ল্যানে প্রতিদিন ৩টি AI জেনারেশন পাবেন। প্রতি রাত ১২টার পর রিসেট হবে। Pro প্ল্যান নিলে আনলিমিটেড।</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>Pro প্ল্যান কিভাবে কিনব?</span><span class="faq-arrow">▼</span>
+          </div>
+          <div class="faq-a">হেল্প ফর্মে "Pro আপগ্রেড" সিলেক্ট করে রিকোয়েস্ট পাঠান। আমরা বিকাশ/নগদ/কার্ড পেমেন্ট লিংক পাঠাব। পেমেন্টের পর ২৪ ঘণ্টার মধ্যে আপনার অ্যাকাউন্ট আপগ্রেড হবে।</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>আমার ডেটা কি নিরাপদ?</span><span class="faq-arrow">▼</span>
+          </div>
+          <div class="faq-a">হ্যাঁ। আপনার API Key শুধু আপনার ব্রাউজারে সেভ থাকে, আমাদের সার্ভারে নয়। কন্টেন্ট জেনারেশন সরাসরি Anthropic API-এ যায়।</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>এজেন্সি সার্ভিসে কতদিনে ফলাফল পাব?</span><span class="faq-arrow">▼</span>
+          </div>
+          <div class="faq-a">সার্ভিসের ধরন অনুযায়ী ভিন্ন। Content Strategy তে ২-৪ সপ্তাহে উন্নতি দেখা যায়। Creator to Business সেটআপ ২-৩ মাসে প্রথম আয় শুরু হয়। গড়ে আমাদের ক্লায়েন্টরা ৩ মাসে উল্লেখযোগ্য পরিবর্তন দেখতে পান।</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script src="assets/js/app.js"></script>
+<script>
+let selectedType = 'help';
+
+// Read URL params
+const urlParams = new URLSearchParams(window.location.search);
+const urlType = urlParams.get('type');
+const urlService = urlParams.get('service');
+if (urlType) selectType(urlType);
+if (urlService) {
+  const el = document.getElementById('helpService');
+  if (el) el.value = urlService;
+}
+
+function selectType(type) {
+  selectedType = type;
+  ['help','agency','upgrade','bug'].forEach(t => {
+    document.getElementById('type-'+t)?.classList.remove('active');
+  });
+  document.getElementById('type-'+type)?.classList.add('active');
+
+  const agencyFields = document.getElementById('agencyFields');
+  const upgradeFields = document.getElementById('upgradeFields');
+  agencyFields.classList.add('hidden');
+  upgradeFields.classList.add('hidden');
+
+  const titles = {
+    help: 'টুল ও কন্টেন্ট হেল্প রিকোয়েস্ট',
+    agency: 'এজেন্সি সার্ভিস ইনকোয়ারি',
+    upgrade: 'Pro আপগ্রেড রিকোয়েস্ট',
+    bug: 'বাগ রিপোর্ট',
+  };
+  document.getElementById('formTitle').textContent = titles[type] || '';
+
+  const placeholders = {
+    help: 'টুল ব্যবহারে কী সমস্যা হচ্ছে? বিস্তারিত লিখুন...',
+    agency: 'আপনার বর্তমান অবস্থা ও লক্ষ্য সম্পর্কে বলুন...',
+    upgrade: 'কোনো প্রশ্ন থাকলে লিখুন বা শুধু পাঠান...',
+    bug: 'কোন ফিচারে সমস্যা হচ্ছে? কী করলে সমস্যাটা হয়?',
+  };
+  document.getElementById('helpMessage').placeholder = placeholders[type] || '';
+
+  if (type === 'agency') agencyFields.classList.remove('hidden');
+  if (type === 'upgrade') upgradeFields.classList.remove('hidden');
+}
+
+function submitHelp() {
+  const name = document.getElementById('helpName').value.trim();
+  const phone = document.getElementById('helpPhone').value.trim();
+  const message = document.getElementById('helpMessage').value.trim();
+
+  if (!name || !phone || !message) {
+    const status = document.getElementById('formStatus');
+    status.className = 'alert alert-error mb-3';
+    status.textContent = '⚠️ নাম, ফোন এবং বার্তা অবশ্যই দিতে হবে।';
+    status.classList.remove('hidden');
+    return;
+  }
+
+  const req = {
+    type: selectedType,
+    name,
+    phone,
+    email: document.getElementById('helpEmail').value.trim(),
+    niche: document.getElementById('helpNiche').value.trim(),
+    service: document.getElementById('helpService')?.value || '',
+    message,
+    experience: document.querySelector('input[name="experience"]:checked')?.value || 'unknown',
+  };
+
+  if (selectedType === 'agency') {
+    Store.addServiceInquiry(req);
+  } else {
+    Store.addHelpRequest(req);
+  }
+  Store.logEvent('help_request', { type: selectedType });
+
+  document.getElementById('helpForm').classList.add('hidden');
+  document.getElementById('successMsg').classList.remove('hidden');
+
+  const ticketId = 'C2B-' + Date.now().toString().slice(-6);
+  document.getElementById('ticketNum').textContent = ticketId;
+
+  Toast.success('রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে!');
+}
+
+function toggleFaq(el) {
+  const item = el.closest('.faq-item');
+  item.classList.toggle('open');
+}
+
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('mainNav').classList.toggle('open');
+});
+</script>
+</body>
+</html>
