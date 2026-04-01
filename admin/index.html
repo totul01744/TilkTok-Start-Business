@@ -1,594 +1,571 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel — Creator2Business</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admin — Creator2Business</title>
 <link rel="stylesheet" href="../assets/css/style.css">
 <style>
-body { font-size:14px; }
-.admin-layout { display:flex; min-height:100vh; }
-.sidebar {
-  width:240px; background:var(--card); border-right:1px solid var(--border);
-  position:fixed; top:0; left:0; height:100vh; z-index:50;
-  display:flex; flex-direction:column; overflow-y:auto;
-  transition:transform 0.3s;
-}
-.sidebar-logo { padding:20px 18px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
-.sidebar-logo .logo-icon { width:32px; height:32px; font-size:0.95rem; }
-.sidebar-logo-text { font-family:var(--font-head); font-weight:800; font-size:0.9rem; color:#fff; line-height:1.2; }
-.sidebar-logo-text small { display:block; color:var(--accent); font-size:0.68rem; letter-spacing:1px; text-transform:uppercase; }
-.sidebar-section { padding:8px 10px 4px; font-size:0.65rem; color:var(--text2); text-transform:uppercase; letter-spacing:1px; font-weight:600; }
-.sidebar-link {
-  display:flex; align-items:center; gap:10px; padding:9px 14px;
-  color:var(--text2); border-radius:var(--radius-xs); margin:2px 8px;
-  cursor:pointer; font-size:0.85rem; font-weight:500; transition:all 0.2s;
-  border:none; background:none; width:calc(100% - 16px); text-align:left;
-}
-.sidebar-link:hover { color:var(--text); background:var(--card2); }
-.sidebar-link.active { color:#fff; background:rgba(108,99,255,0.15); }
-.sidebar-link .s-icon { font-size:0.95rem; width:18px; text-align:center; }
-.sidebar-link .s-badge { margin-left:auto; background:var(--accent2); color:#fff; border-radius:10px; font-size:0.65rem; padding:1px 7px; font-weight:700; }
-.main-content { margin-left:240px; flex:1; padding:24px; min-height:100vh; }
-.admin-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; }
-.page-title { font-family:var(--font-head); font-size:1.3rem; font-weight:800; color:#fff; }
-.page-subtitle { font-size:0.82rem; color:var(--text2); margin-top:2px; }
-.stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin-bottom:24px; }
-.stat-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:18px; }
-.stat-num { font-family:var(--font-head); font-size:2rem; font-weight:800; color:#fff; }
-.stat-label { font-size:0.75rem; color:var(--text2); margin-top:3px; }
-.stat-change { font-size:0.72rem; margin-top:5px; }
-.table-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:20px; }
-.table-header { padding:14px 18px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; background:var(--card2); }
-.table-title { font-weight:700; color:#fff; font-size:0.9rem; }
-table { width:100%; border-collapse:collapse; }
-th { text-align:left; padding:10px 16px; font-size:0.72rem; color:var(--text2); text-transform:uppercase; letter-spacing:0.5px; font-weight:600; border-bottom:1px solid var(--border); }
-td { padding:12px 16px; font-size:0.83rem; color:var(--text); border-bottom:1px solid rgba(26,37,64,0.5); vertical-align:top; }
-tr:last-child td { border-bottom:none; }
-tr:hover td { background:var(--card2); }
-.status-pill { display:inline-flex; align-items:center; gap:4px; border-radius:20px; padding:3px 10px; font-size:0.72rem; font-weight:600; }
-.status-pending { background:rgba(245,197,24,0.12); color:var(--gold); }
-.status-replied { background:rgba(67,233,123,0.12); color:var(--accent3); }
-.status-new { background:rgba(108,99,255,0.12); color:#a78bfa; }
-.status-closed { background:rgba(136,146,176,0.12); color:var(--text2); }
-.action-btn { background:none; border:1px solid var(--border); border-radius:6px; padding:4px 10px; cursor:pointer; font-size:0.72rem; color:var(--text2); font-family:var(--font); transition:all 0.2s; }
-.action-btn:hover { border-color:var(--accent); color:var(--accent); }
-.login-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; }
-.login-box { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:36px; width:100%; max-width:360px; }
-.empty-state { text-align:center; padding:40px 20px; }
-.empty-icon { font-size:2.5rem; margin-bottom:10px; }
-.settings-section { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:16px; }
-.settings-section h3 { margin-bottom:16px; font-size:0.95rem; }
-.toggle-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); }
-.toggle-row:last-child { border-bottom:none; }
-.toggle-row label { font-size:0.86rem; color:var(--text2); }
-.toggle-switch { width:36px; height:20px; background:var(--border2); border-radius:10px; position:relative; cursor:pointer; transition:background 0.2s; border:none; }
-.toggle-switch.on { background:var(--accent); }
-.toggle-switch::after { content:''; position:absolute; top:2px; left:2px; width:16px; height:16px; background:#fff; border-radius:50%; transition:left 0.2s; }
-.toggle-switch.on::after { left:18px; }
-.detail-modal { background:var(--card); border:1px solid var(--border2); border-radius:var(--radius); padding:24px; max-width:600px; width:100%; max-height:85vh; overflow-y:auto; }
-@media(max-width:900px) {
-  .sidebar { transform:translateX(-100%); }
-  .sidebar.open { transform:translateX(0); }
-  .main-content { margin-left:0; }
+body{font-size:14px}
+.adm{display:flex;min-height:100vh}
+.sb{width:230px;background:var(--card);border-right:1px solid var(--border);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:50;display:flex;flex-direction:column}
+.sb-logo{padding:18px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px}
+.sb-lt{font-family:var(--fh);font-weight:800;font-size:.88rem;color:#fff;line-height:1.2}
+.sb-lt small{display:block;color:var(--accent);font-size:.62rem;letter-spacing:1px;text-transform:uppercase}
+.sb-sec{padding:9px 11px 3px;font-size:.62rem;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+.sbl{display:flex;align-items:center;gap:8px;padding:8px 12px;color:var(--text2);border-radius:var(--r3);margin:2px 7px;cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s;border:none;background:none;width:calc(100% - 14px);text-align:left}
+.sbl:hover{color:var(--text);background:var(--card2)}
+.sbl.on{color:#fff;background:rgba(108,99,255,.15)}
+.sbl .si{font-size:.88rem;width:16px;text-align:center}
+.sbl .sbdg{margin-left:auto;background:var(--accent2);color:#fff;border-radius:10px;font-size:.62rem;padding:1px 6px;font-weight:700}
+.main{margin-left:230px;flex:1;padding:22px;min-height:100vh}
+.adm-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.pg-t{font-family:var(--fh);font-size:1.2rem;font-weight:800;color:#fff}
+.pg-s{font-size:.8rem;color:var(--text2)}
+
+/* STATS */
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+.scard{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:16px}
+.snum{font-family:var(--fh);font-size:1.8rem;font-weight:800;color:#fff}
+.slbl{font-size:.73rem;color:var(--text2);margin-top:2px}
+
+/* TABLE */
+.tbl-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:18px}
+.tbl-hdr{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--card2);flex-wrap:wrap;gap:8px}
+.tbl-t{font-weight:700;color:#fff;font-size:.88rem}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:9px 14px;font-size:.68rem;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;font-weight:600;border-bottom:1px solid var(--border)}
+td{padding:11px 14px;font-size:.82rem;color:var(--text);border-bottom:1px solid rgba(26,37,64,.5);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--card2)}
+.pill{display:inline-flex;align-items:center;gap:3px;border-radius:20px;padding:3px 9px;font-size:.69rem;font-weight:600}
+.p-pend{background:rgba(245,197,24,.12);color:var(--gold)}
+.p-appr{background:rgba(67,233,123,.12);color:var(--accent3)}
+.p-rej{background:rgba(255,101,132,.12);color:var(--accent2)}
+.p-new{background:rgba(108,99,255,.12);color:#a78bfa}
+.p-done{background:rgba(67,233,123,.12);color:var(--accent3)}
+.ab{background:none;border:1px solid var(--border);border-radius:5px;padding:4px 9px;cursor:pointer;font-size:.7rem;color:var(--text2);font-family:var(--font);transition:all .2s;margin:0 2px}
+.ab:hover{border-color:var(--accent);color:var(--accent)}
+.ab.red:hover{border-color:var(--accent2);color:var(--accent2)}
+.ab.green:hover{border-color:var(--accent3);color:var(--accent3)}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.login-box{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:34px;width:100%;max-width:340px}
+
+/* TASK EDITOR */
+.task-row{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:12px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px}
+.task-row-num{font-family:var(--fh);font-weight:800;color:var(--accent);font-size:.9rem;min-width:36px}
+.task-row-body{flex:1}
+.task-inp{background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font);font-size:.82rem;padding:7px 10px;width:100%;outline:none;margin-bottom:6px}
+.task-inp:focus{border-color:var(--accent)}
+.task-inp-sm{width:120px}
+.day-range-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.drb{padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:var(--card2);color:var(--text2);cursor:pointer;font-size:.78rem;transition:all .2s}
+.drb.on{border-color:var(--accent);color:#fff;background:rgba(108,99,255,.15)}
+
+/* PRODUCT FORM */
+.pf{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pf-full{grid-column:1/-1}
+.emp{text-align:center;padding:36px 20px}
+
+/* MODAL */
+.mb-wide{max-width:680px!important}
+
+@media(max-width:900px){
+  .sb{transform:translateX(-100%)}
+  .sb.open{transform:translateX(0)}
+  .main{margin-left:0}
 }
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
-<div id="loginScreen" class="login-screen">
+<!-- LOGIN -->
+<div id="loginWrap" class="login-wrap">
   <div class="login-box">
-    <div style="text-align:center;margin-bottom:24px;">
-      <div class="logo-icon" style="width:48px;height:48px;font-size:1.3rem;margin:0 auto 10px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:14px;display:flex;align-items:center;justify-content:center;">🚀</div>
-      <div style="font-family:var(--font-head);font-weight:800;font-size:1.1rem;color:#fff;">Admin Panel</div>
-      <div style="font-size:0.78rem;color:var(--text2);">Creator2Business</div>
+    <div style="text-align:center;margin-bottom:22px;">
+      <div class="logo-ic" style="width:46px;height:46px;font-size:1.2rem;margin:0 auto 10px;border-radius:13px;">🚀</div>
+      <div style="font-family:var(--fh);font-weight:800;font-size:1.05rem;color:#fff;">Admin Panel</div>
+      <div style="font-size:.76rem;color:var(--text2);">Creator2Business</div>
     </div>
-    <div class="form-group mb-3">
-      <label class="form-label">Admin Password</label>
-      <input type="password" class="form-control" id="adminPass" placeholder="পাসওয়ার্ড দিন" onkeydown="if(event.key==='Enter')adminLogin()">
+    <div class="fg mb2"><label class="fl">পাসওয়ার্ড</label>
+      <input type="password" class="fc" id="lpass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
-    <div class="hidden mb-3" id="loginError"><div class="alert alert-error">❌ ভুল পাসওয়ার্ড</div></div>
-    <button class="btn btn-primary btn-full" onclick="adminLogin()">🔐 লগইন করুন</button>
+    <div class="hidden mb2" id="lerr"><div class="alert a-e">❌ ভুল পাসওয়ার্ড</div></div>
+    <button class="btn btn-p btn-fw" onclick="doLogin()">🔐 লগইন</button>
   </div>
 </div>
 
 <!-- ADMIN APP -->
-<div id="adminApp" class="admin-layout hidden">
+<div id="admApp" class="adm hidden">
   <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-icon" style="width:32px;height:32px;font-size:0.9rem;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:9px;display:flex;align-items:center;justify-content:center;">🚀</div>
-      <div class="sidebar-logo-text">Creator2Biz<small>Admin Panel</small></div>
+  <aside class="sb" id="sb">
+    <div class="sb-logo">
+      <div class="logo-ic" style="width:30px;height:30px;font-size:.85rem;border-radius:8px;">🚀</div>
+      <div class="sb-lt">Creator2Biz<small>Admin v2</small></div>
     </div>
-
-    <div style="padding:10px;">
-      <div class="sidebar-section">ড্যাশবোর্ড</div>
-      <button class="sidebar-link active" data-page="dashboard" onclick="showPage('dashboard',this)"><span class="s-icon">📊</span> ওভারভিউ</button>
-
-      <div class="sidebar-section">ইউজার ম্যানেজমেন্ট</div>
-      <button class="sidebar-link" data-page="help" onclick="showPage('help',this)"><span class="s-icon">🆘</span> হেল্প রিকোয়েস্ট <span class="s-badge" id="sb-help">0</span></button>
-      <button class="sidebar-link" data-page="agency" onclick="showPage('agency',this)"><span class="s-icon">🏢</span> এজেন্সি ইনকোয়ারি <span class="s-badge" id="sb-agency">0</span></button>
-      <button class="sidebar-link" data-page="users" onclick="showPage('users',this)"><span class="s-icon">👥</span> Pro ইউজার</button>
-
-      <div class="sidebar-section">কন্টেন্ট ম্যানেজমেন্ট</div>
-      <button class="sidebar-link" data-page="settings" onclick="showPage('settings',this)"><span class="s-icon">⚙️</span> সেটিংস</button>
-      <button class="sidebar-link" data-page="analytics" onclick="showPage('analytics',this)"><span class="s-icon">📈</span> অ্যানালিটিক্স</button>
-
-      <div style="position:absolute;bottom:16px;left:10px;right:10px;">
-        <button class="sidebar-link" style="color:var(--accent2);" onclick="adminLogout()"><span class="s-icon">🚪</span> লগআউট</button>
-      </div>
+    <div style="padding:8px 6px;flex:1;">
+      <div class="sb-sec">ড্যাশবোর্ড</div>
+      <button class="sbl on" data-page="dash" onclick="showPg('dash',this)"><span class="si">📊</span>ওভারভিউ</button>
+      <div class="sb-sec">ইউজার ম্যানেজমেন্ট</div>
+      <button class="sbl" data-page="regs" onclick="showPg('regs',this)"><span class="si">📋</span>রেজিস্ট্রেশন<span class="sbdg" id="dg-regs">0</span></button>
+      <button class="sbl" data-page="orders" onclick="showPg('orders',this)"><span class="si">📦</span>অর্ডার<span class="sbdg" id="dg-orders">0</span></button>
+      <div class="sb-sec">কন্টেন্ট</div>
+      <button class="sbl" data-page="tasks" onclick="showPg('tasks',this)"><span class="si">📅</span>৯০ দিনের প্ল্যান</button>
+      <button class="sbl" data-page="market" onclick="showPg('market',this)"><span class="si">🛍️</span>মার্কেটপ্লেস</button>
+      <div class="sb-sec">সেটিংস</div>
+      <button class="sbl" data-page="settings" onclick="showPg('settings',this)"><span class="si">⚙️</span>সেটিংস</button>
+    </div>
+    <div style="padding:8px 6px;border-top:1px solid var(--border);">
+      <button class="sbl" style="color:var(--accent2);" onclick="doLogout()"><span class="si">🚪</span>লগআউট</button>
     </div>
   </aside>
 
-  <!-- Main -->
-  <main class="main-content">
-    <!-- Dashboard Page -->
-    <div id="page-dashboard">
-      <div class="admin-header">
-        <div><div class="page-title">📊 ড্যাশবোর্ড ওভারভিউ</div><div class="page-subtitle" id="dashDate"></div></div>
-        <div style="display:flex;gap:8px;">
-          <button class="btn btn-sm btn-secondary" onclick="refreshData()">🔄 রিফ্রেশ</button>
-          <a href="../index.html" target="_blank" class="btn btn-sm btn-secondary">🌐 সাইট দেখুন</a>
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ── DASHBOARD ── -->
+    <div id="pg-dash">
+      <div class="adm-hdr">
+        <div><div class="pg-t">📊 ড্যাশবোর্ড</div><div class="pg-s" id="dashDate"></div></div>
+        <div style="display:flex;gap:7px;">
+          <button class="btn btn-sm btn-s" onclick="refresh()">🔄 রিফ্রেশ</button>
+          <a href="../index.html" target="_blank" class="btn btn-sm btn-s">🌐 সাইট</a>
         </div>
       </div>
-
-      <div class="stats-grid" id="statsGrid">
-        <div class="stat-card"><div class="stat-num" id="s-help">0</div><div class="stat-label">মোট হেল্প রিকোয়েস্ট</div><div class="stat-change" style="color:var(--gold);" id="s-help-pending">০টি পেন্ডিং</div></div>
-        <div class="stat-card"><div class="stat-num" id="s-agency">0</div><div class="stat-label">এজেন্সি ইনকোয়ারি</div><div class="stat-change" style="color:var(--accent3);">সম্ভাব্য ক্লায়েন্ট</div></div>
-        <div class="stat-card"><div class="stat-num" id="s-users">0</div><div class="stat-label">Pro ইউজার</div><div class="stat-change" style="color:var(--accent);">সক্রিয়</div></div>
-        <div class="stat-card"><div class="stat-num" id="s-revenue">৳০</div><div class="stat-label">এই মাসের রেভিনিউ</div><div class="stat-change" style="color:var(--accent3);">আনুমানিক</div></div>
+      <div class="sgrid" id="statGrid"></div>
+      <div class="tbl-card">
+        <div class="tbl-hdr"><div class="tbl-t">📋 সাম্প্রতিক রেজিস্ট্রেশন</div><button class="btn btn-sm btn-s" onclick="showPg('regs',document.querySelector('[data-page=regs]'))">সব দেখুন</button></div>
+        <div id="recentRegs"></div>
       </div>
-
-      <!-- Recent Help Requests -->
-      <div class="table-card">
-        <div class="table-header">
-          <div class="table-title">🆘 সাম্প্রতিক হেল্প রিকোয়েস্ট</div>
-          <button class="btn btn-sm btn-secondary" onclick="showPage('help',document.querySelector('[data-page=help]'))">সব দেখুন</button>
-        </div>
-        <div id="recentHelpTable"></div>
-      </div>
-
-      <!-- Recent Inquiries -->
-      <div class="table-card">
-        <div class="table-header">
-          <div class="table-title">🏢 সাম্প্রতিক এজেন্সি ইনকোয়ারি</div>
-          <button class="btn btn-sm btn-secondary" onclick="showPage('agency',document.querySelector('[data-page=agency]'))">সব দেখুন</button>
-        </div>
-        <div id="recentAgencyTable"></div>
+      <div class="tbl-card">
+        <div class="tbl-hdr"><div class="tbl-t">📦 সাম্প্রতিক অর্ডার</div><button class="btn btn-sm btn-s" onclick="showPg('orders',document.querySelector('[data-page=orders]'))">সব দেখুন</button></div>
+        <div id="recentOrders"></div>
       </div>
     </div>
 
-    <!-- Help Requests Page -->
-    <div id="page-help" class="hidden">
-      <div class="admin-header">
-        <div><div class="page-title">🆘 হেল্প রিকোয়েস্ট</div><div class="page-subtitle">ইউজারদের সব প্রশ্ন ও সমস্যা</div></div>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <select class="form-control" id="helpFilter" onchange="renderHelpTable()" style="width:auto;padding:7px 12px;font-size:0.82rem;">
-            <option value="all">সব</option>
-            <option value="pending">পেন্ডিং</option>
-            <option value="replied">রিপ্লাই দেওয়া</option>
-            <option value="closed">বন্ধ</option>
+    <!-- ── REGISTRATIONS ── -->
+    <div id="pg-regs" class="hidden">
+      <div class="adm-hdr">
+        <div><div class="pg-t">📋 রেজিস্ট্রেশন ম্যানেজমেন্ট</div></div>
+        <div style="display:flex;gap:7px;align-items:center;">
+          <select class="fc" id="regFilter" onchange="renderRegs()" style="width:auto;padding:7px 11px;font-size:.8rem;">
+            <option value="all">সব</option><option value="pending">পেন্ডিং</option>
+            <option value="approved">অনুমোদিত</option><option value="rejected">প্রত্যাখ্যাত</option>
           </select>
-          <button class="btn btn-sm btn-secondary" onclick="exportData('help')">⬇️ Export</button>
+          <button class="btn btn-sm btn-s" onclick="dlJSON(Store.getRegistrations(),'registrations.json')">⬇️ Export</button>
         </div>
       </div>
-      <div class="table-card">
-        <div id="helpTable"></div>
+      <div class="tbl-card"><div id="regTable"></div></div>
+    </div>
+
+    <!-- ── ORDERS ── -->
+    <div id="pg-orders" class="hidden">
+      <div class="adm-hdr">
+        <div><div class="pg-t">📦 অর্ডার ম্যানেজমেন্ট</div></div>
+        <button class="btn btn-sm btn-s" onclick="dlJSON(Store.getOrders(),'orders.json')">⬇️ Export</button>
+      </div>
+      <div class="tbl-card"><div id="orderTable"></div></div>
+    </div>
+
+    <!-- ── TASKS (90-day) ── -->
+    <div id="pg-tasks" class="hidden">
+      <div class="adm-hdr">
+        <div><div class="pg-t">📅 ৯০ দিনের প্ল্যান</div><div class="pg-s">ইউজারদের দৈনিক টাস্ক নির্ধারণ করুন</div></div>
+        <div style="display:flex;gap:7px;">
+          <button class="btn btn-sm btn-p" onclick="saveTasks()">💾 সেভ করুন</button>
+          <button class="btn btn-sm btn-s" onclick="dlJSON(Store.getTasks(),'tasks.json')">⬇️ Export</button>
+        </div>
+      </div>
+      <!-- Day range quick nav -->
+      <div class="day-range-bar" id="dayRangeBar"></div>
+      <div id="taskEditor"></div>
+    </div>
+
+    <!-- ── MARKETPLACE ── -->
+    <div id="pg-market" class="hidden">
+      <div class="adm-hdr">
+        <div><div class="pg-t">🛍️ মার্কেটপ্লেস</div><div class="pg-s">সার্ভিস, ইবুক ও কোর্স ম্যানেজ করুন</div></div>
+        <button class="btn btn-sm btn-p" onclick="openProdModal()">+ নতুন প্রোডাক্ট</button>
+      </div>
+      <div class="tbl-card"><div id="prodTable"></div></div>
+    </div>
+
+    <!-- ── SETTINGS ── -->
+    <div id="pg-settings" class="hidden">
+      <div class="adm-hdr"><div class="pg-t">⚙️ সেটিংস</div><button class="btn btn-sm btn-p" onclick="saveSettings()">💾 সেভ করুন</button></div>
+      <div class="card mb2">
+        <h3 style="margin-bottom:14px;">🔑 Admin পাসওয়ার্ড</h3>
+        <div class="fg mb2"><label class="fl">নতুন পাসওয়ার্ড</label><input type="password" class="fc" id="newPass" placeholder="কমপক্ষে ৬ অক্ষর"></div>
+        <button class="btn btn-sm btn-s" onclick="changePass()">পরিবর্তন করুন</button>
+      </div>
+      <div class="card mb2">
+        <h3 style="margin-bottom:14px;">📞 যোগাযোগ তথ্য</h3>
+        <div class="pf">
+          <div class="fg"><label class="fl">WhatsApp নম্বর</label><input class="fc" id="s-wa" placeholder="+8801XXXXXXXXX"></div>
+          <div class="fg"><label class="fl">ইমেইল</label><input class="fc" id="s-email" placeholder="admin@example.com"></div>
+          <div class="fg"><label class="fl">Facebook পেজ</label><input class="fc" id="s-fb" placeholder="https://facebook.com/..."></div>
+          <div class="fg"><label class="fl">সাইটের নাম</label><input class="fc" id="s-sn" placeholder="Creator2Business"></div>
+        </div>
+      </div>
+      <div class="card mb2">
+        <h3 style="margin-bottom:14px;">🗑️ ডেটা ম্যানেজমেন্ট</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-sm btn-s" onclick="dlJSON(Store.getData(),'c2b_full_backup.json')">⬇️ ফুল ব্যাকআপ</button>
+          <button class="btn btn-sm btn-d" onclick="clearEvents()">🗑️ পুরনো লগ মুছুন</button>
+        </div>
       </div>
     </div>
 
-    <!-- Agency Page -->
-    <div id="page-agency" class="hidden">
-      <div class="admin-header">
-        <div><div class="page-title">🏢 এজেন্সি ইনকোয়ারি</div><div class="page-subtitle">সম্ভাব্য ক্লায়েন্টদের তালিকা</div></div>
-        <button class="btn btn-sm btn-secondary" onclick="exportData('agency')">⬇️ Export</button>
-      </div>
-      <div class="table-card">
-        <div id="agencyTable"></div>
-      </div>
-    </div>
-
-    <!-- Users Page -->
-    <div id="page-users" class="hidden">
-      <div class="admin-header">
-        <div><div class="page-title">👥 Pro ইউজার ম্যানেজমেন্ট</div></div>
-        <button class="btn btn-sm btn-primary" onclick="showAddUserModal()">+ নতুন Pro ইউজার</button>
-      </div>
-      <div class="table-card">
-        <div id="usersTable"></div>
-      </div>
-    </div>
-
-    <!-- Analytics Page -->
-    <div id="page-analytics" class="hidden">
-      <div class="admin-header">
-        <div><div class="page-title">📈 অ্যানালিটিক্স</div></div>
-      </div>
-      <div class="stats-grid">
-        <div class="stat-card"><div class="stat-num" id="a-total-gen">0</div><div class="stat-label">মোট AI জেনারেশন</div></div>
-        <div class="stat-card"><div class="stat-num" id="a-tools">11</div><div class="stat-label">সক্রিয় টুল</div></div>
-        <div class="stat-card"><div class="stat-num" id="a-conv">0%</div><div class="stat-label">কনভার্সন রেট</div></div>
-      </div>
-      <div class="table-card">
-        <div class="table-header"><div class="table-title">সাম্প্রতিক ইভেন্টস</div></div>
-        <div id="eventsTable"></div>
-      </div>
-    </div>
-
-    <!-- Settings Page -->
-    <div id="page-settings" class="hidden">
-      <div class="admin-header">
-        <div><div class="page-title">⚙️ সেটিংস</div></div>
-        <button class="btn btn-sm btn-primary" onclick="saveSettings()">💾 সেভ করুন</button>
-      </div>
-
-      <div class="settings-section">
-        <h3>🔑 Admin সেটিংস</h3>
-        <div class="form-group mb-3">
-          <label class="form-label">Admin পাসওয়ার্ড পরিবর্তন</label>
-          <input type="password" class="form-control" id="newAdminPass" placeholder="নতুন পাসওয়ার্ড">
-        </div>
-        <button class="btn btn-sm btn-secondary" onclick="changePassword()">পাসওয়ার্ড পরিবর্তন করুন</button>
-      </div>
-
-      <div class="settings-section">
-        <h3>💎 Pro প্ল্যান সেটিংস</h3>
-        <div class="form-group mb-3">
-          <label class="form-label">Pro মূল্য (টাকায়)</label>
-          <input type="number" class="form-control" id="setProPrice" value="499">
-        </div>
-        <div class="form-group mb-3">
-          <label class="form-label">ফ্রি দৈনিক লিমিট</label>
-          <input type="number" class="form-control" id="setFreeLimit" value="3">
-        </div>
-      </div>
-
-      <div class="settings-section">
-        <h3>📞 যোগাযোগ তথ্য</h3>
-        <div class="form-group mb-3">
-          <label class="form-label">WhatsApp নম্বর</label>
-          <input type="text" class="form-control" id="setWhatsapp" placeholder="+880 1XXX-XXXXXX">
-        </div>
-        <div class="form-group mb-3">
-          <label class="form-label">ইমেইল</label>
-          <input type="email" class="form-control" id="setEmail" placeholder="admin@creator2business.com">
-        </div>
-        <div class="form-group mb-3">
-          <label class="form-label">Facebook পেজ লিংক</label>
-          <input type="text" class="form-control" id="setFacebook" placeholder="https://facebook.com/...">
-        </div>
-      </div>
-
-      <div class="settings-section">
-        <h3>⚡ ফিচার টগল</h3>
-        <div class="toggle-row"><label>Pro আপগ্রেড বাটন দেখাও</label><button class="toggle-switch on" id="tog-pro" onclick="this.classList.toggle('on')"></button></div>
-        <div class="toggle-row"><label>হেল্প উইজেট দেখাও</label><button class="toggle-switch on" id="tog-help" onclick="this.classList.toggle('on')"></button></div>
-        <div class="toggle-row"><label>এজেন্সি পেজ সক্রিয়</label><button class="toggle-switch on" id="tog-agency" onclick="this.classList.toggle('on')"></button></div>
-        <div class="toggle-row"><label>নতুন রেজিস্ট্রেশন বন্ধ</label><button class="toggle-switch" id="tog-reg" onclick="this.classList.toggle('on')"></button></div>
-      </div>
-
-      <div class="settings-section">
-        <h3>🗑️ ডেটা ম্যানেজমেন্ট</h3>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button class="btn btn-sm btn-secondary" onclick="exportAll()">⬇️ সব ডেটা Export</button>
-          <button class="btn btn-sm btn-danger" onclick="clearOldData()">🗑️ পুরনো ডেটা মুছুন</button>
-        </div>
-      </div>
-    </div>
   </main>
 </div>
 
-<!-- Detail Modal -->
-<div class="modal-overlay hidden" id="detailModal">
-  <div class="detail-modal">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-      <h3 id="detailTitle">বিস্তারিত</h3>
-      <button class="modal-close" onclick="Modal.hide('detailModal')">✕</button>
+<!-- DETAIL MODAL -->
+<div class="mo hidden" id="detailModal">
+  <div class="mb mb-wide">
+    <div class="mh"><h3 id="dtTitle">বিস্তারিত</h3><button class="mc" onclick="Modal.hide('detailModal')">✕</button></div>
+    <div class="mbody" id="dtBody"></div>
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="mo hidden" id="prodModal">
+  <div class="mb mb-wide">
+    <div class="mh"><h3 id="pmTitle">প্রোডাক্ট যোগ করুন</h3><button class="mc" onclick="Modal.hide('prodModal')">✕</button></div>
+    <div class="mbody">
+      <div class="pf" id="pmForm">
+        <div class="fg pf-full"><label class="fl">প্রোডাক্টের ধরন *</label>
+          <select class="fc" id="pm-type">
+            <option value="service">সার্ভিস</option><option value="ebook">ইবুক</option>
+            <option value="course">কোর্স</option><option value="template">টেমপ্লেট</option>
+          </select>
+        </div>
+        <div class="fg pf-full"><label class="fl">নাম *</label><input class="fc" id="pm-name" placeholder="প্রোডাক্টের নাম"></div>
+        <div class="fg"><label class="fl">দাম (টাকায়) *</label><input class="fc" id="pm-price" placeholder="৪৯৯" type="number"></div>
+        <div class="fg"><label class="fl">ডেলিভারি / সময়কাল</label><input class="fc" id="pm-delivery" placeholder="যেমন: ৭ দিন, তাৎক্ষণিক"></div>
+        <div class="fg pf-full"><label class="fl">বিবরণ *</label><textarea class="fc" id="pm-desc" rows="3" placeholder="সংক্ষিপ্ত বিবরণ..."></textarea></div>
+        <div class="fg pf-full"><label class="fl">বিস্তারিত তথ্য (কী কী পাবে)</label><textarea class="fc" id="pm-details" rows="4" placeholder="কী কী অন্তর্ভুক্ত আছে তা লিখুন..."></textarea></div>
+        <div class="fg pf-full"><label class="fl">ডাউনলোড লিংক (ইবুক/টেমপ্লেটের ক্ষেত্রে)</label><input class="fc" id="pm-link" placeholder="https://..."></div>
+      </div>
+      <div id="pm-err" class="alert a-e mt2 hidden"></div>
+      <div style="display:flex;gap:8px;margin-top:16px;">
+        <button class="btn btn-p" style="flex:1" onclick="saveProd()">💾 সেভ করুন</button>
+        <button class="btn btn-s" onclick="Modal.hide('prodModal')">বাতিল</button>
+      </div>
     </div>
-    <div id="detailBody"></div>
+  </div>
+</div>
+
+<!-- REJECT MODAL -->
+<div class="mo hidden" id="rejModal">
+  <div class="mb" style="max-width:400px;">
+    <div class="mh"><h3>❌ প্রত্যাখ্যান করুন</h3><button class="mc" onclick="Modal.hide('rejModal')">✕</button></div>
+    <div class="mbody">
+      <div class="fg mb2"><label class="fl">কারণ</label>
+        <textarea class="fc" id="rejReason" rows="3" placeholder="কেন প্রত্যাখ্যান করা হচ্ছে..."></textarea>
+      </div>
+      <input type="hidden" id="rejId">
+      <button class="btn btn-d btn-fw" onclick="confirmReject()">❌ প্রত্যাখ্যান করুন</button>
+    </div>
   </div>
 </div>
 
 <script src="../assets/js/app.js"></script>
 <script>
-// ===== ADMIN AUTH =====
-const ADMIN_PASS_KEY = 'c2b_admin_pass';
+/* ════════════════════════════════════════════════
+   AUTH
+════════════════════════════════════════════════ */
+function doLogin(){
+  const pass=document.getElementById('lpass').value;
+  if(pass===Store.getAdminPass()){ Store.setAdmin(true); bootAdmin(); }
+  else{ document.getElementById('lerr').classList.remove('hidden'); }
+}
+function doLogout(){ Store.setAdmin(false); location.reload(); }
 
-function adminLogin() {
-  const pass = document.getElementById('adminPass').value;
-  const savedPass = localStorage.getItem(ADMIN_PASS_KEY) || 'admin123';
-  if (pass === savedPass) {
-    Store.set('c2b_admin_auth', true);
-    document.getElementById('loginScreen').classList.add('hidden');
-    document.getElementById('adminApp').classList.remove('hidden');
-    initAdmin();
-  } else {
-    document.getElementById('loginError').classList.remove('hidden');
-  }
+function bootAdmin(){
+  document.getElementById('loginWrap').classList.add('hidden');
+  document.getElementById('admApp').classList.remove('hidden');
+  document.getElementById('dashDate').textContent=new Date().toLocaleDateString('bn-BD',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  refresh();
+  buildDayRangeBar();
+  loadSettings();
 }
 
-function adminLogout() {
-  Store.remove('c2b_admin_auth');
-  Store.set('c2b_admin_auth', false);
-  location.reload();
-}
-
-function changePassword() {
-  const newPass = document.getElementById('newAdminPass').value.trim();
-  if (!newPass || newPass.length < 6) { Toast.error('পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে'); return; }
-  localStorage.setItem(ADMIN_PASS_KEY, newPass);
-  Toast.success('পাসওয়ার্ড পরিবর্তন হয়েছে ✅');
-}
-
-// Check auth on load
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded',()=>{
   Toast.init();
-  document.getElementById('dashDate').textContent = new Date().toLocaleDateString('bn-BD', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-  if (Store.isAdmin()) {
-    document.getElementById('loginScreen').classList.add('hidden');
-    document.getElementById('adminApp').classList.remove('hidden');
-    initAdmin();
-  }
-  document.getElementById('adminPass').addEventListener('keydown', e => { if(e.key==='Enter') adminLogin(); });
+  if(Store.isAdmin()) bootAdmin();
+  document.getElementById('lpass').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
 });
 
-// ===== ADMIN INIT =====
-function initAdmin() {
-  refreshData();
+/* ════════════════════════════════════════════════
+   PAGE NAV
+════════════════════════════════════════════════ */
+function showPg(pg,btn){
+  document.querySelectorAll('[id^="pg-"]').forEach(p=>p.classList.add('hidden'));
+  document.getElementById('pg-'+pg)?.classList.remove('hidden');
+  document.querySelectorAll('.sbl').forEach(b=>b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  if(pg==='regs') renderRegs();
+  if(pg==='orders') renderOrderTable();
+  if(pg==='tasks') renderTaskEditor();
+  if(pg==='market') renderProdTable();
 }
 
-function refreshData() {
-  updateStats();
-  renderRecentHelp();
-  renderRecentAgency();
-  updateSidebarBadges();
+/* ════════════════════════════════════════════════
+   STATS / REFRESH
+════════════════════════════════════════════════ */
+function refresh(){
+  const regs=Store.getRegistrations();
+  const orders=Store.getOrders();
+  const prods=Store.getProducts();
+  const pend=regs.filter(r=>r.status==='pending').length;
+  const appr=regs.filter(r=>r.status==='approved').length;
+  const pOrd=orders.filter(o=>o.status==='pending').length;
+
+  document.getElementById('statGrid').innerHTML=`
+    <div class="scard"><div class="snum">${regs.length}</div><div class="slbl">মোট রেজিস্ট্রেশন</div><div style="font-size:.7rem;color:var(--gold);margin-top:4px;">${pend}টি পেন্ডিং</div></div>
+    <div class="scard"><div class="snum">${appr}</div><div class="slbl">অনুমোদিত ইউজার</div></div>
+    <div class="scard"><div class="snum">${orders.length}</div><div class="slbl">মোট অর্ডার</div><div style="font-size:.7rem;color:var(--gold);margin-top:4px;">${pOrd}টি পেন্ডিং</div></div>
+    <div class="scard"><div class="snum">${prods.length}</div><div class="slbl">মোট প্রোডাক্ট</div></div>
+    <div class="scard"><div class="snum" style="color:var(--gold);">৳${orders.filter(o=>o.status==='completed').reduce((s,o)=>s+Number(o.price||0),0).toLocaleString('bn-BD')}</div><div class="slbl">সম্পন্ন সেল</div></div>
+  `;
+
+  document.getElementById('dg-regs').textContent=pend;
+  document.getElementById('dg-orders').textContent=pOrd;
+
+  // Recent tables
+  renderRegRows(regs.slice(0,5),'recentRegs',true);
+  renderOrderRows(orders.slice(0,5),'recentOrders',true);
 }
 
-function updateStats() {
-  const helps = Store.getHelpRequests();
-  const agencies = Store.getServiceInquiries();
-  const d = Store.getData();
-  const proUsers = (d.proUsers || []);
-  const pending = helps.filter(r => r.status === 'pending').length;
-
-  document.getElementById('s-help').textContent = helps.length;
-  document.getElementById('s-help-pending').textContent = `${pending}টি পেন্ডিং`;
-  document.getElementById('s-agency').textContent = agencies.length;
-  document.getElementById('s-users').textContent = proUsers.length;
-  document.getElementById('s-revenue').textContent = `৳${(proUsers.length * 499).toLocaleString('bn-BD')}`;
-
-  // Analytics
-  const totalEvents = (d.events || []).filter(e => e.event === 'generate').length;
-  document.getElementById('a-total-gen').textContent = totalEvents;
-  const convRate = helps.length > 0 ? Math.round((agencies.length / helps.length) * 100) : 0;
-  document.getElementById('a-conv').textContent = convRate + '%';
+/* ════════════════════════════════════════════════
+   REGISTRATIONS
+════════════════════════════════════════════════ */
+function renderRegs(){
+  const fil=document.getElementById('regFilter')?.value||'all';
+  let regs=Store.getRegistrations();
+  if(fil!=='all') regs=regs.filter(r=>r.status===fil);
+  renderRegRows(regs,'regTable',false);
 }
 
-function updateSidebarBadges() {
-  const helps = Store.getHelpRequests().filter(r => r.status === 'pending');
-  const agencies = Store.getServiceInquiries().filter(r => r.status === 'new');
-  document.getElementById('sb-help').textContent = helps.length;
-  document.getElementById('sb-agency').textContent = agencies.length;
-}
-
-// ===== PAGE NAVIGATION =====
-function showPage(page, btn) {
-  document.querySelectorAll('[id^="page-"]').forEach(p => p.classList.add('hidden'));
-  document.getElementById('page-' + page).classList.remove('hidden');
-  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-
-  // Load page data
-  if (page === 'help') renderHelpTable();
-  else if (page === 'agency') renderAgencyTable();
-  else if (page === 'users') renderUsersTable();
-  else if (page === 'analytics') renderAnalytics();
-}
-
-// ===== TABLES =====
-function formatDate(iso) {
-  if (!iso) return '—';
-  const d = new Date(iso);
-  return d.toLocaleDateString('bn-BD') + ' ' + d.toLocaleTimeString('bn-BD', { hour:'2-digit', minute:'2-digit' });
-}
-
-function renderRecentHelp() {
-  const helps = Store.getHelpRequests().slice(0, 5);
-  document.getElementById('recentHelpTable').innerHTML = renderHelpRows(helps, true);
-}
-function renderRecentAgency() {
-  const agencies = Store.getServiceInquiries().slice(0, 5);
-  document.getElementById('recentAgencyTable').innerHTML = renderAgencyRows(agencies, true);
-}
-
-function renderHelpTable() {
-  const filter = document.getElementById('helpFilter')?.value || 'all';
-  let helps = Store.getHelpRequests();
-  if (filter !== 'all') helps = helps.filter(r => r.status === filter);
-  document.getElementById('helpTable').innerHTML = renderHelpRows(helps, false);
-}
-
-function renderHelpRows(helps, compact) {
-  if (!helps.length) return `<div class="empty-state"><div class="empty-icon">📭</div><p class="text-muted">কোনো রিকোয়েস্ট নেই</p></div>`;
-  return `<table><thead><tr>
-    <th>তারিখ</th><th>নাম</th><th>ফোন</th><th>ধরন</th><th>নিশ</th>
-    ${!compact?'<th>বার্তা</th>':''}
+function renderRegRows(regs,elId,compact){
+  const el=document.getElementById(elId);
+  if(!el) return;
+  if(!regs.length){ el.innerHTML=`<div class="emp"><p class="text-muted">কোনো রেজিস্ট্রেশন নেই</p></div>`; return; }
+  el.innerHTML=`<table><thead><tr>
+    <th>তারিখ</th><th>নাম</th><th>WhatsApp</th><th>নিশ</th>
+    ${!compact?'<th>Facebook</th><th>TikTok</th>':''}
     <th>স্ট্যাটাস</th><th>অ্যাকশন</th>
   </tr></thead><tbody>
-  ${helps.map(h => `<tr>
-    <td style="white-space:nowrap;">${formatDate(h.date)}</td>
-    <td><strong>${h.name}</strong></td>
-    <td><a href="https://wa.me/${h.phone?.replace(/\D/g,'')}" target="_blank" style="color:var(--accent3);">${h.phone}</a></td>
-    <td><span class="tag tag-purple">${{help:'হেল্প',bug:'বাগ',upgrade:'আপগ্রেড',agency:'এজেন্সি'}[h.type]||h.type}</span></td>
-    <td>${h.niche||'—'}</td>
-    ${!compact?`<td style="max-width:200px;word-break:break-word;font-size:0.8rem;">${h.message?.slice(0,80)}${h.message?.length>80?'...':''}</td>`:''}
-    <td><span class="status-pill status-${h.status}">${{pending:'পেন্ডিং',replied:'রিপ্লাই',closed:'বন্ধ'}[h.status]||h.status}</span></td>
-    <td style="white-space:nowrap;">
-      <button class="action-btn" onclick="viewDetail('help',${h.id})">👁️ দেখুন</button>
-      ${h.status==='pending'?`<button class="action-btn" style="margin-left:4px;" onclick="updateStatus('help',${h.id},'replied')">✅ রিপ্লাই</button>`:''}
+  ${regs.map(r=>`<tr>
+    <td style="white-space:nowrap;font-size:.76rem;">${fmtDate(r.submittedAt)}</td>
+    <td><strong>${r.name}</strong></td>
+    <td><a href="https://wa.me/${(r.whatsapp||'').replace(/\D/g,'')}" target="_blank" style="color:var(--accent3);">${r.whatsapp}</a></td>
+    <td>${r.niche||'—'}</td>
+    ${!compact?`<td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;">${r.facebook?`<a href="${r.facebook}" target="_blank" style="font-size:.75rem;">🔗 পেজ</a>`:'—'}</td>
+    <td>${r.tiktok||'—'}</td>`:''}
+    <td><span class="pill ${{pending:'p-pend',approved:'p-appr',rejected:'p-rej'}[r.status]||'p-pend'}">${{pending:'পেন্ডিং',approved:'অনুমোদিত',rejected:'প্রত্যাখ্যাত'}[r.status]||r.status}</span></td>
+    <td>
+      <button class="ab" onclick="viewReg(${r.id})">👁️</button>
+      ${r.status==='pending'?`<button class="ab green" onclick="approveReg(${r.id})">✅</button><button class="ab red" onclick="openReject(${r.id})">❌</button>`:''}
     </td>
   </tr>`).join('')}
   </tbody></table>`;
 }
 
-function renderAgencyTable() {
-  const agencies = Store.getServiceInquiries();
-  document.getElementById('agencyTable').innerHTML = renderAgencyRows(agencies, false);
-}
-function renderAgencyRows(agencies, compact) {
-  if (!agencies.length) return `<div class="empty-state"><div class="empty-icon">📭</div><p class="text-muted">কোনো ইনকোয়ারি নেই</p></div>`;
-  return `<table><thead><tr>
-    <th>তারিখ</th><th>নাম</th><th>ফোন</th>
-    ${!compact?'<th>সার্ভিস</th><th>ফলোয়ার</th><th>বার্তা</th>':''}
-    <th>স্ট্যাটাস</th><th>অ্যাকশন</th>
-  </tr></thead><tbody>
-  ${agencies.map(a => `<tr>
-    <td style="white-space:nowrap;">${formatDate(a.date)}</td>
-    <td><strong>${a.name}</strong></td>
-    <td><a href="https://wa.me/${a.phone?.replace(/\D/g,'')}" target="_blank" style="color:var(--accent3);">${a.phone}</a></td>
-    ${!compact?`
-      <td><span class="tag tag-gold">${a.service||'—'}</span></td>
-      <td>${a.followers||'—'}</td>
-      <td style="max-width:180px;font-size:0.8rem;">${a.message?.slice(0,70)}...</td>
-    `:''}
-    <td><span class="status-pill status-${a.status}">${{new:'নতুন',contacted:'যোগাযোগ',closed:'বন্ধ'}[a.status]||a.status}</span></td>
-    <td style="white-space:nowrap;">
-      <button class="action-btn" onclick="viewDetail('agency',${a.id})">👁️ দেখুন</button>
-      ${a.status==='new'?`<button class="action-btn" style="margin-left:4px;" onclick="updateStatus('agency',${a.id},'contacted')">📞 যোগাযোগ করা হয়েছে</button>`:''}
-    </td>
-  </tr>`).join('')}
-  </tbody></table>`;
-}
-
-function renderUsersTable() {
-  const d = Store.getData();
-  const users = d.proUsers || [];
-  document.getElementById('usersTable').innerHTML = users.length
-    ? `<table><thead><tr><th>নাম</th><th>ফোন/ইমেইল</th><th>যোগ দেওয়ার তারিখ</th><th>মেয়াদ শেষ</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead><tbody>
-    ${users.map((u,i) => `<tr>
-      <td>${u.name}</td><td>${u.contact}</td>
-      <td>${formatDate(u.joinDate)}</td><td>${u.expiry||'চলমান'}</td>
-      <td><span class="status-pill status-replied">Pro সক্রিয়</span></td>
-      <td><button class="action-btn" onclick="removeProUser(${i})" style="color:var(--accent2);">✕ সরান</button></td>
-    </tr>`).join('')}
-    </tbody></table>`
-    : `<div class="empty-state"><div class="empty-icon">👤</div><p class="text-muted">কোনো Pro ইউজার নেই</p></div>`;
-}
-
-function renderAnalytics() {
-  const d = Store.getData();
-  const events = (d.events || []).slice(-50).reverse();
-  document.getElementById('eventsTable').innerHTML = events.length
-    ? `<table><thead><tr><th>সময়</th><th>ইভেন্ট</th><th>বিস্তারিত</th></tr></thead><tbody>
-    ${events.map(e => `<tr>
-      <td style="white-space:nowrap;">${formatDate(new Date(e.time).toISOString())}</td>
-      <td><span class="tag tag-purple">${e.event}</span></td>
-      <td style="font-size:0.78rem;color:var(--text2);">${JSON.stringify(e.data)}</td>
-    </tr>`).join('')}
-    </tbody></table>`
-    : `<div class="empty-state"><p class="text-muted">কোনো ইভেন্ট নেই</p></div>`;
-}
-
-// ===== DETAIL MODAL =====
-function viewDetail(type, id) {
-  let item;
-  if (type === 'help') item = Store.getHelpRequests().find(r => r.id === id);
-  else item = Store.getServiceInquiries().find(r => r.id === id);
-  if (!item) return;
-
-  document.getElementById('detailTitle').textContent = type === 'help' ? '🆘 হেল্প রিকোয়েস্ট বিস্তারিত' : '🏢 ইনকোয়ারি বিস্তারিত';
-  document.getElementById('detailBody').innerHTML = `
-    <div style="display:grid;gap:12px;">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        <div class="card" style="padding:12px;"><div class="form-label">নাম</div><div style="color:#fff;font-weight:600;">${item.name}</div></div>
-        <div class="card" style="padding:12px;"><div class="form-label">ফোন</div><div><a href="https://wa.me/${item.phone?.replace(/\D/g,'')}" target="_blank" class="btn btn-sm btn-success">📱 WhatsApp</a></div></div>
-        ${item.email?`<div class="card" style="padding:12px;"><div class="form-label">ইমেইল</div><div style="color:#fff;">${item.email}</div></div>`:''}
-        ${item.niche?`<div class="card" style="padding:12px;"><div class="form-label">নিশ</div><div style="color:#fff;">${item.niche}</div></div>`:''}
-        ${item.service?`<div class="card" style="padding:12px;"><div class="form-label">আগ্রহী সার্ভিস</div><div class="tag tag-gold">${item.service}</div></div>`:''}
-        ${item.followers?`<div class="card" style="padding:12px;"><div class="form-label">ফলোয়ার</div><div style="color:#fff;">${item.followers}</div></div>`:''}
+function viewReg(id){
+  const r=Store.getRegistrations().find(x=>x.id===id); if(!r) return;
+  document.getElementById('dtTitle').textContent='📋 রেজিস্ট্রেশন — '+r.name;
+  document.getElementById('dtBody').innerHTML=`
+    <div class="grid2 mb2">
+      <div class="card" style="padding:12px;"><div style="font-size:.72rem;color:var(--text2);">নাম</div><div style="color:#fff;font-weight:700;">${r.name}</div></div>
+      <div class="card" style="padding:12px;"><div style="font-size:.72rem;color:var(--text2);">WhatsApp</div>
+        <a href="https://wa.me/${(r.whatsapp||'').replace(/\D/g,'')}" target="_blank" class="btn btn-sm btn-g" style="margin-top:4px;">📱 ${r.whatsapp}</a>
       </div>
-      <div class="card" style="padding:14px;"><div class="form-label mb-1">বার্তা</div><div style="color:var(--text3);font-size:0.88rem;line-height:1.7;white-space:pre-line;">${item.message}</div></div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        ${item.status!=='replied'?`<button class="btn btn-sm btn-success" onclick="updateStatus('${type}',${id},'replied');Modal.hide('detailModal');">✅ রিপ্লাই দিয়েছি</button>`:''}
-        ${item.status!=='closed'?`<button class="btn btn-sm btn-secondary" onclick="updateStatus('${type}',${id},'closed');Modal.hide('detailModal');">🔒 বন্ধ করুন</button>`:''}
-        <a href="https://wa.me/${item.phone?.replace(/\D/g,'')}" target="_blank" class="btn btn-sm btn-primary">💬 WhatsApp করুন</a>
-      </div>
+      <div class="card" style="padding:12px;"><div style="font-size:.72rem;color:var(--text2);">ঠিকানা</div><div style="color:#fff;">${r.address||'—'}</div></div>
+      <div class="card" style="padding:12px;"><div style="font-size:.72rem;color:var(--text2);">নিশ</div><div style="color:#fff;">${r.niche||'—'}</div></div>
+      ${r.facebook?`<div class="card" style="padding:12px;grid-column:1/-1;"><div style="font-size:.72rem;color:var(--text2);">Facebook</div><a href="${r.facebook}" target="_blank" style="font-size:.83rem;">${r.facebook}</a></div>`:''}
+      ${r.tiktok?`<div class="card" style="padding:12px;"><div style="font-size:.72rem;color:var(--text2);">TikTok</div><div style="color:#fff;">${r.tiktok}</div></div>`:''}
+    </div>
+    ${r.description?`<div class="card mb2" style="padding:14px;"><div style="font-size:.72rem;color:var(--text2);margin-bottom:5px;">বিজনেস পরিকল্পনা</div><p style="font-size:.86rem;line-height:1.7;">${r.description}</p></div>`:''}
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      ${r.status==='pending'?`<button class="btn btn-g" onclick="approveReg(${r.id});Modal.hide('detailModal')">✅ অনুমোদন করুন</button><button class="btn btn-d" onclick="openReject(${r.id});Modal.hide('detailModal')">❌ প্রত্যাখ্যান</button>`:
+      `<span class="pill ${{approved:'p-appr',rejected:'p-rej'}[r.status]||'p-pend'}">${{approved:'✅ অনুমোদিত',rejected:'❌ প্রত্যাখ্যাত'}[r.status]||r.status}</span>`}
+      <a href="https://wa.me/${(r.whatsapp||'').replace(/\D/g,'')}" target="_blank" class="btn btn-p">💬 WhatsApp</a>
     </div>`;
   Modal.show('detailModal');
 }
 
-function updateStatus(type, id, status) {
-  if (type === 'help') Store.updateHelpRequest(id, { status });
-  else {
-    const d = Store.getData();
-    const idx = (d.serviceInquiries||[]).findIndex(r => r.id === id);
-    if (idx !== -1) { d.serviceInquiries[idx].status = status; Store.setData(d); }
+function approveReg(id){
+  Store.updateRegistration(id,{status:'approved'});
+  refresh(); renderRegs();
+  Toast.success('✅ অনুমোদন করা হয়েছে!');
+}
+function openReject(id){ document.getElementById('rejId').value=id; document.getElementById('rejReason').value=''; Modal.show('rejModal'); }
+function confirmReject(){
+  const id=+document.getElementById('rejId').value;
+  const reason=document.getElementById('rejReason').value.trim()||'আপনার আবেদন গ্রহণ করা হয়নি।';
+  Store.updateRegistration(id,{status:'rejected',rejectReason:reason});
+  Modal.hide('rejModal'); refresh(); renderRegs();
+  Toast.success('প্রত্যাখ্যান করা হয়েছে');
+}
+
+/* ════════════════════════════════════════════════
+   ORDERS
+════════════════════════════════════════════════ */
+function renderOrderTable(){ renderOrderRows(Store.getOrders(),'orderTable',false); }
+function renderOrderRows(orders,elId,compact){
+  const el=document.getElementById(elId); if(!el) return;
+  if(!orders.length){ el.innerHTML=`<div class="emp"><p class="text-muted">কোনো অর্ডার নেই</p></div>`; return; }
+  el.innerHTML=`<table><thead><tr>
+    <th>তারিখ</th><th>ইউজার</th><th>প্রোডাক্ট</th><th>দাম</th>
+    ${!compact?'<th>পেমেন্ট</th><th>নোট</th>':''}
+    <th>স্ট্যাটাস</th><th>অ্যাকশন</th>
+  </tr></thead><tbody>
+  ${orders.map(o=>`<tr>
+    <td style="white-space:nowrap;font-size:.76rem;">${fmtDate(o.date)}</td>
+    <td><strong>${o.userName||'—'}</strong><div style="font-size:.72rem;color:var(--text2);">${o.userWa||''}</div></td>
+    <td>${o.productName}</td>
+    <td style="color:var(--gold);font-weight:600;">৳${Number(o.price||0).toLocaleString('bn-BD')}</td>
+    ${!compact?`<td>${o.payMethod||'—'}</td><td style="max-width:120px;font-size:.76rem;">${o.note||'—'}</td>`:''}
+    <td><span class="pill ${{pending:'p-pend',confirmed:'p-new',completed:'p-appr',cancelled:'p-rej'}[o.status]||'p-pend'}">${{pending:'পেন্ডিং',confirmed:'কনফার্ম',completed:'সম্পন্ন',cancelled:'বাতিল'}[o.status]||o.status}</span></td>
+    <td>
+      ${o.status==='pending'?`<button class="ab green" onclick="updOrder(${o.id},'confirmed')">✅</button>`:''}
+      ${o.status==='confirmed'?`<button class="ab green" onclick="updOrder(${o.id},'completed')">🏁</button>`:''}
+      ${o.status!=='cancelled'&&o.status!=='completed'?`<button class="ab red" onclick="updOrder(${o.id},'cancelled')">✕</button>`:''}
+      <a href="https://wa.me/${(o.userWa||'').replace(/\D/g,'')}" target="_blank" class="ab">📱</a>
+    </td>
+  </tr>`).join('')}
+  </tbody></table>`;
+}
+function updOrder(id,status){
+  Store.updateOrder(id,{status});
+  refresh(); renderOrderTable();
+  Toast.success('অর্ডার আপডেট হয়েছে ✅');
+}
+
+/* ════════════════════════════════════════════════
+   90-DAY TASK EDITOR
+════════════════════════════════════════════════ */
+let editingDay=1;
+const TASK_TYPES=['content','analysis','business','mindset','growth','engagement','monetization'];
+const TYPE_LABELS={content:'কন্টেন্ট',analysis:'বিশ্লেষণ',business:'বিজনেস',mindset:'মাইন্ডসেট',growth:'গ্রোথ',engagement:'এনগেজমেন্ট',monetization:'মনিটাইজেশন'};
+
+function buildDayRangeBar(){
+  const bar=document.getElementById('dayRangeBar'); if(!bar) return;
+  const ranges=[{l:'দিন ১-১৫',s:1,e:15},{l:'দিন ১৬-৩০',s:16,e:30},{l:'দিন ৩১-৪৫',s:31,e:45},{l:'দিন ৪৬-৬০',s:46,e:60},{l:'দিন ৬১-৭৫',s:61,e:75},{l:'দিন ৭৬-৯০',s:76,e:90}];
+  bar.innerHTML=ranges.map((r,i)=>`<div class="drb${i===0?' on':''}" onclick="jumpToRange(${r.s},this)">${r.l}</div>`).join('');
+}
+function jumpToRange(startDay,btn){
+  document.querySelectorAll('.drb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  editingDay=startDay;
+  renderTaskEditor();
+}
+
+function renderTaskEditor(){
+  const tasks=Store.getTasks();
+  const el=document.getElementById('taskEditor'); if(!el) return;
+  const endDay=Math.min(editingDay+14,90);
+  let html='';
+  for(let d=editingDay;d<=endDay;d++){
+    const t=tasks.find(x=>x.day===d)||{day:d,title:'',description:'',type:'content',resources:''};
+    html+=`<div class="task-row">
+      <div class="task-row-num">দিন ${d}</div>
+      <div class="task-row-body">
+        <div style="display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
+          <select class="task-inp task-inp-sm" id="tt-${d}">
+            ${TASK_TYPES.map(tp=>`<option value="${tp}"${t.type===tp?' selected':''}>${TYPE_LABELS[tp]||tp}</option>`).join('')}
+          </select>
+          <input class="task-inp" id="ti-${d}" value="${t.title||''}" placeholder="টাস্ক শিরোনাম" style="flex:1;">
+        </div>
+        <textarea class="task-inp" id="td-${d}" rows="2" placeholder="বিস্তারিত বর্ণনা — ইউজার কী কী করবে...">${t.description||''}</textarea>
+        <input class="task-inp" id="tr-${d}" value="${t.resources||''}" placeholder="রিসোর্স লিংক বা রেফারেন্স (ঐচ্ছিক)">
+      </div>
+    </div>`;
   }
-  refreshData();
-  if (type === 'help') renderHelpTable();
-  else renderAgencyTable();
-  Toast.success('স্ট্যাটাস আপডেট হয়েছে ✅');
+  el.innerHTML=html;
 }
 
-// ===== PRO USER MANAGEMENT =====
-function showAddUserModal() {
-  const name = prompt('Pro ইউজারের নাম:');
-  if (!name) return;
-  const contact = prompt('ফোন বা ইমেইল:');
-  if (!contact) return;
-  const d = Store.getData();
-  if (!d.proUsers) d.proUsers = [];
-  d.proUsers.push({ name, contact, joinDate: new Date().toISOString(), expiry: null });
-  Store.setData(d);
-  renderUsersTable();
-  updateStats();
-  Toast.success('Pro ইউজার যোগ করা হয়েছে ✅');
+function saveTasks(){
+  const existingTasks=Store.getTasks();
+  const endDay=Math.min(editingDay+14,90);
+  for(let d=editingDay;d<=endDay;d++){
+    const title=document.getElementById('ti-'+d)?.value.trim();
+    const desc=document.getElementById('td-'+d)?.value.trim();
+    const type=document.getElementById('tt-'+d)?.value;
+    const resources=document.getElementById('tr-'+d)?.value.trim();
+    const idx=existingTasks.findIndex(t=>t.day===d);
+    if(idx!==-1) existingTasks[idx]={day:d,title,description:desc,type,resources};
+    else existingTasks.push({day:d,title,description:desc,type,resources});
+  }
+  Store.saveTasks(existingTasks);
+  Toast.success(`দিন ${editingDay}-${Math.min(editingDay+14,90)} সেভ হয়েছে ✅`);
 }
 
-function removeProUser(index) {
-  if (!confirm('এই ইউজারকে সরাতে চান?')) return;
-  const d = Store.getData();
-  d.proUsers.splice(index, 1);
-  Store.setData(d);
-  renderUsersTable();
-  updateStats();
-  Toast.success('ইউজার সরানো হয়েছে');
+/* ════════════════════════════════════════════════
+   MARKETPLACE ADMIN
+════════════════════════════════════════════════ */
+let editProdId=null;
+
+function renderProdTable(){
+  const prods=Store.getProducts();
+  const el=document.getElementById('prodTable');
+  if(!prods.length){ el.innerHTML=`<div class="emp"><p class="text-muted">কোনো প্রোডাক্ট নেই। + বাটন দিয়ে যোগ করুন।</p></div>`; return; }
+  el.innerHTML=`<table><thead><tr>
+    <th>ধরন</th><th>নাম</th><th>দাম</th><th>ডেলিভারি</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th>
+  </tr></thead><tbody>
+  ${prods.map(p=>`<tr>
+    <td><span class="pill ${{service:'p-new',ebook:'p-appr',course:'p-pend',template:'p-rej'}[p.type]||'p-pend'}">${{service:'সার্ভিস',ebook:'ইবুক',course:'কোর্স',template:'টেমপ্লেট'}[p.type]||p.type}</span></td>
+    <td><strong>${p.name}</strong></td>
+    <td style="color:var(--gold);font-weight:600;">৳${Number(p.price||0).toLocaleString('bn-BD')}</td>
+    <td style="font-size:.8rem;">${p.delivery||'—'}</td>
+    <td><span class="pill ${p.active?'p-appr':'p-rej'}">${p.active?'সক্রিয়':'অফ'}</span></td>
+    <td>
+      <button class="ab" onclick="editProd(${p.id})">✏️</button>
+      <button class="ab" onclick="toggleProd(${p.id})">${p.active?'🔒':'🔓'}</button>
+      <button class="ab red" onclick="deleteProd(${p.id})">🗑️</button>
+    </td>
+  </tr>`).join('')}
+  </tbody></table>`;
 }
 
-// ===== SETTINGS =====
-function saveSettings() {
-  const d = Store.getData();
-  d.settings = {
-    proPrice: document.getElementById('setProPrice').value,
-    freeLimit: document.getElementById('setFreeLimit').value,
-    whatsapp: document.getElementById('setWhatsapp').value,
-    email: document.getElementById('setEmail').value,
-    facebook: document.getElementById('setFacebook').value,
-  };
-  Store.setData(d);
-  Toast.success('সেটিংস সেভ হয়েছে ✅');
+function openProdModal(){ editProdId=null; document.getElementById('pmTitle').textContent='+ নতুন প্রোডাক্ট'; ['pm-type','pm-name','pm-price','pm-delivery','pm-desc','pm-details','pm-link'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';}); document.getElementById('pm-err').classList.add('hidden'); Modal.show('prodModal'); }
+function editProd(id){ const p=Store.getProducts().find(x=>x.id===id); if(!p) return; editProdId=id; document.getElementById('pmTitle').textContent='✏️ প্রোডাক্ট সম্পাদনা'; document.getElementById('pm-type').value=p.type||'service'; document.getElementById('pm-name').value=p.name||''; document.getElementById('pm-price').value=p.price||''; document.getElementById('pm-delivery').value=p.delivery||''; document.getElementById('pm-desc').value=p.description||''; document.getElementById('pm-details').value=p.details||''; document.getElementById('pm-link').value=p.link||''; Modal.show('prodModal'); }
+function saveProd(){
+  const name=document.getElementById('pm-name').value.trim();
+  const price=document.getElementById('pm-price').value;
+  const desc=document.getElementById('pm-desc').value.trim();
+  if(!name||!price||!desc){ document.getElementById('pm-err').textContent='⚠️ নাম, দাম ও বিবরণ আবশ্যক।'; document.getElementById('pm-err').classList.remove('hidden'); return; }
+  document.getElementById('pm-err').classList.add('hidden');
+  const prod={type:document.getElementById('pm-type').value,name,price:+price,delivery:document.getElementById('pm-delivery').value,description:desc,details:document.getElementById('pm-details').value,link:document.getElementById('pm-link').value};
+  if(editProdId){ Store.updateProduct(editProdId,prod); Toast.success('প্রোডাক্ট আপডেট হয়েছে ✅'); }
+  else{ Store.addProduct(prod); Toast.success('প্রোডাক্ট যোগ হয়েছে ✅'); }
+  Modal.hide('prodModal'); renderProdTable(); refresh();
 }
+function toggleProd(id){ const p=Store.getProducts().find(x=>x.id===id); if(!p) return; Store.updateProduct(id,{active:!p.active}); renderProdTable(); Toast.success(p.active?'প্রোডাক্ট অফ করা হয়েছে':'প্রোডাক্ট চালু করা হয়েছে'); }
+function deleteProd(id){ if(!confirm('এই প্রোডাক্ট মুছবেন?')) return; Store.deleteProduct(id); renderProdTable(); refresh(); Toast.success('মুছে ফেলা হয়েছে'); }
 
-// ===== EXPORT =====
-function exportData(type) {
-  const data = type === 'help' ? Store.getHelpRequests() : Store.getServiceInquiries();
-  downloadJSON(data, `${type}_requests_${Date.now()}.json`);
-  Toast.success('ডেটা ডাউনলোড হচ্ছে...');
+/* ════════════════════════════════════════════════
+   SETTINGS
+════════════════════════════════════════════════ */
+function loadSettings(){
+  const d=Store.getData(); const s=d.settings||{};
+  ['wa','email','fb','sn'].forEach(k=>{ const el=document.getElementById('s-'+k); if(el) el.value=s[k]||''; });
 }
-
-function exportAll() {
-  downloadJSON(Store.getData(), `c2b_all_data_${Date.now()}.json`);
-  Toast.success('সব ডেটা ডাউনলোড হচ্ছে...');
+function saveSettings(){
+  const d=Store.getData();
+  d.settings={ wa:document.getElementById('s-wa').value, email:document.getElementById('s-email').value, fb:document.getElementById('s-fb').value, sn:document.getElementById('s-sn').value };
+  Store.setData(d); Toast.success('সেটিংস সেভ হয়েছে ✅');
 }
-
-function clearOldData() {
-  if (!confirm('৩০ দিনের পুরনো ইভেন্ট মুছে ফেলবেন?')) return;
-  const d = Store.getData();
-  const cutoff = Date.now() - (30 * 24 * 60 * 60 * 1000);
-  d.events = (d.events || []).filter(e => e.time > cutoff);
-  Store.setData(d);
-  Toast.success('পুরনো ডেটা মুছা হয়েছে');
+function changePass(){
+  const np=document.getElementById('newPass').value.trim();
+  if(!np||np.length<6){ Toast.error('কমপক্ষে ৬ অক্ষরের পাসওয়ার্ড দিন'); return; }
+  Store.setAdminPass(np); Toast.success('পাসওয়ার্ড পরিবর্তন হয়েছে ✅');
+}
+function clearEvents(){
+  if(!confirm('৩০ দিনের পুরনো লগ মুছবেন?')) return;
+  const d=Store.getData(); const cut=Date.now()-30*864e5; d.events=(d.events||[]).filter(e=>e.t>cut); Store.setData(d); Toast.success('পুরনো লগ মুছা হয়েছে');
 }
 </script>
 </body>

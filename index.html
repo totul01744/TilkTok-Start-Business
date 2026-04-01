@@ -1,659 +1,753 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Creator2Business — কন্টেন্ট থেকে বিজনেস</title>
-<meta name="description" content="বাংলাদেশের ক্রিয়েটরদের জন্য AI-powered বিজনেস টুলস। কন্টেন্ট বানাও, অডিয়েন্স বাড়াও, বিজনেস চালাও।">
+<meta name="description" content="বাংলাদেশের ক্রিয়েটরদের জন্য AI-powered বিজনেস প্ল্যাটফর্ম">
 <link rel="stylesheet" href="assets/css/style.css">
 <style>
-/* ===== HERO ===== */
-.hero { padding: 80px 0 60px; text-align: center; }
-.hero-tag { display: inline-block; background: rgba(108,99,255,0.12); border: 1px solid rgba(108,99,255,0.3); color: #a78bfa; font-size: 0.78rem; font-weight: 600; padding: 5px 16px; border-radius: 20px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
-.hero h1 { margin-bottom: 16px; }
-.hero p { font-size: 1.05rem; max-width: 560px; margin: 0 auto 32px; }
-.hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-.stats-bar { display: flex; gap: 32px; justify-content: center; margin-top: 48px; flex-wrap: wrap; }
-.stat-item { text-align: center; }
-.stat-val { font-family: var(--font-head); font-size: 1.6rem; font-weight: 800; color: #fff; }
-.stat-lbl { font-size: 0.78rem; color: var(--text2); margin-top: 2px; }
+/* ── ONBOARDING ── */
+.ob-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1}
+.ob-box{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);max-width:620px;width:100%;overflow:hidden}
+.ob-hero{background:linear-gradient(135deg,rgba(108,99,255,.18),rgba(255,101,132,.1));padding:36px 32px 28px;text-align:center;border-bottom:1px solid var(--border)}
+.ob-steps{display:flex;gap:8px;justify-content:center;margin-top:20px}
+.ob-step{width:8px;height:8px;border-radius:50%;background:var(--border2)}
+.ob-step.on{background:var(--accent);width:24px;border-radius:4px}
+.ob-body{padding:28px 32px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.fc-full{grid-column:1/-1}
+.pending-screen{text-align:center;padding:48px 32px}
+.pending-icon{font-size:3.5rem;margin-bottom:16px;animation:bob 2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 
-/* ===== TOOLS SECTION ===== */
-.tools-nav { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-bottom: 24px; }
-.tool-tab {
-  background: var(--card); border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm); padding: 14px 10px;
-  cursor: pointer; text-align: center; transition: all 0.22s;
-  color: var(--text2); font-family: var(--font); font-size: 0.78rem;
-  font-weight: 500; position: relative; overflow: hidden;
+/* ── MAIN APP ── */
+.app-layout{display:flex;min-height:calc(100vh - 62px)}
+.sidebar{width:220px;background:var(--card);border-right:1px solid var(--border);position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;flex-shrink:0}
+.sb-sec{padding:10px 12px 4px;font-size:.65rem;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+.sb-btn{display:flex;align-items:center;gap:9px;padding:9px 13px;color:var(--text2);border-radius:var(--r3);margin:2px 8px;cursor:pointer;font-size:.83rem;font-weight:500;transition:all .2s;border:none;background:none;width:calc(100% - 16px);text-align:left}
+.sb-btn:hover{color:var(--text);background:var(--card2)}
+.sb-btn.on{color:#fff;background:rgba(108,99,255,.15);border-left:2px solid var(--accent)}
+.sb-ico{font-size:.9rem;width:17px;text-align:center}
+.main{flex:1;padding:24px;overflow-x:hidden}
+.pg-title{font-family:var(--fh);font-size:1.25rem;font-weight:800;color:#fff;margin-bottom:4px}
+.pg-sub{font-size:.82rem;color:var(--text2);margin-bottom:22px}
+
+/* ── TOOLS ── */
+.tool-tabs{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:9px;margin-bottom:20px}
+.ttab{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:12px 8px;cursor:pointer;text-align:center;transition:all .2s;color:var(--text2);font-family:var(--font);font-size:.76rem;font-weight:500}
+.ttab:hover{border-color:var(--border2);color:var(--text);transform:translateY(-1px)}
+.ttab.on{border-color:var(--accent);color:#fff;background:rgba(108,99,255,.1);box-shadow:0 0 0 1px var(--accent),0 4px 18px var(--glow)}
+.ttab .ti{font-size:1.3rem;margin-bottom:4px;display:block}
+.tdesc{background:rgba(108,99,255,.07);border:1px solid rgba(108,99,255,.16);border-radius:var(--r2);padding:10px 14px;font-size:.83rem;color:var(--text2);margin-bottom:18px}
+.fc-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:18px}
+.fc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.fc-full2{grid-column:1/-1}
+.out-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.out-hdr{background:var(--card2);border-bottom:1px solid var(--border);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.out-title{font-family:var(--fh);font-weight:800;font-size:.9rem;color:#fff;display:flex;align-items:center;gap:7px}
+.out-body{padding:18px}
+.ri{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:15px;margin-bottom:10px;transition:border-color .2s}
+.ri:hover{border-color:var(--border2)}
+.ri:last-child{margin-bottom:0}
+
+/* ── 90-DAY TASKS ── */
+.day-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;margin-bottom:20px}
+.day-cell{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:10px 6px;text-align:center;cursor:pointer;transition:all .2s}
+.day-cell:hover{border-color:var(--accent)}
+.day-cell.done{background:rgba(67,233,123,.1);border-color:rgba(67,233,123,.4)}
+.day-cell.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.day-cell.locked{opacity:.4;cursor:default}
+.dc-num{font-family:var(--fh);font-weight:800;font-size:1rem;color:#fff}
+.dc-lbl{font-size:.65rem;color:var(--text2);margin-top:2px}
+.task-detail{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px}
+
+/* ── MARKETPLACE ── */
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.prod-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:all .25s;display:flex;flex-direction:column}
+.prod-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.prod-thumb{height:140px;background:linear-gradient(135deg,var(--bg3),var(--card2));display:flex;align-items:center;justify-content:center;font-size:3rem;border-bottom:1px solid var(--border)}
+.prod-body{padding:16px;flex:1;display:flex;flex-direction:column}
+.prod-name{font-weight:700;color:#fff;margin-bottom:5px;font-size:.95rem}
+.prod-desc{font-size:.82rem;color:var(--text2);margin-bottom:10px;flex:1;line-height:1.6}
+.prod-price{font-family:var(--fh);font-size:1.3rem;font-weight:800;color:var(--gold);margin-bottom:10px}
+
+/* ── TABS ── */
+.tab-bar{display:flex;gap:4px;background:var(--bg2);border-radius:var(--r2);padding:4px;margin-bottom:18px;flex-wrap:wrap}
+.tbn{flex:1;min-width:70px;padding:7px 10px;border-radius:7px;border:none;background:transparent;color:var(--text2);font-family:var(--font);font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s;text-align:center}
+.tbn.on{background:var(--accent);color:#fff;box-shadow:0 2px 10px var(--glow)}
+
+/* ── PROFILE BADGE ── */
+.prof-badge{display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--border);border-radius:var(--r2);padding:10px 14px}
+.pb-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;flex-shrink:0}
+
+@media(max-width:768px){
+  .sidebar{display:none}
+  .app-layout{flex-direction:column}
+  .main{padding:14px}
+  .form-grid,.fc-grid{grid-template-columns:1fr}
+  .fc-full,.fc-full2{grid-column:1}
 }
-.tool-tab:hover { border-color: var(--border2); color: var(--text); transform: translateY(-1px); }
-.tool-tab.active { border-color: var(--accent); color: #fff; background: rgba(108,99,255,0.1); box-shadow: 0 0 0 1px var(--accent), 0 4px 20px var(--glow); }
-.tool-tab .t-icon { font-size: 1.4rem; margin-bottom: 5px; display: block; }
-
-/* ===== TOOL DESC ===== */
-.tool-desc { background: rgba(108,99,255,0.07); border: 1px solid rgba(108,99,255,0.18); border-radius: var(--radius-sm); padding: 12px 16px; font-size: 0.85rem; color: var(--text2); display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
-
-/* ===== FORM CARD ===== */
-.form-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; }
-.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 18px; }
-.form-full { grid-column: 1 / -1; }
-
-/* ===== OUTPUT ===== */
-.output-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-.output-header { background: var(--card2); border-bottom: 1px solid var(--border); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-.output-title { font-family: var(--font-head); font-weight: 800; font-size: 0.95rem; color: #fff; display: flex; align-items: center; gap: 8px; }
-.output-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-.output-body { padding: 20px; }
-
-/* ===== RESULT ITEMS ===== */
-.result-item { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 12px; position: relative; transition: border-color 0.2s; }
-.result-item:hover { border-color: var(--border2); }
-.result-item:last-child { margin-bottom: 0; }
-
-/* ===== SCORE CARD ===== */
-.score-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-bottom: 18px; }
-.score-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; text-align: center; }
-.score-val { font-family: var(--font-head); font-size: 1.5rem; font-weight: 800; }
-.score-lbl { font-size: 0.72rem; color: var(--text2); margin-top: 2px; }
-
-/* ===== DAY CARD ===== */
-.day-card { background: var(--bg2); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 10px; }
-.day-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-.day-name { font-family: var(--font-head); font-weight: 700; color: var(--accent); font-size: 0.88rem; }
-.day-time { background: rgba(245,197,24,0.12); color: var(--gold); border-radius: 6px; padding: 2px 10px; font-size: 0.73rem; font-weight: 600; }
-
-/* ===== FUNNEL ===== */
-.funnel-step { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 20px; display: flex; gap: 14px; }
-.funnel-step:not(:last-child)::after { content: '↓'; display: block; text-align: center; color: var(--accent); font-size: 1.1rem; font-weight: 900; margin-top: -12px; margin-bottom: 8px; }
-.step-circle { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-family: var(--font-head); font-weight: 800; font-size: 0.85rem; flex-shrink: 0; }
-
-/* ===== USAGE BAR ===== */
-.usage-bar { background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; font-size: 0.85rem; }
-
-/* ===== HELP WIDGET ===== */
-.help-widget {
-  position: fixed; bottom: 24px; left: 24px; z-index: 500;
-}
-.help-bubble {
-  width: 52px; height: 52px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  cursor: pointer; font-size: 1.3rem;
-  box-shadow: 0 4px 20px var(--glow), 0 2px 10px var(--glow2);
-  transition: transform 0.2s; border: none;
-  animation: pulse-help 3s infinite;
-}
-.help-bubble:hover { transform: scale(1.1); }
-@keyframes pulse-help { 0%,100%{box-shadow:0 4px 20px var(--glow);} 50%{box-shadow:0 4px 30px rgba(108,99,255,0.5);} }
-.help-panel {
-  position: absolute; bottom: 64px; left: 0;
-  width: 300px; background: var(--card);
-  border: 1px solid var(--border2); border-radius: var(--radius);
-  padding: 20px; display: none;
-  box-shadow: var(--shadow-lg); animation: fadeUp 0.3s ease;
-}
-.help-panel.open { display: block; }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header class="header">
-  <div class="header-inner">
-    <a href="index.html" class="logo">
-      <div class="logo-icon">🚀</div>
-      <span class="logo-text">Creator<span>2</span>Business</span>
-    </a>
-    <nav class="nav" id="mainNav">
-      <a href="index.html" class="nav-link active">🛠️ টুলস</a>
-      <a href="agency.html" class="nav-link">🏢 এজেন্সি</a>
-      <a href="help.html" class="nav-link">💬 হেল্প নিন</a>
-      <span class="nav-badge">BETA</span>
-      <button class="btn btn-sm btn-secondary" onclick="showApiModal()" style="margin-left:6px;">⚙️ Settings</button>
-    </nav>
-    <button class="hamburger" id="hamburger">☰</button>
-  </div>
-</header>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="container">
-    <div class="hero-tag">🇧🇩 বাংলাদেশের ক্রিয়েটরদের জন্য</div>
-    <h1>কন্টেন্ট থেকে <span class="glow-text">বিজনেস</span><br>তৈরি করুন AI দিয়ে</h1>
-    <p class="text-muted">ভাইরাল কন্টেন্ট আইডিয়া, গ্রোথ প্ল্যান, সার্ভিস প্যাকেজ ও আরো অনেক কিছু — সব এক জায়গায়।</p>
-    <div class="hero-btns">
-      <button class="btn btn-primary btn-lg" onclick="document.getElementById('toolsSection').scrollIntoView({behavior:'smooth'})">✨ শুরু করুন ফ্রিতে</button>
-      <a href="agency.html" class="btn btn-secondary btn-lg">🏢 এজেন্সি দেখুন</a>
+<!-- ═══════════════════════════════════════════════════
+     SCREEN 1: ONBOARDING (shown when status = 'none')
+     ═══════════════════════════════════════════════════ -->
+<div id="screenOnboard" class="ob-wrap hidden">
+  <div class="ob-box">
+    <div class="ob-hero">
+      <div class="logo-ic" style="width:52px;height:52px;font-size:1.4rem;margin:0 auto 14px;">🚀</div>
+      <h2>Creator2Business তে স্বাগতম!</h2>
+      <p style="font-size:.9rem;margin-top:8px;">শুরু করতে নিচের ফর্মটি পূরণ করুন — আমরা ২৪ ঘণ্টার মধ্যে রিভিউ করে অ্যাক্সেস দেব।</p>
+      <div class="ob-steps"><div class="ob-step on"></div><div class="ob-step"></div><div class="ob-step"></div></div>
     </div>
-    <div class="stats-bar">
-      <div class="stat-item"><div class="stat-val">১১+</div><div class="stat-lbl">AI টুলস</div></div>
-      <div class="stat-item"><div class="stat-val">১০০%</div><div class="stat-lbl">বাংলায়</div></div>
-      <div class="stat-item"><div class="stat-val">ফ্রি</div><div class="stat-lbl">শুরু করতে</div></div>
-      <div class="stat-item"><div class="stat-val">৩০s</div><div class="stat-lbl">প্রতি স্ক্রিপ্ট</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- TOOLS SECTION -->
-<section class="section" id="toolsSection">
-  <div class="container">
-    <div class="usage-bar">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span>⚡ আজকের ব্যবহার:</span>
-        <span class="usage-display" style="font-weight:700;"></span>
-      </div>
-      <button class="btn btn-sm btn-primary" onclick="showUpgradeModal()">🚀 Pro → আনলিমিটেড</button>
-    </div>
-
-    <!-- Tool Tabs -->
-    <div class="tools-nav" id="toolsNav">
-      <button class="tool-tab active" data-tool="content_ideas" onclick="selectTool('content_ideas',this)"><span class="t-icon">💡</span>কন্টেন্ট আইডিয়া</button>
-      <button class="tool-tab" data-tool="hook_script" onclick="selectTool('hook_script',this)"><span class="t-icon">🎣</span>হুক & স্ক্রিপ্ট</button>
-      <button class="tool-tab" data-tool="niche_finder" onclick="selectTool('niche_finder',this)"><span class="t-icon">🔍</span>নিশ ফাইন্ডার</button>
-      <button class="tool-tab" data-tool="product_ideas" onclick="selectTool('product_ideas',this)"><span class="t-icon">🛍️</span>প্রোডাক্ট আইডিয়া</button>
-      <button class="tool-tab" data-tool="service_package" onclick="selectTool('service_package',this)"><span class="t-icon">📦</span>সার্ভিস প্যাকেজ</button>
-      <button class="tool-tab" data-tool="bio_optimizer" onclick="selectTool('bio_optimizer',this)"><span class="t-icon">📝</span>Bio অপটিমাইজার</button>
-      <button class="tool-tab" data-tool="course_outline" onclick="selectTool('course_outline',this)"><span class="t-icon">🎓</span>কোর্স আউটলাইন</button>
-      <button class="tool-tab" data-tool="growth_plan" onclick="selectTool('growth_plan',this)"><span class="t-icon">📈</span>গ্রোথ প্ল্যান</button>
-      <button class="tool-tab" data-tool="engagement_reply" onclick="selectTool('engagement_reply',this)"><span class="t-icon">💬</span>এনগেজমেন্ট</button>
-      <button class="tool-tab" data-tool="content_analysis" onclick="selectTool('content_analysis',this)"><span class="t-icon">📊</span>অ্যানালাইসিস</button>
-      <button class="tool-tab" data-tool="trend_ideas" onclick="selectTool('trend_ideas',this)"><span class="t-icon">🔥</span>ট্রেন্ড আইডিয়া</button>
-      <button class="tool-tab" data-tool="funnel_builder" onclick="selectTool('funnel_builder',this)"><span class="t-icon">🎯</span>ফানেল বিল্ডার</button>
-    </div>
-
-    <!-- Tool Description -->
-    <div class="tool-desc" id="toolDesc">
-      <span>💡</span><span id="toolDescText">ভাইরাল ভিডিও আইডিয়া জেনারেট করুন — টাইটেল, হুক, স্ক্রিপ্ট, ক্যাপশন ও হ্যাশট্যাগ সহ ২০টি আইডিয়া পাবেন</span>
-    </div>
-
-    <!-- Input Form -->
-    <div class="form-card" id="inputForm">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:18px;">
-        <div style="width:4px;height:20px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;"></div>
-        <strong style="color:#fff;">ইনপুট তথ্য দিন</strong>
-      </div>
-      <div class="form-grid" id="formFields"></div>
-      <button class="btn btn-primary btn-full" id="genBtn" onclick="generate()">✨ AI দিয়ে জেনারেট করুন</button>
-    </div>
-
-    <!-- Output -->
-    <div class="output-card hidden" id="outputCard">
-      <div class="output-header">
-        <div class="output-title"><span id="outIcon">💡</span><span id="outTitle">ফলাফল</span></div>
-        <div class="output-actions">
-          <button class="btn btn-sm btn-secondary" onclick="copyResult()">📋 কপি</button>
-          <button class="btn btn-sm btn-secondary" onclick="downloadResult()">⬇️ ডাউনলোড</button>
-          <button class="btn btn-sm btn-secondary" onclick="generate()">🔄 আবার</button>
+    <div class="ob-body">
+      <div style="font-family:var(--fh);font-weight:800;color:#fff;margin-bottom:16px;font-size:1rem;">📋 আপনার তথ্য দিন</div>
+      <div class="form-grid">
+        <div class="fg">
+          <label class="fl">আপনার পুরো নাম *</label>
+          <input class="fc" id="ob-name" placeholder="নাম লিখুন">
+        </div>
+        <div class="fg">
+          <label class="fl">জেলা / ঠিকানা *</label>
+          <input class="fc" id="ob-addr" placeholder="যেমন: ঢাকা, চট্টগ্রাম">
+        </div>
+        <div class="fg">
+          <label class="fl">WhatsApp নম্বর *</label>
+          <input class="fc" id="ob-wa" placeholder="+880 1XXX-XXXXXX" type="tel">
+        </div>
+        <div class="fg">
+          <label class="fl">Facebook পেজ লিংক</label>
+          <input class="fc" id="ob-fb" placeholder="https://facebook.com/...">
+        </div>
+        <div class="fg">
+          <label class="fl">TikTok ইউজারনেম</label>
+          <input class="fc" id="ob-tt" placeholder="@yourusername">
+        </div>
+        <div class="fg">
+          <label class="fl">আপনার নিশ</label>
+          <input class="fc" id="ob-niche" placeholder="যেমন: ফিটনেস, রান্না">
+        </div>
+        <div class="fg fc-full">
+          <label class="fl">আপনি কিভাবে বিজনেস শুরু করতে চান? (ঐচ্ছিক)</label>
+          <textarea class="fc" id="ob-desc" rows="3" placeholder="আপনার পরিকল্পনা ও লক্ষ্য সম্পর্কে বলুন..."></textarea>
         </div>
       </div>
-      <div class="output-body" id="outputBody"></div>
+      <div id="ob-err" class="alert a-e mt2 hidden"></div>
+      <button class="btn btn-p btn-fw btn-lg mt3" onclick="submitOnboard()">
+        📨 রেজিস্ট্রেশন সাবমিট করুন
+      </button>
+      <p style="text-align:center;font-size:.75rem;margin-top:10px;color:var(--text2);">আপনার তথ্য সম্পূর্ণ নিরাপদ ও গোপনীয় থাকবে</p>
     </div>
   </div>
-</section>
+</div>
 
-<!-- HELP WIDGET -->
-<div class="help-widget">
-  <button class="help-bubble" onclick="toggleHelpPanel()" title="হেল্প দরকার?">💬</button>
-  <div class="help-panel" id="helpPanel">
-    <div style="font-family:var(--font-head);font-weight:800;color:#fff;margin-bottom:4px;">হেল্প দরকার? 👋</div>
-    <p style="font-size:0.82rem;margin-bottom:14px;">কোনো সমস্যা হচ্ছে? আমাদের এক্সপার্ট টিম সাহায্য করতে প্রস্তুত।</p>
-    <a href="help.html" class="btn btn-primary btn-sm btn-full" style="margin-bottom:8px;">💬 হেল্প রিকোয়েস্ট করুন</a>
-    <a href="agency.html" class="btn btn-secondary btn-sm btn-full">🏢 প্রফেশনাল সার্ভিস নিন</a>
+<!-- ═══════════════════════════════════════════════════
+     SCREEN 2: PENDING APPROVAL
+     ═══════════════════════════════════════════════════ -->
+<div id="screenPending" class="ob-wrap hidden">
+  <div class="ob-box">
+    <div class="pending-screen">
+      <div class="pending-icon">⏳</div>
+      <h2 style="margin-bottom:10px;">রিভিউ চলছে...</h2>
+      <p style="max-width:380px;margin:0 auto 20px;">আপনার রেজিস্ট্রেশন সফলভাবে জমা হয়েছে। আমরা ২৪ ঘণ্টার মধ্যে রিভিউ করে WhatsApp-এ জানাব।</p>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-bottom:20px;">
+        <div style="font-size:.78rem;color:var(--text2);">আপনার WhatsApp</div>
+        <div id="pend-wa" style="font-weight:700;color:#fff;font-size:1rem;margin-top:3px;"></div>
+      </div>
+      <div class="alert a-i" style="text-align:left;">
+        <span>💡</span>
+        <div>অনুমোদন পেলে পেজটি রিফ্রেশ করুন অথবা আমরা লিংক পাঠাব।</div>
+      </div>
+      <button class="btn btn-s mt3" onclick="location.reload()">🔄 স্ট্যাটাস চেক করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SCREEN 3: REJECTED
+     ═══════════════════════════════════════════════════ -->
+<div id="screenRejected" class="ob-wrap hidden">
+  <div class="ob-box">
+    <div class="pending-screen">
+      <div style="font-size:3rem;margin-bottom:16px;">❌</div>
+      <h2 style="color:var(--accent2);margin-bottom:10px;">অনুমোদন হয়নি</h2>
+      <p id="rej-reason" style="margin-bottom:20px;"></p>
+      <button class="btn btn-p" onclick="reapply()">🔄 আবার আবেদন করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SCREEN 4: MAIN APP (approved users)
+     ═══════════════════════════════════════════════════ -->
+<div id="screenApp" class="hidden">
+
+  <!-- HEADER -->
+  <header class="hdr">
+    <div class="hdr-in">
+      <a href="index.html" class="logo">
+        <div class="logo-ic">🚀</div>
+        <span>Creator<span style="color:var(--accent)">2</span>Business</span>
+      </a>
+      <nav class="nav" id="mainNav">
+        <a href="index.html" class="nav-a on">🛠️ টুলস</a>
+        <a href="marketplace.html" class="nav-a">🛍️ মার্কেটপ্লেস</a>
+        <a href="tasks.html" class="nav-a">📅 ৯০ দিন</a>
+        <button class="btn btn-sm btn-s" onclick="showApiModal()" style="margin-left:6px;">⚙️</button>
+      </nav>
+      <button class="hmb">☰</button>
+    </div>
+  </header>
+
+  <!-- APP LAYOUT -->
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div style="padding:14px 10px 4px;">
+        <div id="sideProfile"></div>
+      </div>
+      <div class="sb-sec">AI টুলস</div>
+      <button class="sb-btn on" data-page="tools" onclick="showPage('tools',this)"><span class="sb-ico">🛠️</span>সব টুলস</button>
+      <div class="sb-sec">আমার যাত্রা</div>
+      <button class="sb-btn" data-page="tasks" onclick="showPage('tasks',this)"><span class="sb-ico">📅</span>৯০ দিনের প্ল্যান</button>
+      <button class="sb-btn" data-page="market" onclick="showPage('market',this)"><span class="sb-ico">🛍️</span>মার্কেটপ্লেস</button>
+      <button class="sb-btn" data-page="orders" onclick="showPage('orders',this)"><span class="sb-ico">📦</span>আমার অর্ডার</button>
+      <div class="sb-sec">সাহায্য</div>
+      <button class="sb-btn" data-page="help" onclick="showPage('help',this)"><span class="sb-ico">💬</span>হেল্প নিন</button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+
+      <!-- ── TOOLS PAGE ── -->
+      <div id="pg-tools">
+        <div class="pg-title">🛠️ AI টুলস</div>
+        <div class="pg-sub">আপনার কন্টেন্ট ও বিজনেস গড়তে AI ব্যবহার করুন</div>
+        <div class="tool-tabs" id="toolTabs"></div>
+        <div class="tdesc"><span>💡</span>&nbsp;<span id="tdescTxt"></span></div>
+        <div class="fc-card">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:14px;">
+            <div style="width:3px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;"></div>
+            <strong style="color:#fff;font-size:.9rem;">ইনপুট দিন</strong>
+          </div>
+          <div class="fc-grid" id="fcFields"></div>
+          <button class="btn btn-p btn-fw" id="genBtn" onclick="generate()">✨ AI দিয়ে তৈরি করুন</button>
+        </div>
+        <div class="out-card hidden" id="outCard">
+          <div class="out-hdr">
+            <div class="out-title"><span id="outIco">💡</span><span id="outTitle">ফলাফল</span></div>
+            <div style="display:flex;gap:7px;">
+              <button class="btn btn-sm btn-s" onclick="copyTxt(document.getElementById('outBody').innerText,this)">📋 কপি</button>
+              <button class="btn btn-sm btn-s" onclick="generate()">🔄 আবার</button>
+            </div>
+          </div>
+          <div class="out-body" id="outBody"></div>
+        </div>
+      </div>
+
+      <!-- ── TASKS PAGE ── -->
+      <div id="pg-tasks" class="hidden">
+        <div class="pg-title">📅 ৯০ দিনের রোডম্যাপ</div>
+        <div class="pg-sub">প্রতিদিনের কাজ সম্পন্ন করুন এবং ক্রিয়েটর থেকে বিজনেস ওনার হয়ে উঠুন</div>
+        <div id="taskContent"></div>
+      </div>
+
+      <!-- ── MARKETPLACE PAGE ── -->
+      <div id="pg-market" class="hidden">
+        <div class="pg-title">🛍️ মার্কেটপ্লেস</div>
+        <div class="pg-sub">এজেন্সি সার্ভিস ও ডিজিটাল প্রোডাক্ট কিনুন</div>
+        <div id="marketContent"></div>
+      </div>
+
+      <!-- ── ORDERS PAGE ── -->
+      <div id="pg-orders" class="hidden">
+        <div class="pg-title">📦 আমার অর্ডার</div>
+        <div class="pg-sub">আপনার কেনা সার্ভিস ও প্রোডাক্ট</div>
+        <div id="ordersContent"></div>
+      </div>
+
+      <!-- ── HELP PAGE ── -->
+      <div id="pg-help" class="hidden">
+        <div class="pg-title">💬 হেল্প ও সাপোর্ট</div>
+        <div class="pg-sub">যেকোনো সমস্যায় আমরা পাশে আছি</div>
+        <div class="card mb2">
+          <h3 style="margin-bottom:14px;">📨 সাহায্যের জন্য বার্তা পাঠান</h3>
+          <div class="fg mb2">
+            <label class="fl">বিষয়</label>
+            <input class="fc" id="h-subject" placeholder="কি বিষয়ে সাহায্য দরকার?">
+          </div>
+          <div class="fg mb2">
+            <label class="fl">বিস্তারিত</label>
+            <textarea class="fc" id="h-msg" rows="4" placeholder="বিস্তারিত লিখুন..."></textarea>
+          </div>
+          <button class="btn btn-p" onclick="sendHelp()">📨 পাঠান</button>
+        </div>
+        <div class="alert a-i">
+          <span>💬</span>
+          <div>সরাসরি WhatsApp-এ যোগাযোগ করুন — সবচেয়ে দ্রুত সাড়া পাবেন।<br>
+          <a id="wa-link" href="#" target="_blank" class="btn btn-g mt1 btn-sm">📱 WhatsApp করুন</a></div>
+        </div>
+      </div>
+
+    </main>
   </div>
 </div>
 
 <!-- API KEY MODAL -->
-<div class="modal-overlay hidden" id="apiModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>⚙️ Settings</h3>
-      <button class="modal-close" onclick="Modal.hide('apiModal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="alert alert-info mb-3" style="font-size:0.82rem;">
-        Anthropic Claude API Key লাগবে। <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> থেকে বিনামূল্যে নিন।
-      </div>
-      <div class="form-group mb-3">
-        <label class="form-label">API Key</label>
-        <input type="password" class="form-control" id="apiKeyInput" placeholder="sk-ant-api03-...">
-      </div>
-      <div class="form-group mb-3">
-        <label class="form-label">আপনার নাম (ঐচ্ছিক)</label>
-        <input type="text" class="form-control" id="userNameInput" placeholder="আপনার নাম লিখুন">
-      </div>
-      <button class="btn btn-primary btn-full" onclick="saveApiKey()">💾 সেভ করুন</button>
-      <div class="mt-2 text-center" style="font-size:0.78rem;color:var(--text2);">আপনার API Key শুধু আপনার ব্রাউজারে সেভ থাকে। কোথাও পাঠানো হয় না।</div>
+<div class="mo hidden" id="apiModal">
+  <div class="mb" style="max-width:420px;">
+    <div class="mh"><h3>⚙️ API Key সেটআপ</h3><button class="mc" onclick="Modal.hide('apiModal')">✕</button></div>
+    <div class="mbody">
+      <div class="alert a-i mb2" style="font-size:.8rem;">console.anthropic.com থেকে ফ্রি API Key নিন।</div>
+      <div class="fg mb2"><label class="fl">API Key</label><input type="password" class="fc" id="akInput" placeholder="sk-ant-..."></div>
+      <button class="btn btn-p btn-fw" onclick="saveAK()">💾 সেভ করুন</button>
     </div>
   </div>
 </div>
 
-<!-- UPGRADE MODAL -->
-<div class="modal-overlay hidden" id="upgradeModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>🚀 Pro তে আপগ্রেড করুন</h3>
-      <button class="modal-close" onclick="Modal.hide('upgradeModal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div style="text-align:center;padding:16px 0;">
-        <div style="font-size:2rem;margin-bottom:8px;">💎</div>
-        <div style="font-family:var(--font-head);font-size:1.8rem;font-weight:900;color:#fff;">৪৯৯ টাকা</div>
-        <div style="color:var(--text2);font-size:0.85rem;">প্রতি মাস — যেকোনো সময় বাতিল করুন</div>
-      </div>
-      <div style="margin:16px 0;">
-        <div class="result-item" style="margin-bottom:8px;">✅ সব AI টুল আনলিমিটেড</div>
-        <div class="result-item" style="margin-bottom:8px;">✅ Business Builder টুলস</div>
-        <div class="result-item" style="margin-bottom:8px;">✅ PDF Export</div>
-        <div class="result-item" style="margin-bottom:8px;">✅ Priority Support</div>
-        <div class="result-item">✅ নতুন ফিচার আর্লি অ্যাক্সেস</div>
-      </div>
-      <a href="help.html?type=upgrade" class="btn btn-primary btn-full">💬 আপগ্রেড করতে যোগাযোগ করুন</a>
-      <div class="mt-2 text-center" style="font-size:0.78rem;color:var(--text2);">bKash / Nagad / Card — সব পেমেন্ট গ্রহণ করা হয়</div>
-    </div>
+<!-- BUY MODAL -->
+<div class="mo hidden" id="buyModal">
+  <div class="mb" style="max-width:460px;">
+    <div class="mh"><h3 id="buyTitle">প্রোডাক্ট কিনুন</h3><button class="mc" onclick="Modal.hide('buyModal')">✕</button></div>
+    <div class="mbody" id="buyBody"></div>
+  </div>
+</div>
+
+<!-- TASK DETAIL MODAL -->
+<div class="mo hidden" id="taskModal">
+  <div class="mb" style="max-width:520px;">
+    <div class="mh"><h3 id="tmTitle"></h3><button class="mc" onclick="Modal.hide('taskModal')">✕</button></div>
+    <div class="mbody" id="tmBody"></div>
   </div>
 </div>
 
 <script src="assets/js/app.js"></script>
 <script>
-// ===== TOOL CONFIGURATIONS =====
-const TOOL_CONFIG = {
-  content_ideas: { icon:'💡', label:'কন্টেন্ট আইডিয়া', desc:'২০টি ভাইরাল ভিডিও আইডিয়া — হুক, স্ক্রিপ্ট, হ্যাশট্যাগ সহ', fields:['niche','audience','topic'] },
-  hook_script: { icon:'🎣', label:'হুক & স্ক্রিপ্ট', desc:'৫টি ইমোশনাল হুক + ৩০ সেকেন্ডের পূর্ণ স্ক্রিপ্ট', fields:['niche','audience','topic'] },
-  niche_finder: { icon:'🔍', label:'নিশ ফাইন্ডার', desc:'আপনার স্কিল ও আগ্রহ দিয়ে সবচেয়ে প্রফিটেবল নিশ খুঁজে পান', fields:['skills','interests','experience'] },
-  product_ideas: { icon:'🛍️', label:'প্রোডাক্ট আইডিয়া', desc:'কন্টেন্ট থেকে কোন ডিজিটাল প্রোডাক্ট বিক্রি করবেন — ৬টি আইডিয়া', fields:['niche','followers','skills'] },
-  service_package: { icon:'📦', label:'সার্ভিস প্যাকেজ', desc:'Basic / Standard / Premium — ৩টি সার্ভিস প্যাকেজ সাথে দাম ও ডেলিভারি', fields:['niche','skills','experience'] },
-  bio_optimizer: { icon:'📝', label:'Bio অপটিমাইজার', desc:'সব প্ল্যাটফর্মের জন্য পারফেক্ট প্রোফাইল বায়ো', fields:['niche','platform','goal'] },
-  course_outline: { icon:'🎓', label:'কোর্স আউটলাইন', desc:'সম্পূর্ণ কোর্স কারিকুলাম, মডিউল ও সেলস পয়েন্ট', fields:['topic','level','duration'] },
-  growth_plan: { icon:'📈', label:'গ্রোথ প্ল্যান', desc:'৭ দিনের পোস্টিং সময়সূচি ও এনগেজমেন্ট স্ট্র্যাটেজি', fields:['niche','followers','goal'] },
-  engagement_reply: { icon:'💬', label:'এনগেজমেন্ট', desc:'১০টি কমেন্ট + ১০টি DM রিপ্লাই — সফট সেলিং টোনে', fields:['niche','product','topic'] },
-  content_analysis: { icon:'📊', label:'অ্যানালাইসিস', desc:'কন্টেন্টের সমস্যা চিহ্নিত করে ধাপে ধাপে সমাধান', fields:['niche','problem','current'] },
-  trend_ideas: { icon:'🔥', label:'ট্রেন্ড আইডিয়া', desc:'১০টি ট্রেন্ডিং কন্টেন্ট আইডিয়া — বাংলাদেশ অডিয়েন্সের জন্য', fields:['niche','audience'] },
-  funnel_builder: { icon:'🎯', label:'ফানেল বিল্ডার', desc:'কন্টেন্ট → লিড → সেল — সম্পূর্ণ মার্কেটিং ফানেল', fields:['niche','product','price'] },
+/* ════════════════════════════════════════════════
+   TOOL CONFIG
+════════════════════════════════════════════════ */
+const TOOLS = {
+  content_ideas:{ ico:'💡', label:'কন্টেন্ট আইডিয়া', desc:'২০টি ভাইরাল ভিডিও আইডিয়া — হুক, স্ক্রিপ্ট, হ্যাশট্যাগ সহ', fields:['niche','audience','topic'] },
+  hook_script:{ ico:'🎣', label:'হুক & স্ক্রিপ্ট', desc:'৫টি শক্তিশালী হুক + সম্পূর্ণ ৩০ সেকেন্ডের স্ক্রিপ্ট', fields:['niche','audience','topic'] },
+  niche_finder:{ ico:'🔍', label:'নিশ ফাইন্ডার', desc:'আপনার দক্ষতা অনুযায়ী সবচেয়ে প্রফিটেবল নিশ', fields:['skills','interests','experience'] },
+  product_ideas:{ ico:'🛍️', label:'প্রোডাক্ট আইডিয়া', desc:'কন্টেন্ট থেকে কোন ডিজিটাল প্রোডাক্ট বিক্রি করবেন', fields:['niche','followers','skills'] },
+  service_package:{ ico:'📦', label:'সার্ভিস প্যাকেজ', desc:'Basic/Standard/Premium তিনটি সার্ভিস প্যাকেজ + দাম', fields:['niche','skills','experience'] },
+  bio_optimizer:{ ico:'📝', label:'Bio অপটিমাইজার', desc:'সব প্ল্যাটফর্মের পারফেক্ট প্রোফাইল বায়ো', fields:['niche','platform','goal'] },
+  course_outline:{ ico:'🎓', label:'কোর্স আউটলাইন', desc:'সম্পূর্ণ কোর্স কারিকুলাম, মডিউল ও সেলস পয়েন্ট', fields:['topic','level','duration'] },
+  growth_plan:{ ico:'📈', label:'গ্রোথ প্ল্যান', desc:'৭ দিনের পোস্টিং সময়সূচি ও এনগেজমেন্ট স্ট্র্যাটেজি', fields:['niche','followers','goal'] },
+  engagement_reply:{ ico:'💬', label:'এনগেজমেন্ট', desc:'১০টি কমেন্ট + ১০টি DM রিপ্লাই সফট সেলিং সহ', fields:['niche','product','topic'] },
+  content_analysis:{ ico:'📊', label:'অ্যানালাইসিস', desc:'কন্টেন্টের সমস্যা চিহ্নিত করে সমাধান', fields:['niche','problem','current'] },
+  funnel_builder:{ ico:'🎯', label:'ফানেল বিল্ডার', desc:'কন্টেন্ট → লিড → সেল — সম্পূর্ণ মার্কেটিং ফানেল', fields:['niche','product','price'] },
+};
+const FIELDS = {
+  niche:{ l:'আপনার নিশ', p:'যেমন: ফিটনেস, রান্না' },
+  audience:{ l:'টার্গেট অডিয়েন্স', p:'যেমন: ১৮-৩০ বছর বয়সী' },
+  topic:{ l:'ভিডিও টপিক', p:'যেমন: ৩০ দিনে ওজন কমানো' },
+  followers:{ l:'বর্তমান ফলোয়ার', p:'যেমন: ৫০০০' },
+  product:{ l:'প্রোডাক্ট/সার্ভিস', p:'যেমন: অনলাইন কোর্স' },
+  problem:{ l:'সমস্যা', p:'কন্টেন্টের সমস্যা বলুন', t:'textarea' },
+  skills:{ l:'আপনার দক্ষতা', p:'যেমন: ভিডিও এডিটিং' },
+  interests:{ l:'আপনার আগ্রহ', p:'যেমন: রান্না, ব্যবসা' },
+  experience:{ l:'অভিজ্ঞতা', p:'যেমন: ২ বছর কন্টেন্ট বানাই' },
+  platform:{ l:'প্ল্যাটফর্ম', p:'', t:'select', opts:['Facebook','TikTok','YouTube','Instagram'] },
+  goal:{ l:'লক্ষ্য', p:'', t:'select', opts:['ফলোয়ার বাড়ানো','পণ্য বিক্রি','কোর্স লঞ্চ','ফ্রিল্যান্সার হওয়া'] },
+  level:{ l:'লেভেল', p:'', t:'select', opts:['বিগিনার','ইন্টারমিডিয়েট','এক্সপার্ট'] },
+  duration:{ l:'দৈর্ঘ্য', p:'', t:'select', opts:['১ সপ্তাহ','২ সপ্তাহ','৪ সপ্তাহ','৮ সপ্তাহ'] },
+  price:{ l:'দাম (টাকায়)', p:'যেমন: ৪৯৯০' },
+  current:{ l:'বর্তমান অবস্থা', p:'যেমন: গড় ভিউ ৫০০' },
 };
 
-const FIELD_CONFIG = {
-  niche: { label:'আপনার নিশ', placeholder:'যেমন: ফিটনেস, রান্না, ইসলামিক কন্টেন্ট' },
-  audience: { label:'টার্গেট অডিয়েন্স', placeholder:'যেমন: ১৮-৩০ বছর বয়সী গৃহিণী' },
-  topic: { label:'ভিডিও টপিক', placeholder:'যেমন: ৩০ দিনে ওজন কমানো' },
-  followers: { label:'বর্তমান ফলোয়ার', placeholder:'যেমন: ৫০০০' },
-  product: { label:'প্রোডাক্ট/সার্ভিস', placeholder:'যেমন: অনলাইন কোর্স, গ্রাফিক ডিজাইন' },
-  problem: { label:'সমস্যা বর্ণনা', placeholder:'আপনার কন্টেন্ট বা চ্যানেলের সমস্যা লিখুন', type:'textarea' },
-  skills: { label:'আপনার দক্ষতা', placeholder:'যেমন: ভিডিও এডিটিং, কুকিং, ইসলামিক জ্ঞান' },
-  interests: { label:'আপনার আগ্রহ', placeholder:'যেমন: ফুটবল, রান্না, ব্যবসা' },
-  experience: { label:'অভিজ্ঞতা', placeholder:'যেমন: ২ বছর কন্টেন্ট বানাই' },
-  platform: { label:'প্ল্যাটফর্ম', placeholder:'Facebook / TikTok / YouTube / Instagram', type:'select', options:['Facebook','TikTok','YouTube','Instagram','সব প্ল্যাটফর্ম'] },
-  goal: { label:'লক্ষ্য', placeholder:'যেমন: ফলোয়ার বাড়ানো, পণ্য বিক্রি', type:'select', options:['ফলোয়ার বাড়ানো','পণ্য/সার্ভিস বিক্রি','ব্র্যান্ড বিল্ড করা','কোর্স লঞ্চ করা','ফ্রিল্যান্সার হওয়া'] },
-  level: { label:'কোর্স লেভেল', placeholder:'', type:'select', options:['বিগিনার','ইন্টারমিডিয়েট','এক্সপার্ট'] },
-  duration: { label:'কোর্সের দৈর্ঘ্য', placeholder:'', type:'select', options:['১ সপ্তাহ','২ সপ্তাহ','৪ সপ্তাহ','৮ সপ্তাহ','৩ মাস'] },
-  price: { label:'প্রোডাক্টের দাম (টাকায়)', placeholder:'যেমন: ৪৯৯০' },
-  current: { label:'বর্তমান অবস্থা', placeholder:'যেমন: গড় ভিউ ৫০০, ফলোয়ার ২০০০' },
+const PROMPTS = {
+  content_ideas: v=>`বাংলাদেশের ক্রিয়েটরের জন্য ২০টি ভাইরাল কন্টেন্ট আইডিয়া দাও।নিশ:${v.niche} অডিয়েন্স:${v.audience} টপিক:${v.topic}
+{"ideas":[{"id":1,"title":"...","hook":"...","script":"...","caption":"...","hashtags":["#..."],"cta":"...","emotion":"curiosity/fear/humor/greed"},...]}`,
+  hook_script: v=>`৫টি ভাইরাল হুক ও স্ক্রিপ্ট তৈরি করো। নিশ:${v.niche} টপিক:${v.topic}
+{"hooks":[{"id":1,"hook_type":"curiosity","hook":"...","script":"...","cta":"...","why":"..."},...]}`,
+  niche_finder: v=>`সবচেয়ে প্রফিটেবল নিশ বের করো। স্কিল:${v.skills} আগ্রহ:${v.interests}
+{"niches":[{"rank":1,"niche":"...","why":"...","monetization":["..."],"competition":"low/medium/high","income_potential":"...","starter_content":["..."]},...5টি],"recommendation":"..."}`,
+  product_ideas: v=>`ডিজিটাল প্রোডাক্ট আইডিয়া দাও। নিশ:${v.niche} ফলোয়ার:${v.followers}
+{"products":[{"type":"course/ebook/service","name":"...","description":"...","price_bdt":"...","effort":"low/medium/high","time_to_create":"..."},...6টি],"recommended":"..."}`,
+  service_package: v=>`৩টি সার্ভিস প্যাকেজ তৈরি করো। নিশ:${v.niche} স্কিল:${v.skills}
+{"packages":[{"name":"Basic","price_bdt":"...","delivery_days":"...","includes":["..."],"best_for":"..."},{"name":"Standard","price_bdt":"...","delivery_days":"...","includes":["..."],"best_for":"..."},{"name":"Premium","price_bdt":"...","delivery_days":"...","includes":["..."],"best_for":"..."}],"pitch":"..."}`,
+  bio_optimizer: v=>`সোশ্যাল মিডিয়া বায়ো অপটিমাইজ করো। নিশ:${v.niche} প্ল্যাটফর্ম:${v.platform}
+{"bios":{"facebook":"...","instagram":"...","tiktok":"...","youtube":"..."},"keywords":["..."],"profile_tips":["...",...5টি]}`,
+  course_outline: v=>`কোর্স আউটলাইন তৈরি করো। টপিক:${v.topic} লেভেল:${v.level}
+{"title":"...","tagline":"...","price_bdt":"...","modules":[{"number":1,"title":"...","duration":"...","lessons":["..."]},...5টি],"sales_points":["...",...5টি]}`,
+  growth_plan: v=>`৭ দিনের গ্রোথ প্ল্যান। নিশ:${v.niche} ফলোয়ার:${v.followers}
+{"plan":[{"day":1,"day_name":"...","content":"...","posting_time":"...","engagement_strategy":"...","goal":"..."},...7টি],"expected_growth":"..."}`,
+  engagement_reply: v=>`এনগেজমেন্ট রিপ্লাই তৈরি করো। নিশ:${v.niche} প্রোডাক্ট:${v.product}
+{"comment_replies":[{"type":"...","reply":"..."},...10টি],"dm_replies":[{"stage":"awareness/interest/desire/action","message":"..."},...10টি]}`,
+  content_analysis: v=>`কন্টেন্ট বিশ্লেষণ করো। সমস্যা:${v.problem} নিশ:${v.niche}
+{"scores":{"hook":7,"retention":6,"engagement":7,"cta":5},"problems":["...",...5টি],"solutions":[{"step":1,"title":"...","action":"..."},...6টি],"quick_wins":["...",...3টি]}`,
+  funnel_builder: v=>`মার্কেটিং ফানেল তৈরি করো। নিশ:${v.niche} প্রোডাক্ট:${v.product} দাম:${v.price}
+{"funnel":{"awareness":{"content":"...","example":"..."},"interest":{"content":"...","lead_magnet":"..."},"desire":{"content":"...","social_proof":"..."},"action":{"cta":"...","offer":"...","urgency":"..."}},"monthly_target":"..."}`,
 };
 
-let currentTool = 'content_ideas';
-let lastResult = null;
-
-function selectTool(tool, btn) {
-  currentTool = tool;
-  document.querySelectorAll('.tool-tab').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const cfg = TOOL_CONFIG[tool];
-  document.getElementById('toolDescText').textContent = cfg.desc;
-  renderFields(cfg.fields);
-  document.getElementById('outputCard').classList.add('hidden');
+/* ════════════════════════════════════════════════
+   ONBOARDING
+════════════════════════════════════════════════ */
+function submitOnboard(){
+  const name=document.getElementById('ob-name').value.trim();
+  const addr=document.getElementById('ob-addr').value.trim();
+  const wa=document.getElementById('ob-wa').value.trim();
+  const errEl=document.getElementById('ob-err');
+  if(!name||!addr||!wa){ errEl.textContent='⚠️ নাম, ঠিকানা ও WhatsApp নম্বর আবশ্যক।'; errEl.classList.remove('hidden'); return; }
+  errEl.classList.add('hidden');
+  Store.addRegistration({
+    name, address:addr, whatsapp:wa,
+    facebook:document.getElementById('ob-fb').value.trim(),
+    tiktok:document.getElementById('ob-tt').value.trim(),
+    niche:document.getElementById('ob-niche').value.trim(),
+    description:document.getElementById('ob-desc').value.trim(),
+  });
+  routeUser();
+}
+function reapply(){
+  const d=Store.getData(); d.profile=null; Store.setData(d); location.reload();
 }
 
-function renderFields(fields) {
-  const container = document.getElementById('formFields');
-  container.innerHTML = fields.map(f => {
-    const fc = FIELD_CONFIG[f] || { label: f, placeholder: f };
-    let input;
-    if (fc.type === 'textarea') {
-      input = `<textarea class="form-control" id="f_${f}" placeholder="${fc.placeholder}" rows="3"></textarea>`;
-    } else if (fc.type === 'select') {
-      input = `<select class="form-control" id="f_${f}">${fc.options.map(o => `<option>${o}</option>`).join('')}</select>`;
-    } else {
-      input = `<input type="text" class="form-control" id="f_${f}" placeholder="${fc.placeholder}">`;
-    }
-    const isTextarea = fc.type === 'textarea';
-    return `<div class="form-group${isTextarea?' form-full':''}">${'<label class="form-label">'+fc.label+'</label>'+input}</div>`;
+/* ════════════════════════════════════════════════
+   ROUTING
+════════════════════════════════════════════════ */
+function routeUser(){
+  ['screenOnboard','screenPending','screenRejected','screenApp'].forEach(id=>document.getElementById(id)?.classList.add('hidden'));
+  const st=Store.getStatus();
+  if(st==='none'){ document.getElementById('screenOnboard').classList.remove('hidden'); }
+  else if(st==='pending'){ document.getElementById('screenPending').classList.remove('hidden'); const p=Store.getProfile(); document.getElementById('pend-wa').textContent=p?.whatsapp||''; }
+  else if(st==='rejected'){ document.getElementById('screenRejected').classList.remove('hidden'); const p=Store.getProfile(); document.getElementById('rej-reason').textContent=p?.rejectReason||'আপনার আবেদন গ্রহণ করা যায়নি।'; }
+  else if(st==='approved'){ initApp(); document.getElementById('screenApp').classList.remove('hidden'); }
+}
+
+/* ════════════════════════════════════════════════
+   MAIN APP INIT
+════════════════════════════════════════════════ */
+let curTool='content_ideas', lastResult=null;
+
+function initApp(){
+  // Profile badge in sidebar
+  const p=Store.getProfile()||{};
+  const initials=(p.name||'ব্যবহারকারী').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('sideProfile').innerHTML=`
+    <div class="prof-badge">
+      <div class="pb-av">${initials}</div>
+      <div><div style="font-weight:700;color:#fff;font-size:.85rem;">${p.name||''}</div><div class="tag tg" style="font-size:.65rem;margin-top:3px;">✅ অনুমোদিত</div></div>
+    </div>`;
+
+  // WA link
+  const waLink=document.getElementById('wa-link');
+  if(waLink) waLink.href=`https://wa.me/${(p.whatsapp||'').replace(/\D/g,'')}`;
+
+  buildToolTabs();
+  renderFields(TOOLS[curTool].fields);
+  document.getElementById('tdescTxt').textContent=TOOLS[curTool].desc;
+}
+
+/* ════════════════════════════════════════════════
+   TOOLS
+════════════════════════════════════════════════ */
+function buildToolTabs(){
+  document.getElementById('toolTabs').innerHTML=Object.entries(TOOLS).map(([k,v])=>`
+    <button class="ttab${k===curTool?' on':''}" onclick="selectTool('${k}',this)">
+      <span class="ti">${v.ico}</span>${v.label}
+    </button>`).join('');
+}
+function selectTool(tool,btn){
+  curTool=tool;
+  document.querySelectorAll('.ttab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('tdescTxt').textContent=TOOLS[tool].desc;
+  renderFields(TOOLS[tool].fields);
+  document.getElementById('outCard').classList.add('hidden');
+}
+function renderFields(fields){
+  document.getElementById('fcFields').innerHTML=fields.map(f=>{
+    const fc=FIELDS[f]||{l:f,p:''};
+    let inp;
+    if(fc.t==='textarea') inp=`<textarea class="fc" id="f_${f}" rows="3" placeholder="${fc.p}"></textarea>`;
+    else if(fc.t==='select') inp=`<select class="fc" id="f_${f}">${(fc.opts||[]).map(o=>`<option>${o}</option>`).join('')}</select>`;
+    else inp=`<input class="fc" id="f_${f}" placeholder="${fc.p}">`;
+    return `<div class="fg${fc.t==='textarea'?' fc-full2':''}"><label class="fl">${fc.l}</label>${inp}</div>`;
   }).join('');
 }
+function getVals(){ const v={}; TOOLS[curTool].fields.forEach(f=>{ const el=document.getElementById('f_'+f); if(el) v[f]=el.value.trim(); }); return v; }
 
-function getVals() {
-  const vals = {};
-  TOOL_CONFIG[currentTool].fields.forEach(f => {
-    const el = document.getElementById('f_' + f);
-    if (el) vals[f] = el.value.trim();
-  });
-  return vals;
-}
-
-async function generate() {
-  if (!AI.checkLimit()) {
-    document.getElementById('outputCard').classList.remove('hidden');
-    document.getElementById('outputBody').innerHTML = Render.limitReached();
-    return;
-  }
-
-  const btn = document.getElementById('genBtn');
-  const outCard = document.getElementById('outputCard');
-  const cfg = TOOL_CONFIG[currentTool];
-
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spin-icon"></span> জেনারেট হচ্ছে...';
-  document.getElementById('outIcon').textContent = cfg.icon;
-  document.getElementById('outTitle').textContent = cfg.label + ' — ফলাফল';
-  outCard.classList.remove('hidden');
-  document.getElementById('outputBody').innerHTML = Render.skeleton(4);
-
-  try {
-    const prompt = Prompts[currentTool](getVals());
-    const data = await AI.call(prompt);
-    lastResult = data;
-    Store.incrementUsage();
-    Store.logEvent('generate', { tool: currentTool });
+async function generate(){
+  const btn=document.getElementById('genBtn');
+  const oc=document.getElementById('outCard');
+  const cfg=TOOLS[curTool];
+  btn.disabled=true; btn.innerHTML='<span class="spin"></span> তৈরি হচ্ছে...';
+  document.getElementById('outIco').textContent=cfg.ico;
+  document.getElementById('outTitle').textContent=cfg.label+' — ফলাফল';
+  oc.classList.remove('hidden');
+  document.getElementById('outBody').innerHTML=`<div class="skel mb1" style="height:14px;width:60%"></div><div class="skel mb1" style="height:12px;width:80%"></div><div class="skel" style="height:12px;width:70%"></div>`;
+  try{
+    const data=await AI.call(PROMPTS[curTool](getVals()));
+    lastResult=data; Store.log('generate',{tool:curTool});
     renderResult(data);
-    updateUsageDisplay();
-    outCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  } catch(err) {
-    document.getElementById('outputBody').innerHTML = Render.error(err.message);
-  }
-
-  btn.disabled = false;
-  btn.innerHTML = '✨ AI দিয়ে জেনারেট করুন';
+    oc.scrollIntoView({behavior:'smooth',block:'start'});
+  } catch(e){ document.getElementById('outBody').innerHTML=`<div class="alert a-e">⚠️ ${e.message}</div>`; }
+  btn.disabled=false; btn.innerHTML='✨ AI দিয়ে তৈরি করুন';
 }
 
-function renderResult(data) {
-  const body = document.getElementById('outputBody');
-  let html = '';
-  const t = currentTool;
-
-  if (t === 'content_ideas' && data.ideas) {
-    html = `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;">`;
-    data.ideas.forEach((item, i) => {
-      const eClr = item.emotion==='fear'?'red':item.emotion==='humor'?'green':item.emotion==='greed'?'gold':'purple';
-      html += `<div class="result-item card-glow">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-          <span class="tag tag-${eClr}">${item.emotion||'ভাইরাল'}</span><span class="tag tag-gray">#${item.id||i+1}</span>
+function renderResult(data){
+  const body=document.getElementById('outBody'); let html='';
+  if(curTool==='content_ideas'&&data.ideas){
+    html='<div class="gaut">'+data.ideas.map((it,i)=>{
+      const ec={curiosity:'tp',fear:'tr',humor:'tg',greed:'tgo'}[it.emotion]||'tp';
+      return `<div class="ri card-glow">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;">
+          <span class="tag ${ec}">${it.emotion||'আইডিয়া'}</span><span class="tag tgr">#${it.id||i+1}</span>
         </div>
-        <div style="font-weight:700;color:#fff;margin-bottom:8px;font-size:0.95rem;">${item.title}</div>
-        <div class="mb-1"><span class="tag tag-red" style="margin-right:4px;font-size:0.68rem;">হুক</span><span style="color:var(--text2);font-size:0.83rem;">${item.hook}</span></div>
-        <hr class="divider">
-        <p style="font-size:0.83rem;white-space:pre-line;margin-bottom:8px;">${item.script}</p>
-        <p style="font-size:0.8rem;color:var(--text2);margin-bottom:8px;">${item.caption}</p>
-        <div style="display:flex;flex-wrap:wrap;gap:5px;">${(item.hashtags||[]).map(h=>`<span class="tag tag-purple" style="font-size:0.68rem;">${h}</span>`).join('')}</div>
-        ${item.cta?`<div style="background:rgba(108,99,255,0.1);border-radius:6px;padding:8px;margin-top:8px;font-size:0.78rem;color:#a78bfa;font-weight:600;">📢 ${item.cta}</div>`:''}
+        <div style="font-weight:700;color:#fff;margin-bottom:7px;font-size:.93rem;">${it.title}</div>
+        <div class="mb1"><span class="tag tr" style="margin-right:4px;font-size:.66rem;">হুক</span><span style="color:var(--text2);font-size:.82rem;">${it.hook}</span></div>
+        <hr class="dv"><p style="font-size:.82rem;white-space:pre-line;margin-bottom:7px;">${it.script}</p>
+        <p style="font-size:.79rem;color:var(--text2);margin-bottom:7px;">${it.caption}</p>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;">${(it.hashtags||[]).map(h=>`<span class="tag tp" style="font-size:.66rem;">${h}</span>`).join('')}</div>
+        ${it.cta?`<div style="background:rgba(108,99,255,.1);border-radius:6px;padding:7px;margin-top:7px;font-size:.78rem;color:#a78bfa;font-weight:600;">📢 ${it.cta}</div>`:''}
+      </div>`;
+    }).join('')+'</div>';
+  } else if(curTool==='hook_script'&&data.hooks){
+    data.hooks.forEach((it,i)=>{
+      const cc={curiosity:'tp',fear:'tr',humor:'tg',greed:'tgo',emotion:'tp'}[it.hook_type]||'tp';
+      html+=`<div class="ri mb1"><div style="display:flex;gap:7px;align-items:center;margin-bottom:7px;"><span class="tag ${cc}">${it.hook_type}</span><span class="tag tgr">#${i+1}</span></div>
+      <div style="font-size:.97rem;font-weight:700;color:#fff;margin-bottom:9px;">"${it.hook}"</div>
+      <span class="tag tg mb1" style="font-size:.66rem;">স্ক্রিপ্ট</span>
+      <p style="font-size:.84rem;white-space:pre-line;margin-bottom:8px;margin-top:5px;">${it.script}</p>
+      ${it.why?`<p style="font-size:.79rem;color:var(--text2);">💡 ${it.why}</p>`:''}
+      ${it.cta?`<div style="background:rgba(108,99,255,.1);border-radius:6px;padding:7px;margin-top:7px;font-size:.8rem;color:#a78bfa;font-weight:600;">📢 ${it.cta}</div>`:''}
       </div>`;
     });
-    html += '</div>';
-  }
-
-  else if (t === 'hook_script' && data.hooks) {
-    data.hooks.forEach((item, i) => {
-      const colors = {curiosity:'purple',fear:'red',humor:'green',greed:'gold',emotion:'purple'};
-      const clr = colors[item.hook_type] || 'purple';
-      html += `<div class="result-item mb-2">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-          <span class="tag tag-${clr}">${item.hook_type}</span><span class="tag tag-gray">#${i+1}</span>
+  } else if(curTool==='service_package'&&data.packages){
+    html='<div class="grid3">'+data.packages.map((pk,i)=>{
+      const clr=['var(--text2)','var(--accent)','var(--gold)'][i];
+      return `<div class="ri" style="border-top:3px solid ${clr};text-align:center;">
+        <div style="font-family:var(--fh);font-size:1rem;font-weight:800;color:#fff;margin-bottom:3px;">${pk.name}</div>
+        <div style="font-size:1.5rem;font-weight:800;color:${clr};margin-bottom:2px;">৳${pk.price_bdt}</div>
+        <div style="font-size:.73rem;color:var(--text2);margin-bottom:10px;">⏰ ${pk.delivery_days} দিন</div>
+        <div style="text-align:left;">${(pk.includes||[]).map(inc=>`<div style="font-size:.8rem;padding:2px 0;">✅ ${inc}</div>`).join('')}</div>
+        <div style="font-size:.73rem;color:var(--text2);background:var(--bg);border-radius:5px;padding:5px;margin-top:8px;">🎯 ${pk.best_for}</div>
+      </div>`;
+    }).join('')+'</div>';
+    if(data.pitch) html+=`<div class="ri mt2"><span class="tag tp mb1">পিচ টেমপ্লেট</span><p style="font-size:.84rem;white-space:pre-line;margin-top:6px;">${data.pitch}</p></div>`;
+  } else if(curTool==='growth_plan'&&data.plan){
+    const clrs=['#6c63ff','#ff6584','#43e97b','#f5c518','#6c63ff','#ff6584','#43e97b'];
+    data.plan.forEach((day,i)=>{
+      html+=`<div class="ri mb1" style="border-left:3px solid ${clrs[i]};">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">
+          <div style="font-family:var(--fh);font-weight:700;color:${clrs[i]};font-size:.87rem;">📅 ${day.day_name||'দিন '+day.day}</div>
+          <div style="background:rgba(245,197,24,.12);color:var(--gold);border-radius:5px;padding:2px 9px;font-size:.71rem;font-weight:600;">⏰ ${day.posting_time}</div>
         </div>
-        <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:10px;">"${item.hook}"</div>
-        <div class="tag tag-green mb-1" style="font-size:0.7rem;">সম্পূর্ণ স্ক্রিপ্ট</div>
-        <p style="font-size:0.86rem;white-space:pre-line;margin-bottom:10px;">${item.script}</p>
-        ${item.why?`<p style="font-size:0.8rem;color:var(--text2);margin-bottom:8px;">💡 ${item.why}</p>`:''}
-        ${item.cta?`<div style="background:rgba(108,99,255,0.1);border-radius:6px;padding:8px;font-size:0.82rem;color:#a78bfa;font-weight:600;">📢 ${item.cta}</div>`:''}
+        <div style="font-weight:600;color:var(--text3);margin-bottom:4px;font-size:.86rem;">${day.content}</div>
+        <div style="font-size:.8rem;color:var(--text2);">📌 ${day.engagement_strategy}</div>
+        ${day.goal?`<span class="tag tg mt1" style="font-size:.67rem;">🎯 ${day.goal}</span>`:''}
       </div>`;
     });
-  }
-
-  else if (t === 'niche_finder' && data.niches) {
-    data.niches.forEach((n, i) => {
-      const compClr = n.competition==='low'?'green':n.competition==='high'?'red':'gold';
-      html += `<div class="result-item mb-2" style="border-left:3px solid var(--accent);">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-          <div style="display:flex;align-items:center;gap:8px;"><span class="tag tag-purple">#${n.rank||i+1} নিশ</span><span class="tag tag-${compClr}">প্রতিযোগিতা: ${n.competition}</span></div>
-          <span style="font-size:0.8rem;color:var(--gold);font-weight:600;">💰 ${n.income_potential}</span>
-        </div>
-        <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:6px;">${n.niche}</div>
-        <p style="font-size:0.85rem;margin-bottom:8px;">${n.why}</p>
-        <div style="font-size:0.82rem;color:var(--text2);margin-bottom:8px;"><strong style="color:var(--text3);">অডিয়েন্স:</strong> ${n.audience}</div>
-        <div class="mb-1"><span class="tag tag-green" style="font-size:0.7rem;margin-bottom:6px;">আয়ের উপায়</span><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:5px;">${(n.monetization||[]).map(m=>`<span class="tag tag-gray">${m}</span>`).join('')}</div></div>
-        ${(n.starter_content||[]).length?`<div style="margin-top:8px;"><div style="font-size:0.78rem;color:var(--text2);margin-bottom:5px;">প্রথম কন্টেন্ট আইডিয়া:</div>${n.starter_content.map(s=>`<div style="font-size:0.82rem;color:var(--text3);padding:3px 0;">→ ${s}</div>`).join('')}</div>`:''}
-      </div>`;
+    if(data.expected_growth) html+=`<div class="alert a-s mt2">📈 <strong>প্রত্যাশিত ফলাফল:</strong> ${data.expected_growth}</div>`;
+  } else if(curTool==='funnel_builder'&&data.funnel){
+    const steps=[['awareness','🎯 সচেতনতা','var(--accent)'],['interest','🔍 আগ্রহ','var(--gold)'],['desire','❤️ ইচ্ছা','var(--accent2)'],['action','💰 সেল','var(--accent3)']];
+    steps.forEach(([k,lb,clr],i)=>{ const d=data.funnel[k]||{};
+      html+=`<div class="ri mb2" style="border-left:3px solid ${clr};display:flex;gap:13px;">
+        <div style="width:30px;height:30px;border-radius:50%;background:${clr};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.8rem;flex-shrink:0;">${i+1}</div>
+        <div style="flex:1;"><div style="font-family:var(--fh);font-weight:700;color:#fff;margin-bottom:6px;">${lb}</div>
+        ${d.content?`<div style="font-size:.83rem;margin-bottom:3px;"><strong>কন্টেন্ট:</strong> ${d.content}</div>`:''}
+        ${d.example?`<div style="font-size:.81rem;color:var(--text2);">উদাহরণ: ${d.example}</div>`:''}
+        ${d.lead_magnet?`<div style="font-size:.8rem;color:var(--accent3);margin-top:4px;">🧲 ${d.lead_magnet}</div>`:''}
+        ${d.cta?`<div style="background:rgba(108,99,255,.1);border-radius:5px;padding:6px;margin-top:6px;font-size:.8rem;color:#a78bfa;font-weight:600;">📢 ${d.cta}</div>`:''}
+        ${d.offer?`<div style="font-size:.8rem;color:var(--accent2);margin-top:3px;">🎁 ${d.offer}</div>`:''}
+        </div></div>${i<steps.length-1?'<div style="text-align:center;color:var(--accent);font-size:1.1rem;font-weight:900;margin:-8px 0 4px;">↓</div>':''}`;
     });
-    if (data.recommendation) html += `<div class="alert alert-success mt-2">💡 <strong>সুপারিশ:</strong> ${data.recommendation}</div>`;
-    if (data.action_plan) { html += `<div class="result-item mt-2"><div class="tag tag-purple mb-2">এখনই যা করুন</div>${data.action_plan.map((a,i)=>`<div style="padding:5px 0;font-size:0.86rem;">${i+1}. ${a}</div>`).join('')}</div>`; }
+    if(data.monthly_target) html+=`<div class="alert a-s mt2">📈 <strong>মাসিক লক্ষ্য:</strong> ${data.monthly_target}</div>`;
+  } else {
+    html=`<pre style="color:var(--text2);font-size:.8rem;overflow-x:auto;white-space:pre-wrap;">${JSON.stringify(data,null,2)}</pre>`;
   }
+  body.innerHTML=html;
+}
 
-  else if (t === 'product_ideas' && data.products) {
-    html = `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;">`;
-    data.products.forEach(p => {
-      const effortClr = p.effort==='low'?'green':p.effort==='high'?'red':'gold';
-      html += `<div class="result-item card-glow">
-        <div class="tag tag-purple mb-2">${p.type}</div>
-        <div style="font-weight:700;color:#fff;font-size:0.95rem;margin-bottom:5px;">${p.name}</div>
-        <p style="font-size:0.83rem;margin-bottom:8px;">${p.description}</p>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
-          <span style="color:var(--gold);font-weight:700;font-size:1rem;">৳ ${p.price_bdt}</span>
-          <span class="tag tag-${effortClr}">প্রচেষ্টা: ${p.effort}</span>
-        </div>
-        <div style="font-size:0.78rem;color:var(--text2);">⏰ তৈরি করতে: ${p.time_to_create}</div>
-        <div style="font-size:0.78rem;color:var(--text2);margin-top:4px;">🎯 ${p.target}</div>
-        <div style="font-size:0.78rem;color:var(--text3);margin-top:6px;">💡 ${p.why}</div>
-      </div>`;
-    });
-    html += '</div>';
-    if (data.quick_start) html += `<div class="alert alert-info mt-3">⚡ <strong>দ্রুত শুরু:</strong> ${data.quick_start}</div>`;
+/* ════════════════════════════════════════════════
+   PAGE NAVIGATION
+════════════════════════════════════════════════ */
+function showPage(pg,btn){
+  document.querySelectorAll('[id^="pg-"]').forEach(p=>p.classList.add('hidden'));
+  document.getElementById('pg-'+pg)?.classList.remove('hidden');
+  document.querySelectorAll('.sb-btn').forEach(b=>b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  if(pg==='tasks') renderTasks();
+  if(pg==='market') renderMarket();
+  if(pg==='orders') renderOrders();
+}
+
+/* ════════════════════════════════════════════════
+   90-DAY TASKS
+════════════════════════════════════════════════ */
+function renderTasks(){
+  const tasks=Store.getTasks();
+  const prog=Store.getUserTaskProgress();
+  const el=document.getElementById('taskContent');
+  if(!tasks.length){
+    el.innerHTML=`<div class="alert a-i">📅 অ্যাডমিন এখনো ৯০ দিনের প্ল্যান তৈরি করেননি। শীঘ্রই আসছে!</div>`; return;
   }
-
-  else if (t === 'service_package' && data.packages) {
-    html = `<div class="grid-3">`;
-    const pkgColors = ['var(--text2)','var(--accent)','var(--gold)'];
-    data.packages.forEach((pkg, i) => {
-      html += `<div class="result-item" style="border-top:3px solid ${pkgColors[i]};text-align:center;">
-        <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:4px;">${pkg.name}</div>
-        <div style="font-size:1.6rem;font-weight:800;color:${pkgColors[i]};margin-bottom:2px;">৳${pkg.price_bdt}</div>
-        <div style="font-size:0.78rem;color:var(--text2);margin-bottom:12px;">⏰ ${pkg.delivery_days} দিনে ডেলিভারি</div>
-        <div style="text-align:left;margin-bottom:10px;">${pkg.includes.map(inc=>`<div style="font-size:0.83rem;padding:3px 0;">✅ ${inc}</div>`).join('')}</div>
-        ${pkg.not_includes?.length?`<div style="text-align:left;margin-bottom:10px;">${pkg.not_includes.map(ni=>`<div style="font-size:0.8rem;padding:2px 0;color:var(--text2);">✗ ${ni}</div>`).join('')}</div>`:''}
-        <div style="font-size:0.78rem;color:var(--text2);background:var(--bg);border-radius:6px;padding:6px;">🎯 ${pkg.best_for}</div>
-      </div>`;
-    });
-    html += '</div>';
-    if (data.pitch) html += `<div class="result-item mt-2"><div class="tag tag-purple mb-2">পিচ টেমপ্লেট</div><p style="font-size:0.86rem;white-space:pre-line;">${data.pitch}</p></div>`;
-  }
-
-  else if (t === 'bio_optimizer' && data.bios) {
-    const platforms = [['facebook','Facebook','#1877f2'],['instagram','Instagram','#e4405f'],['tiktok','TikTok','#69c9d0'],['youtube','YouTube','#ff0000']];
-    html = '<div class="tab-bar mb-3">';
-    platforms.forEach((p,i) => { html += `<button class="tab-btn${i===0?' active':''}" onclick="switchBioTab('${p[0]}',this)">${p[1]}</button>`; });
-    html += '</div>';
-    platforms.forEach((p, i) => {
-      html += `<div id="bio_${p[0]}" class="result-item${i>0?' hidden':''}" style="border-left:3px solid ${p[2]};">
-        <div style="font-weight:700;color:#fff;margin-bottom:10px;">${p[1]} Bio</div>
-        <div style="font-size:0.9rem;color:var(--text3);white-space:pre-line;line-height:1.7;">${data.bios[p[0]]||'এই প্ল্যাটফর্মের জন্য বায়ো পাওয়া যায়নি'}</div>
-        <button class="btn btn-sm btn-secondary mt-2" onclick="copyText('${(data.bios[p[0]]||'').replace(/'/g,"\\'")}',this)">📋 কপি করুন</button>
-      </div>`;
-    });
-    if (data.keywords?.length) html += `<div class="result-item mt-2"><div class="tag tag-gold mb-2">গুরুত্বপূর্ণ কীওয়ার্ড</div><div style="display:flex;flex-wrap:wrap;gap:6px;">${data.keywords.map(k=>`<span class="tag tag-purple">${k}</span>`).join('')}</div></div>`;
-    if (data.profile_tips?.length) html += `<div class="result-item mt-2"><div class="tag tag-green mb-2">প্রোফাইল টিপস</div>${data.profile_tips.map(t=>`<div style="font-size:0.85rem;padding:4px 0;">💡 ${t}</div>`).join('')}</div>`;
-  }
-
-  else if (t === 'course_outline' && data.modules) {
-    html = `<div class="result-item mb-3" style="background:linear-gradient(135deg,rgba(108,99,255,0.1),rgba(255,101,132,0.07));border-color:rgba(108,99,255,0.3);">
-      <h3 style="color:#fff;margin-bottom:5px;">${data.title||''}</h3>
-      <p style="font-size:0.88rem;color:var(--text2);margin-bottom:10px;">${data.tagline||''}</p>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;">
-        ${data.price_bdt?`<span class="tag tag-gold">💰 ৳${data.price_bdt}</span>`:''}
-        ${data.target_audience?`<span class="tag tag-purple">🎯 ${data.target_audience}</span>`:''}
+  const done=Object.values(prog).filter(Boolean).length;
+  el.innerHTML=`
+    <div class="card mb2" style="background:linear-gradient(135deg,rgba(108,99,255,.12),rgba(67,233,123,.06));">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="font-family:var(--fh);font-size:1.1rem;font-weight:800;color:#fff;">আপনার অগ্রগতি</div>
+        <div style="font-family:var(--fh);font-size:1.4rem;font-weight:800;color:var(--accent3);">${done}<span style="font-size:.9rem;color:var(--text2);">/৯০</span></div>
       </div>
-      ${data.outcome?`<p style="font-size:0.85rem;margin-top:10px;color:var(--text3);">🏆 ${data.outcome}</p>`:''}
-    </div>`;
-    data.modules.forEach(m => {
-      html += `<div class="day-card">
-        <div class="day-header"><div class="day-name">মডিউল ${m.number}: ${m.title}</div><div class="day-time">⏰ ${m.duration}</div></div>
-        ${m.lessons.map(l=>`<div style="font-size:0.83rem;padding:3px 0;color:var(--text2);">▸ ${l}</div>`).join('')}
-      </div>`;
-    });
-    if (data.sales_points?.length) { html += `<div class="result-item mt-2"><div class="tag tag-red mb-2">সেলস পয়েন্ট</div>${data.sales_points.map(s=>`<div style="font-size:0.85rem;padding:4px 0;">✅ ${s}</div>`).join('')}</div>`; }
-  }
-
-  else if (t === 'growth_plan' && data.plan) {
-    const dayColors = ['#6c63ff','#ff6584','#43e97b','#f5c518','#6c63ff','#ff6584','#43e97b'];
-    data.plan.forEach((day, i) => {
-      html += `<div class="day-card" style="border-left-color:${dayColors[i]};">
-        <div class="day-header">
-          <div class="day-name" style="color:${dayColors[i]};">📅 ${day.day_name||'দিন '+day.day}</div>
-          <div class="day-time">⏰ ${day.posting_time}</div>
-        </div>
-        <div style="font-weight:600;color:var(--text3);margin-bottom:5px;">${day.content_type}: ${day.content}</div>
-        <div style="font-size:0.82rem;color:var(--text2);margin-bottom:4px;">📌 ${day.engagement_strategy}</div>
-        ${day.goal?`<span class="tag tag-green" style="font-size:0.7rem;">🎯 ${day.goal}</span>`:''}
-        ${day.tip?`<div style="font-size:0.78rem;color:var(--text2);margin-top:6px;">💡 ${day.tip}</div>`:''}
-      </div>`;
-    });
-    if (data.expected_growth) html += `<div class="alert alert-success mt-2">📈 <strong>প্রত্যাশিত ফলাফল:</strong> ${data.expected_growth}</div>`;
-  }
-
-  else if (t === 'engagement_reply') {
-    html = `<div class="tab-bar mb-3">
-      <button class="tab-btn active" onclick="switchEngageTab('comments',this)">💬 কমেন্ট রিপ্লাই (${(data.comment_replies||[]).length})</button>
-      <button class="tab-btn" onclick="switchEngageTab('dms',this)">📩 DM রিপ্লাই (${(data.dm_replies||[]).length})</button>
+      <div style="background:var(--border);border-radius:4px;height:8px;overflow:hidden;">
+        <div style="width:${Math.round(done/90*100)}%;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent3));border-radius:4px;transition:width .5s;"></div>
+      </div>
+      <div style="font-size:.78rem;color:var(--text2);margin-top:6px;">${Math.round(done/90*100)}% সম্পন্ন</div>
     </div>
-    <div id="engage_comments">`;
-    (data.comment_replies||[]).forEach((r,i) => {
-      html += `<div class="result-item mb-2">
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
-          <span class="tag tag-purple">${r.type||'রিপ্লাই'}</span>
-        </div>
-        ${r.comment_example?`<div style="font-size:0.8rem;color:var(--text2);margin-bottom:6px;font-style:italic;">"${r.comment_example}"</div>`:''}
-        <div style="font-size:0.88rem;color:var(--text3);">${r.reply}</div>
-        <button class="btn btn-sm btn-secondary mt-1" style="font-size:0.72rem;" onclick="copyText('${r.reply.replace(/'/g,"\\'")}',this)">📋 কপি</button>
-      </div>`;
-    });
-    html += `</div><div id="engage_dms" class="hidden">`;
-    (data.dm_replies||[]).forEach((r,i) => {
-      const stageClrs = {awareness:'gray',interest:'purple',desire:'gold',action:'green'};
-      html += `<div class="result-item mb-2" style="border-left:3px solid var(--accent2);">
-        <span class="tag tag-${stageClrs[r.stage]||'purple'} mb-2">${r.stage}</span>
-        ${r.trigger?`<div style="font-size:0.78rem;color:var(--text2);margin-bottom:6px;">ট্রিগার: ${r.trigger}</div>`:''}
-        <div style="font-size:0.86rem;white-space:pre-line;">${r.message}</div>
-        <button class="btn btn-sm btn-secondary mt-1" style="font-size:0.72rem;" onclick="copyText('${r.message.replace(/'/g,"\\'")}',this)">📋 কপি</button>
-      </div>`;
-    });
-    html += '</div>';
-    if (data.tips?.length) html += `<div class="result-item mt-2"><div class="tag tag-gold mb-2">এনগেজমেন্ট টিপস</div>${data.tips.map(t=>`<div style="font-size:0.85rem;padding:4px 0;">💡 ${t}</div>`).join('')}</div>`;
-  }
-
-  else if (t === 'content_analysis' && data.scores) {
-    const s = data.scores;
-    const scoreColors = { hook:'#6c63ff', retention:'#f5c518', engagement:'#43e97b', cta:'#ff6584' };
-    html = `<div class="score-grid mb-3">
-      ${Object.entries(s).map(([k,v]) => `<div class="score-card"><div class="score-val" style="color:${scoreColors[k]||'#fff'};">${v}/১০</div><div class="score-lbl">${{hook:'হুক',retention:'রিটেনশন',engagement:'এনগেজমেন্ট',cta:'CTA'}[k]||k}</div></div>`).join('')}
-    </div>`;
-    if (data.problems?.length) { html += `<div class="result-item mb-2" style="border-left:3px solid var(--accent2);"><div class="tag tag-red mb-2">চিহ্নিত সমস্যা</div><ul style="padding-left:18px;color:var(--text2);font-size:0.86rem;line-height:2;">${data.problems.map(p=>`<li>${p}</li>`).join('')}</ul></div>`; }
-    if (data.solutions?.length) {
-      html += `<div style="margin-top:12px;"><div style="font-family:var(--font-head);font-weight:700;color:#fff;margin-bottom:10px;">✅ সমাধানের ধাপসমূহ</div>`;
-      data.solutions.forEach(sol => {
-        const pClr = sol.priority==='high'?'red':sol.priority==='low'?'green':'gold';
-        html += `<div class="result-item mb-2" style="border-left:3px solid var(--accent3);">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-            <div style="width:24px;height:24px;background:var(--accent3);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-weight:800;font-size:0.75rem;">${sol.step}</div>
-            <strong style="color:#fff;">${sol.title}</strong>
-            <span class="tag tag-${pClr}" style="margin-left:auto;font-size:0.68rem;">${sol.priority}</span>
-          </div>
-          <div style="font-size:0.86rem;">${sol.action}</div>
+    <div class="day-grid">
+      ${Array.from({length:90},(_,i)=>{
+        const day=i+1; const task=tasks.find(t=>t.day===day);
+        const isDone=prog[day]; const cls=isDone?'done':'';
+        return `<div class="day-cell ${cls}" onclick="openTask(${day})" title="${task?task.title:'কাজ নেই'}">
+          <div class="dc-num">${isDone?'✅':day}</div>
+          <div class="dc-lbl">${task?task.type||'কাজ':'—'}</div>
         </div>`;
-      });
-      html += '</div>';
-    }
-    if (data.quick_wins?.length) html += `<div class="alert alert-success mt-2"><strong>⚡ দ্রুত ফলাফল:</strong><div style="margin-top:6px;">${data.quick_wins.map(w=>`<div>• ${w}</div>`).join('')}</div></div>`;
-  }
+      }).join('')}
+    </div>`;
+}
 
-  else if (t === 'trend_ideas' && data.trends) {
-    html = `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;">`;
-    data.trends.forEach(tr => {
-      const sc = tr.viral_score||0;
-      const scClr = sc>=8?'#43e97b':sc>=6?'#f5c518':'#ff6584';
-      html += `<div class="result-item card-glow">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-          <span class="tag tag-purple">${tr.trend_type}</span>
-          <span style="font-size:0.88rem;font-weight:700;color:${scClr};">🔥 ${sc}/১০</span>
+function openTask(day){
+  const tasks=Store.getTasks();
+  const task=tasks.find(t=>t.day===day);
+  const prog=Store.getUserTaskProgress();
+  const isDone=prog[day];
+  document.getElementById('tmTitle').textContent=`দিন ${day} ${task?'— '+task.title:'(কাজ নেই)'}`;
+  document.getElementById('tmBody').innerHTML=task?`
+    <div class="tag ${({content:'tp',analysis:'tgo',business:'tg',mindset:'tr'}[task.type]||'tp')} mb2">${task.type||'কাজ'}</div>
+    <p style="font-size:.9rem;line-height:1.8;margin-bottom:16px;">${task.description||''}</p>
+    ${task.resources?`<div class="alert a-i mb2" style="font-size:.82rem;">📚 রিসোর্স: ${task.resources}</div>`:''}
+    <button class="btn ${isDone?'btn-s':'btn-g'} btn-fw" onclick="toggleTaskDone(${day})">
+      ${isDone?'↩️ অসম্পন্ন করুন':'✅ সম্পন্ন হয়েছে'}
+    </button>`:`<p class="text-muted">এই দিনের জন্য কোনো কাজ নির্ধারিত নেই।</p>`;
+  Modal.show('taskModal');
+}
+function toggleTaskDone(day){
+  const p=Store.getUserTaskProgress();
+  Store.setTaskDone(day,!p[day]);
+  Modal.hide('taskModal');
+  renderTasks();
+  Toast.success(p[day]?'কাজ অসম্পন্ন করা হয়েছে':'🎉 দিন '+day+' সম্পন্ন!');
+}
+
+/* ════════════════════════════════════════════════
+   MARKETPLACE
+════════════════════════════════════════════════ */
+function renderMarket(){
+  const prods=Store.getProducts().filter(p=>p.active);
+  const el=document.getElementById('marketContent');
+  if(!prods.length){ el.innerHTML=`<div class="alert a-i">🛍️ এখনো কোনো প্রোডাক্ট যোগ করা হয়নি। শীঘ্রই আসছে!</div>`; return; }
+  // Filter tabs
+  const types=[...new Set(prods.map(p=>p.type))];
+  el.innerHTML=`
+    <div class="tab-bar mb2" id="mktTabs">
+      <button class="tbn on" onclick="filterMarket('all',this)">সব</button>
+      ${types.map(t=>`<button class="tbn" onclick="filterMarket('${t}',this)">${{service:'সার্ভিস',ebook:'ইবুক',course:'কোর্স',template:'টেমপ্লেট'}[t]||t}</button>`).join('')}
+    </div>
+    <div class="prod-grid" id="prodGrid">${renderProdCards(prods)}</div>`;
+}
+function renderProdCards(prods){
+  return prods.map(p=>`
+    <div class="prod-card">
+      <div class="prod-thumb">${{service:'🏢',ebook:'📖',course:'🎓',template:'📄'}[p.type]||'📦'}</div>
+      <div class="prod-body">
+        <div class="tag ${{service:'tp',ebook:'tgo',course:'tg',template:'tr'}[p.type]||'tp'} mb1">${{service:'সার্ভিস',ebook:'ইবুক',course:'কোর্স',template:'টেমপ্লেট'}[p.type]||p.type}</div>
+        <div class="prod-name">${p.name}</div>
+        <div class="prod-desc">${p.description}</div>
+        <div class="prod-price">৳${Number(p.price).toLocaleString('bn-BD')}</div>
+        <button class="btn btn-p btn-fw" onclick="openBuy(${p.id})">🛒 কিনুন</button>
+      </div>
+    </div>`).join('');
+}
+function filterMarket(type,btn){
+  document.querySelectorAll('#mktTabs .tbn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const prods=Store.getProducts().filter(p=>p.active&&(type==='all'||p.type===type));
+  document.getElementById('prodGrid').innerHTML=renderProdCards(prods);
+}
+
+let buyProdId=null;
+function openBuy(id){
+  const p=Store.getProducts().find(pr=>pr.id===id); if(!p) return;
+  buyProdId=id;
+  document.getElementById('buyTitle').textContent=p.name;
+  document.getElementById('buyBody').innerHTML=`
+    <div class="ri mb2" style="text-align:center;">
+      <div style="font-size:2.5rem;margin-bottom:8px;">${{service:'🏢',ebook:'📖',course:'🎓',template:'📄'}[p.type]||'📦'}</div>
+      <div style="font-family:var(--fh);font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:5px;">${p.name}</div>
+      <div style="font-size:.85rem;color:var(--text2);margin-bottom:10px;">${p.description}</div>
+      <div style="font-family:var(--fh);font-size:1.8rem;font-weight:800;color:var(--gold);">৳${Number(p.price).toLocaleString('bn-BD')}</div>
+    </div>
+    ${p.details?`<div class="alert a-i mb2" style="font-size:.82rem;">${p.details}</div>`:''}
+    <div class="fg mb2"><label class="fl">পেমেন্ট পদ্ধতি</label>
+      <select class="fc" id="payMethod"><option value="bkash">bKash</option><option value="nagad">Nagad</option><option value="card">Card</option></select>
+    </div>
+    <div class="fg mb3"><label class="fl">নোট (ঐচ্ছিক)</label><input class="fc" id="buyNote" placeholder="কোনো বিশেষ নির্দেশনা..."></div>
+    <button class="btn btn-p btn-fw" onclick="confirmBuy()">✅ অর্ডার কনফার্ম করুন</button>
+    <div style="font-size:.75rem;color:var(--text2);text-align:center;margin-top:8px;">অর্ডারের পর আমরা WhatsApp-এ পেমেন্ট নির্দেশনা পাঠাব</div>`;
+  Modal.show('buyModal');
+}
+function confirmBuy(){
+  const p=Store.getProducts().find(pr=>pr.id===buyProdId); if(!p) return;
+  const prof=Store.getProfile()||{};
+  Store.addOrder({ productId:buyProdId, productName:p.name, price:p.price, type:p.type, payMethod:document.getElementById('payMethod').value, note:document.getElementById('buyNote').value, userName:prof.name, userWa:prof.whatsapp });
+  Modal.hide('buyModal');
+  Toast.success('অর্ডার সফল! আমরা WhatsApp-এ যোগাযোগ করব।');
+  renderOrders();
+}
+
+/* ════════════════════════════════════════════════
+   ORDERS
+════════════════════════════════════════════════ */
+function renderOrders(){
+  const orders=Store.getOrders();
+  const el=document.getElementById('ordersContent');
+  if(!orders.length){ el.innerHTML=`<div class="alert a-i">📦 এখনো কোনো অর্ডার নেই। মার্কেটপ্লেস থেকে কিনুন।</div>`; return; }
+  el.innerHTML=orders.map(o=>`
+    <div class="ri mb2">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+        <div style="font-weight:700;color:#fff;">${o.productName}</div>
+        <div style="display:flex;gap:7px;align-items:center;">
+          <span class="tag tgo">${fmtBDT(o.price)}</span>
+          <span class="tag ${{pending:'tgr',confirmed:'tp',completed:'tg',cancelled:'tr'}[o.status]||'tgr'}">${{pending:'পেন্ডিং',confirmed:'কনফার্ম',completed:'সম্পন্ন',cancelled:'বাতিল'}[o.status]||o.status}</span>
         </div>
-        <div style="font-weight:700;color:#fff;margin-bottom:6px;font-size:0.95rem;">${tr.idea}</div>
-        <p style="font-size:0.82rem;margin-bottom:6px;">${tr.reason}</p>
-        <div style="font-size:0.8rem;color:var(--text3);padding:8px;background:var(--bg);border-radius:6px;margin-bottom:6px;">${tr.adaptation}</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;">
-          ${tr.best_platform?`<span class="tag tag-gray">📱 ${tr.best_platform}</span>`:''}
-          ${tr.best_time?`<span class="tag tag-gold">⏰ ${tr.best_time}</span>`:''}
-        </div>
-      </div>`;
-    });
-    html += '</div>';
-  }
-
-  else if (t === 'funnel_builder' && data.funnel) {
-    const f = data.funnel;
-    const steps = [
-      {key:'awareness',label:'🎯 Awareness — সচেতনতা',color:'var(--accent)'},
-      {key:'interest',label:'🔍 Interest — আগ্রহ',color:'var(--gold)'},
-      {key:'desire',label:'❤️ Desire — ইচ্ছা',color:'var(--accent2)'},
-      {key:'action',label:'💰 Action — সেল',color:'var(--accent3)'},
-    ];
-    steps.forEach((s, i) => {
-      const d = f[s.key]||{};
-      html += `<div class="funnel-step" style="border-left:3px solid ${s.color};">
-        <div class="step-circle" style="background:${s.color};color:${s.color===''?'#000':'#fff'};">${i+1}</div>
-        <div style="flex:1;">
-          <div style="font-family:var(--font-head);font-weight:700;color:#fff;margin-bottom:8px;">${s.label}</div>
-          ${d.content?`<div style="font-size:0.85rem;"><strong>কন্টেন্ট:</strong> ${d.content}</div>`:''}
-          ${d.platform?`<div style="font-size:0.83rem;color:var(--text2);">📱 প্ল্যাটফর্ম: ${d.platform}</div>`:''}
-          ${d.example?`<div style="font-size:0.83rem;color:var(--text3);margin-top:5px;">উদাহরণ: ${d.example}</div>`:''}
-          ${d.lead_magnet?`<div style="font-size:0.82rem;color:var(--accent3);margin-top:4px;">🧲 ${d.lead_magnet}</div>`:''}
-          ${d.social_proof?`<div style="font-size:0.82rem;color:var(--gold);margin-top:4px;">⭐ ${d.social_proof}</div>`:''}
-          ${d.cta?`<div style="background:rgba(108,99,255,0.1);border-radius:6px;padding:7px;margin-top:7px;font-size:0.82rem;color:#a78bfa;font-weight:600;">📢 ${d.cta}</div>`:''}
-          ${d.offer?`<div style="font-size:0.82rem;color:var(--accent2);margin-top:4px;">🎁 অফার: ${d.offer}</div>`:''}
-          ${d.urgency?`<div style="font-size:0.82rem;color:var(--accent2);margin-top:2px;">⏰ ${d.urgency}</div>`:''}
-        </div>
-      </div>`;
-    });
-    if (data.weekly_schedule) html += `<div class="result-item mt-2"><div class="tag tag-purple mb-2">সাপ্তাহিক সময়সূচি</div><p style="font-size:0.86rem;">${data.weekly_schedule}</p></div>`;
-    if (data.monthly_target) html += `<div class="alert alert-success mt-2">📈 <strong>মাসিক লক্ষ্য:</strong> ${data.monthly_target}</div>`;
-  }
-
-  else {
-    html = `<pre style="color:var(--text2);font-size:0.82rem;overflow-x:auto;white-space:pre-wrap;">${JSON.stringify(data, null, 2)}</pre>`;
-  }
-
-  body.innerHTML = html;
+      </div>
+      <div style="font-size:.8rem;color:var(--text2);">📅 ${fmtDate(o.date)} | 💳 ${o.payMethod}</div>
+      ${o.note?`<div style="font-size:.79rem;color:var(--text2);margin-top:4px;">📝 ${o.note}</div>`:''}
+    </div>`).join('');
 }
 
-function switchBioTab(platform, btn) {
-  document.querySelectorAll('[id^="bio_"]').forEach(el => el.classList.add('hidden'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('bio_' + platform)?.classList.remove('hidden');
-  btn.classList.add('active');
-}
-function switchEngageTab(tab, btn) {
-  ['comments','dms'].forEach(t => document.getElementById('engage_'+t)?.classList.add('hidden'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('engage_'+tab)?.classList.remove('hidden');
-  btn.classList.add('active');
-}
-
-function copyResult() {
-  const text = document.getElementById('outputBody').innerText;
-  navigator.clipboard.writeText(text).then(() => Toast.success('কপি হয়েছে! ✅'));
-}
-function downloadResult() {
-  if (lastResult) downloadJSON(lastResult, `${currentTool}_${Date.now()}.json`);
-}
-function toggleHelpPanel() {
-  document.getElementById('helpPanel').classList.toggle('open');
+/* ════════════════════════════════════════════════
+   HELP
+════════════════════════════════════════════════ */
+function sendHelp(){
+  const sub=document.getElementById('h-subject').value.trim();
+  const msg=document.getElementById('h-msg').value.trim();
+  if(!sub||!msg){ Toast.error('বিষয় ও বার্তা দিন'); return; }
+  Store.log('help_request',{subject:sub,message:msg});
+  document.getElementById('h-subject').value='';
+  document.getElementById('h-msg').value='';
+  Toast.success('বার্তা পাঠানো হয়েছে! আমরা শীঘ্রই যোগাযোগ করব।');
 }
 
-// Init
-renderFields(TOOL_CONFIG['content_ideas'].fields);
+/* ════════════════════════════════════════════════
+   API KEY
+════════════════════════════════════════════════ */
+function showApiModal(){ document.getElementById('akInput').value=Store.getAK()||''; Modal.show('apiModal'); }
+function saveAK(){
+  const k=document.getElementById('akInput').value.trim();
+  if(!k||!k.startsWith('sk-ant-')){ Toast.error('সঠিক API Key দিন'); return; }
+  Store.setAK(k); Modal.hide('apiModal'); Toast.success('API Key সেভ হয়েছে! ✅');
+}
+
+/* ════════════════════════════════════════════════
+   BOOT
+════════════════════════════════════════════════ */
+routeUser();
 </script>
 </body>
 </html>
