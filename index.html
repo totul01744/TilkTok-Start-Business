@@ -2,467 +2,510 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Creator2Business — কন্টেন্ট থেকে বিজনেস</title>
-<meta name="description" content="বাংলাদেশের ক্রিয়েটরদের জন্য AI-powered বিজনেস প্ল্যাটফর্ম">
+<title>Creator2Business</title>
 <link rel="stylesheet" href="assets/css/style.css">
 <style>
-/* ── ONBOARDING ── */
-.ob-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1}
-.ob-box{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);max-width:620px;width:100%;overflow:hidden}
-.ob-hero{background:linear-gradient(135deg,rgba(108,99,255,.18),rgba(255,101,132,.1));padding:36px 32px 28px;text-align:center;border-bottom:1px solid var(--border)}
-.ob-steps{display:flex;gap:8px;justify-content:center;margin-top:20px}
-.ob-step{width:8px;height:8px;border-radius:50%;background:var(--border2)}
-.ob-step.on{background:var(--accent);width:24px;border-radius:4px}
-.ob-body{padding:28px 32px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
-.fc-full{grid-column:1/-1}
-.pending-screen{text-align:center;padding:48px 32px}
-.pending-icon{font-size:3.5rem;margin-bottom:16px;animation:bob 2s ease-in-out infinite}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-
-/* ── MAIN APP ── */
-.app-layout{display:flex;min-height:calc(100vh - 62px)}
-.sidebar{width:220px;background:var(--card);border-right:1px solid var(--border);position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;flex-shrink:0}
-.sb-sec{padding:10px 12px 4px;font-size:.65rem;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;font-weight:600}
-.sb-btn{display:flex;align-items:center;gap:9px;padding:9px 13px;color:var(--text2);border-radius:var(--r3);margin:2px 8px;cursor:pointer;font-size:.83rem;font-weight:500;transition:all .2s;border:none;background:none;width:calc(100% - 16px);text-align:left}
-.sb-btn:hover{color:var(--text);background:var(--card2)}
-.sb-btn.on{color:#fff;background:rgba(108,99,255,.15);border-left:2px solid var(--accent)}
-.sb-ico{font-size:.9rem;width:17px;text-align:center}
-.main{flex:1;padding:24px;overflow-x:hidden}
-.pg-title{font-family:var(--fh);font-size:1.25rem;font-weight:800;color:#fff;margin-bottom:4px}
-.pg-sub{font-size:.82rem;color:var(--text2);margin-bottom:22px}
-
-/* ── TOOLS ── */
-.tool-tabs{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:9px;margin-bottom:20px}
-.ttab{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:12px 8px;cursor:pointer;text-align:center;transition:all .2s;color:var(--text2);font-family:var(--font);font-size:.76rem;font-weight:500}
+/* ── PHONE LOGIN ── */
+.phone-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1}
+.ph-steps{display:flex;gap:8px;justify-content:center;margin-top:18px}
+.ph-step{width:7px;height:7px;border-radius:50%;background:var(--border2);transition:all .3s}
+.ph-step.on{background:var(--accent);width:22px;border-radius:4px}
+.tool-tabs{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-bottom:18px}
+.ttab{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:11px 7px;cursor:pointer;text-align:center;transition:all .2s;color:var(--text2);font-family:var(--font);font-size:.74rem;font-weight:500}
 .ttab:hover{border-color:var(--border2);color:var(--text);transform:translateY(-1px)}
-.ttab.on{border-color:var(--accent);color:#fff;background:rgba(108,99,255,.1);box-shadow:0 0 0 1px var(--accent),0 4px 18px var(--glow)}
-.ttab .ti{font-size:1.3rem;margin-bottom:4px;display:block}
-.tdesc{background:rgba(108,99,255,.07);border:1px solid rgba(108,99,255,.16);border-radius:var(--r2);padding:10px 14px;font-size:.83rem;color:var(--text2);margin-bottom:18px}
-.fc-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:18px}
-.fc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.ttab.on{border-color:var(--accent);color:#fff;background:rgba(108,99,255,.1);box-shadow:0 0 0 1px var(--accent)}
+.ttab .ti{font-size:1.2rem;margin-bottom:4px;display:block}
+.tdesc{background:rgba(108,99,255,.07);border:1px solid rgba(108,99,255,.15);border-radius:var(--r2);padding:10px 13px;font-size:.82rem;color:var(--text2);margin-bottom:16px}
+.fc-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:16px}
+.fc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px;margin-bottom:14px}
 .fc-full2{grid-column:1/-1}
 .out-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
-.out-hdr{background:var(--card2);border-bottom:1px solid var(--border);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.out-title{font-family:var(--fh);font-weight:800;font-size:.9rem;color:#fff;display:flex;align-items:center;gap:7px}
-.out-body{padding:18px}
-.ri{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:15px;margin-bottom:10px;transition:border-color .2s}
-.ri:hover{border-color:var(--border2)}
+.out-hdr{background:var(--card2);border-bottom:1px solid var(--border);padding:11px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px}
+.out-body{padding:16px}
+.ri{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:10px}
 .ri:last-child{margin-bottom:0}
-
-/* ── 90-DAY TASKS ── */
-.day-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;margin-bottom:20px}
-.day-cell{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:10px 6px;text-align:center;cursor:pointer;transition:all .2s}
-.day-cell:hover{border-color:var(--accent)}
-.day-cell.done{background:rgba(67,233,123,.1);border-color:rgba(67,233,123,.4)}
-.day-cell.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
-.day-cell.locked{opacity:.4;cursor:default}
-.dc-num{font-family:var(--fh);font-weight:800;font-size:1rem;color:#fff}
-.dc-lbl{font-size:.65rem;color:var(--text2);margin-top:2px}
-.task-detail{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px}
-
-/* ── MARKETPLACE ── */
-.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
-.prod-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:all .25s;display:flex;flex-direction:column}
-.prod-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
-.prod-thumb{height:140px;background:linear-gradient(135deg,var(--bg3),var(--card2));display:flex;align-items:center;justify-content:center;font-size:3rem;border-bottom:1px solid var(--border)}
-.prod-body{padding:16px;flex:1;display:flex;flex-direction:column}
-.prod-name{font-weight:700;color:#fff;margin-bottom:5px;font-size:.95rem}
-.prod-desc{font-size:.82rem;color:var(--text2);margin-bottom:10px;flex:1;line-height:1.6}
-.prod-price{font-family:var(--fh);font-size:1.3rem;font-weight:800;color:var(--gold);margin-bottom:10px}
-
-/* ── TABS ── */
-.tab-bar{display:flex;gap:4px;background:var(--bg2);border-radius:var(--r2);padding:4px;margin-bottom:18px;flex-wrap:wrap}
-.tbn{flex:1;min-width:70px;padding:7px 10px;border-radius:7px;border:none;background:transparent;color:var(--text2);font-family:var(--font);font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s;text-align:center}
-.tbn.on{background:var(--accent);color:#fff;box-shadow:0 2px 10px var(--glow)}
-
-/* ── PROFILE BADGE ── */
-.prof-badge{display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--border);border-radius:var(--r2);padding:10px 14px}
-.pb-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;flex-shrink:0}
-
-@media(max-width:768px){
-  .sidebar{display:none}
-  .app-layout{flex-direction:column}
-  .main{padding:14px}
-  .form-grid,.fc-grid{grid-template-columns:1fr}
-  .fc-full,.fc-full2{grid-column:1}
-}
+/* PROFILE CARD */
+.profile-card{background:linear-gradient(135deg,rgba(108,99,255,.12),rgba(255,101,132,.07));border:1px solid rgba(108,99,255,.25);border-radius:var(--r);padding:18px;margin-bottom:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+/* NOTIF */
+.notif-list{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════
-     SCREEN 1: ONBOARDING (shown when status = 'none')
-     ═══════════════════════════════════════════════════ -->
+<!-- ════ SCREEN: PHONE LOGIN ════ -->
+<div id="screenPhone" class="phone-screen">
+  <div class="login-box">
+    <div style="text-align:center;margin-bottom:22px;">
+      <div class="logo-ic" style="width:46px;height:46px;font-size:1.2rem;margin:0 auto 10px;border-radius:12px;">🚀</div>
+      <div style="font-family:var(--fh);font-weight:800;font-size:1.1rem;color:#fff;">Creator2Business</div>
+      <div style="font-size:.78rem;color:var(--text2);">আপনার WhatsApp নম্বর দিন</div>
+    </div>
+    <div class="fg mb2">
+      <label class="fl">WhatsApp নম্বর</label>
+      <input class="fc" id="phoneInput" type="tel" placeholder="01XXXXXXXXX" maxlength="14"
+        onkeydown="if(event.key==='Enter')checkPhone()">
+    </div>
+    <div id="phoneErr" class="alert a-e mb2 hidden"></div>
+    <button class="btn btn-p btn-fw" id="phoneBtn" onclick="checkPhone()">
+      ➤ প্রবেশ করুন
+    </button>
+    <p style="text-align:center;font-size:.73rem;color:var(--text2);margin-top:10px;">
+      প্রথমবার? নম্বর দিলে রেজিস্ট্রেশন ফর্ম আসবে।
+    </p>
+  </div>
+</div>
+
+<!-- ════ SCREEN: ONBOARDING FORM ════ -->
 <div id="screenOnboard" class="ob-wrap hidden">
   <div class="ob-box">
     <div class="ob-hero">
-      <div class="logo-ic" style="width:52px;height:52px;font-size:1.4rem;margin:0 auto 14px;">🚀</div>
-      <h2>Creator2Business তে স্বাগতম!</h2>
-      <p style="font-size:.9rem;margin-top:8px;">শুরু করতে নিচের ফর্মটি পূরণ করুন — আমরা ২৪ ঘণ্টার মধ্যে রিভিউ করে অ্যাক্সেস দেব।</p>
-      <div class="ob-steps"><div class="ob-step on"></div><div class="ob-step"></div><div class="ob-step"></div></div>
+      <div class="logo-ic" style="width:46px;height:46px;font-size:1.2rem;margin:0 auto 12px;border-radius:12px;">🚀</div>
+      <h2 style="font-size:1.2rem;margin-bottom:8px;">স্বাগতম Creator2Business-এ!</h2>
+      <p style="font-size:.86rem;">নিচের তথ্য দিন — আমরা ২৪ ঘণ্টার মধ্যে যাচাই করে অ্যাক্সেস দেব।</p>
+      <div class="ph-steps"><div class="ph-step on"></div><div class="ph-step"></div><div class="ph-step"></div></div>
     </div>
     <div class="ob-body">
-      <div style="font-family:var(--fh);font-weight:800;color:#fff;margin-bottom:16px;font-size:1rem;">📋 আপনার তথ্য দিন</div>
-      <div class="form-grid">
-        <div class="fg">
-          <label class="fl">আপনার পুরো নাম *</label>
-          <input class="fc" id="ob-name" placeholder="নাম লিখুন">
+      <!-- Photo upload -->
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:18px;">
+        <div class="photo-upload" id="photoUpload" onclick="document.getElementById('photoFile').click()">
+          <input type="file" id="photoFile" accept="image/*" style="display:none" onchange="handlePhoto(this)">
+          <span style="font-size:1.6rem;">📷</span>
+          <span style="font-size:.68rem;color:var(--text2);margin-top:3px;">ছবি যোগ করুন</span>
         </div>
-        <div class="fg">
-          <label class="fl">জেলা / ঠিকানা *</label>
-          <input class="fc" id="ob-addr" placeholder="যেমন: ঢাকা, চট্টগ্রাম">
-        </div>
-        <div class="fg">
-          <label class="fl">WhatsApp নম্বর *</label>
-          <input class="fc" id="ob-wa" placeholder="+880 1XXX-XXXXXX" type="tel">
-        </div>
-        <div class="fg">
-          <label class="fl">Facebook পেজ লিংক</label>
-          <input class="fc" id="ob-fb" placeholder="https://facebook.com/...">
-        </div>
-        <div class="fg">
-          <label class="fl">TikTok ইউজারনেম</label>
-          <input class="fc" id="ob-tt" placeholder="@yourusername">
-        </div>
-        <div class="fg">
-          <label class="fl">আপনার নিশ</label>
-          <input class="fc" id="ob-niche" placeholder="যেমন: ফিটনেস, রান্না">
-        </div>
-        <div class="fg fc-full">
-          <label class="fl">আপনি কিভাবে বিজনেস শুরু করতে চান? (ঐচ্ছিক)</label>
-          <textarea class="fc" id="ob-desc" rows="3" placeholder="আপনার পরিকল্পনা ও লক্ষ্য সম্পর্কে বলুন..."></textarea>
+        <div>
+          <div style="font-size:.82rem;color:var(--text3);font-weight:600;">প্রোফাইল ছবি (ঐচ্ছিক)</div>
+          <div style="font-size:.76rem;color:var(--text2);">JPG বা PNG, সর্বোচ্চ 2MB</div>
         </div>
       </div>
-      <div id="ob-err" class="alert a-e mt2 hidden"></div>
-      <button class="btn btn-p btn-fw btn-lg mt3" onclick="submitOnboard()">
+      <div class="form-grid">
+        <div class="fg"><label class="fl">পুরো নাম *</label><input class="fc" id="ob-name" placeholder="আপনার নাম"></div>
+        <div class="fg"><label class="fl">জেলা / ঠিকানা *</label><input class="fc" id="ob-addr" placeholder="যেমন: ঢাকা, রাজশাহী"></div>
+        <div class="fg"><label class="fl">WhatsApp নম্বর</label><input class="fc" id="ob-wa" readonly style="opacity:.6"></div>
+        <div class="fg"><label class="fl">Facebook পেজ লিংক</label><input class="fc" id="ob-fb" placeholder="https://facebook.com/..."></div>
+        <div class="fg"><label class="fl">TikTok ইউজারনেম</label><input class="fc" id="ob-tt" placeholder="@yourusername"></div>
+        <div class="fg"><label class="fl">আপনার নিশ</label><input class="fc" id="ob-niche" placeholder="যেমন: ফিটনেস, রান্না"></div>
+        <div class="fg fc-full"><label class="fl">বিজনেস পরিকল্পনা (ঐচ্ছিক)</label>
+          <textarea class="fc" id="ob-desc" rows="3" placeholder="কিভাবে বিজনেস শুরু করতে চান, আপনার লক্ষ্য কী..."></textarea>
+        </div>
+      </div>
+      <div id="obErr" class="alert a-e mt2 hidden"></div>
+      <button class="btn btn-p btn-fw btn-lg mt3" id="obBtn" onclick="submitOnboard()">
         📨 রেজিস্ট্রেশন সাবমিট করুন
       </button>
-      <p style="text-align:center;font-size:.75rem;margin-top:10px;color:var(--text2);">আপনার তথ্য সম্পূর্ণ নিরাপদ ও গোপনীয় থাকবে</p>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════
-     SCREEN 2: PENDING APPROVAL
-     ═══════════════════════════════════════════════════ -->
-<div id="screenPending" class="ob-wrap hidden">
-  <div class="ob-box">
-    <div class="pending-screen">
-      <div class="pending-icon">⏳</div>
-      <h2 style="margin-bottom:10px;">রিভিউ চলছে...</h2>
-      <p style="max-width:380px;margin:0 auto 20px;">আপনার রেজিস্ট্রেশন সফলভাবে জমা হয়েছে। আমরা ২৪ ঘণ্টার মধ্যে রিভিউ করে WhatsApp-এ জানাব।</p>
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-bottom:20px;">
-        <div style="font-size:.78rem;color:var(--text2);">আপনার WhatsApp</div>
-        <div id="pend-wa" style="font-weight:700;color:#fff;font-size:1rem;margin-top:3px;"></div>
-      </div>
-      <div class="alert a-i" style="text-align:left;">
-        <span>💡</span>
-        <div>অনুমোদন পেলে পেজটি রিফ্রেশ করুন অথবা আমরা লিংক পাঠাব।</div>
-      </div>
-      <button class="btn btn-s mt3" onclick="location.reload()">🔄 স্ট্যাটাস চেক করুন</button>
+<!-- ════ SCREEN: PENDING ════ -->
+<div id="screenPending" class="phone-screen hidden">
+  <div class="login-box" style="max-width:400px;text-align:center;padding:36px 28px;">
+    <div style="font-size:3rem;margin-bottom:14px;animation:bob 2s ease-in-out infinite;">⏳</div>
+    <h2 style="font-size:1.2rem;margin-bottom:8px;">রিভিউ চলছে...</h2>
+    <p style="margin-bottom:18px;font-size:.86rem;">আপনার আবেদন পেয়েছি। আমরা ২৪ ঘণ্টার মধ্যে WhatsApp-এ জানাব।</p>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:18px;">
+      <div style="font-size:.73rem;color:var(--text2);">নম্বর</div>
+      <div id="pendWa" style="font-weight:700;color:#fff;font-size:.95rem;margin-top:2px;"></div>
     </div>
+    <button class="btn btn-s btn-fw" onclick="location.reload()">🔄 স্ট্যাটাস চেক করুন</button>
+    <button class="btn btn-d btn-fw mt1" onclick="logoutUser()" style="font-size:.78rem;">অন্য নম্বরে লগইন</button>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════
-     SCREEN 3: REJECTED
-     ═══════════════════════════════════════════════════ -->
-<div id="screenRejected" class="ob-wrap hidden">
-  <div class="ob-box">
-    <div class="pending-screen">
-      <div style="font-size:3rem;margin-bottom:16px;">❌</div>
-      <h2 style="color:var(--accent2);margin-bottom:10px;">অনুমোদন হয়নি</h2>
-      <p id="rej-reason" style="margin-bottom:20px;"></p>
-      <button class="btn btn-p" onclick="reapply()">🔄 আবার আবেদন করুন</button>
-    </div>
+<!-- ════ SCREEN: REJECTED ════ -->
+<div id="screenRejected" class="phone-screen hidden">
+  <div class="login-box" style="max-width:400px;text-align:center;padding:36px 28px;">
+    <div style="font-size:3rem;margin-bottom:14px;">❌</div>
+    <h2 style="font-size:1.2rem;color:var(--accent2);margin-bottom:8px;">অনুমোদন হয়নি</h2>
+    <p id="rejReason" style="margin-bottom:18px;font-size:.86rem;"></p>
+    <button class="btn btn-s btn-fw" onclick="logoutUser()">🔄 ফিরে যান</button>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════
-     SCREEN 4: MAIN APP (approved users)
-     ═══════════════════════════════════════════════════ -->
+<!-- ════ SCREEN: MAIN APP ════ -->
 <div id="screenApp" class="hidden">
-
-  <!-- HEADER -->
   <header class="hdr">
     <div class="hdr-in">
-      <a href="index.html" class="logo">
-        <div class="logo-ic">🚀</div>
-        <span>Creator<span style="color:var(--accent)">2</span>Business</span>
-      </a>
+      <a href="index.html" class="logo"><div class="logo-ic">🚀</div><span>Creator<span style="color:var(--accent)">2</span>Business</span></a>
       <nav class="nav" id="mainNav">
         <a href="index.html" class="nav-a on">🛠️ টুলস</a>
-        <a href="marketplace.html" class="nav-a">🛍️ মার্কেটপ্লেস</a>
-        <a href="tasks.html" class="nav-a">📅 ৯০ দিন</a>
-        <button class="btn btn-sm btn-s" onclick="showApiModal()" style="margin-left:6px;">⚙️</button>
+        <a href="#" class="nav-a" onclick="showPage('tasks',null)">📅 ৯০ দিন</a>
+        <a href="#" class="nav-a" onclick="showPage('market',null)">🛍️ মার্কেট</a>
+        <button class="btn btn-sm btn-s" onclick="Modal.show('apiModal')" style="margin-left:5px;">⚙️</button>
+        <button class="btn btn-sm btn-d" onclick="logoutUser()" style="margin-left:3px;" title="লগআউট">🚪</button>
       </nav>
       <button class="hmb">☰</button>
     </div>
   </header>
 
-  <!-- APP LAYOUT -->
   <div class="app-layout">
-    <!-- Sidebar -->
     <aside class="sidebar">
-      <div style="padding:14px 10px 4px;">
+      <div style="padding:12px 8px 4px;">
         <div id="sideProfile"></div>
       </div>
       <div class="sb-sec">AI টুলস</div>
-      <button class="sb-btn on" data-page="tools" onclick="showPage('tools',this)"><span class="sb-ico">🛠️</span>সব টুলস</button>
+      <button class="sb-btn on" data-page="tools" onclick="showPage('tools',this)">🛠️ টুলস</button>
       <div class="sb-sec">আমার যাত্রা</div>
-      <button class="sb-btn" data-page="tasks" onclick="showPage('tasks',this)"><span class="sb-ico">📅</span>৯০ দিনের প্ল্যান</button>
-      <button class="sb-btn" data-page="market" onclick="showPage('market',this)"><span class="sb-ico">🛍️</span>মার্কেটপ্লেস</button>
-      <button class="sb-btn" data-page="orders" onclick="showPage('orders',this)"><span class="sb-ico">📦</span>আমার অর্ডার</button>
-      <div class="sb-sec">সাহায্য</div>
-      <button class="sb-btn" data-page="help" onclick="showPage('help',this)"><span class="sb-ico">💬</span>হেল্প নিন</button>
+      <button class="sb-btn" data-page="tasks" onclick="showPage('tasks',this)">📅 ৯০ দিনের প্ল্যান</button>
+      <button class="sb-btn" data-page="market" onclick="showPage('market',this)">🛍️ মার্কেটপ্লেস</button>
+      <button class="sb-btn" data-page="orders" onclick="showPage('orders',this)">📦 আমার অর্ডার</button>
+      <div class="sb-sec">এজেন্সি</div>
+      <button class="sb-btn" data-page="agency" onclick="showPage('agency',this)">🏢 দ্রুত সাহায্য</button>
+      <div class="sb-sec">সাপোর্ট</div>
+      <button class="sb-btn" data-page="help" onclick="showPage('help',this)">💬 হেল্প</button>
     </aside>
 
-    <!-- Main Content -->
-    <main class="main">
+    <main class="main-c">
+      <!-- NOTIFICATIONS (always visible top) -->
+      <div id="notifArea"></div>
 
-      <!-- ── TOOLS PAGE ── -->
+      <!-- ── TOOLS ── -->
       <div id="pg-tools">
-        <div class="pg-title">🛠️ AI টুলস</div>
-        <div class="pg-sub">আপনার কন্টেন্ট ও বিজনেস গড়তে AI ব্যবহার করুন</div>
+        <div class="pg-t">🛠️ AI টুলস</div>
+        <div class="pg-s">কন্টেন্ট ও বিজনেস গড়তে AI ব্যবহার করুন</div>
         <div class="tool-tabs" id="toolTabs"></div>
-        <div class="tdesc"><span>💡</span>&nbsp;<span id="tdescTxt"></span></div>
+        <div class="tdesc">💡 <span id="tdescTxt"></span></div>
         <div class="fc-card">
-          <div style="display:flex;align-items:center;gap:7px;margin-bottom:14px;">
-            <div style="width:3px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;"></div>
-            <strong style="color:#fff;font-size:.9rem;">ইনপুট দিন</strong>
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:13px;">
+            <div style="width:3px;height:17px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;"></div>
+            <strong style="color:#fff;font-size:.88rem;">ইনপুট দিন</strong>
           </div>
           <div class="fc-grid" id="fcFields"></div>
-          <button class="btn btn-p btn-fw" id="genBtn" onclick="generate()">✨ AI দিয়ে তৈরি করুন</button>
+          <button class="btn btn-p btn-fw" id="genBtn" onclick="generate()">✨ তৈরি করুন</button>
         </div>
         <div class="out-card hidden" id="outCard">
           <div class="out-hdr">
-            <div class="out-title"><span id="outIco">💡</span><span id="outTitle">ফলাফল</span></div>
-            <div style="display:flex;gap:7px;">
-              <button class="btn btn-sm btn-s" onclick="copyTxt(document.getElementById('outBody').innerText,this)">📋 কপি</button>
-              <button class="btn btn-sm btn-s" onclick="generate()">🔄 আবার</button>
+            <div style="font-family:var(--fh);font-weight:800;font-size:.88rem;color:#fff;display:flex;align-items:center;gap:6px;"><span id="outIco"></span><span id="outTitle"></span></div>
+            <div style="display:flex;gap:6px;">
+              <button class="btn btn-sm btn-s" onclick="navigator.clipboard.writeText(document.getElementById('outBody').innerText).then(()=>Toast.success('কপি হয়েছে!'))">📋</button>
+              <button class="btn btn-sm btn-s" onclick="generate()">🔄</button>
             </div>
           </div>
           <div class="out-body" id="outBody"></div>
         </div>
       </div>
 
-      <!-- ── TASKS PAGE ── -->
+      <!-- ── TASKS ── -->
       <div id="pg-tasks" class="hidden">
-        <div class="pg-title">📅 ৯০ দিনের রোডম্যাপ</div>
-        <div class="pg-sub">প্রতিদিনের কাজ সম্পন্ন করুন এবং ক্রিয়েটর থেকে বিজনেস ওনার হয়ে উঠুন</div>
+        <div class="pg-t">📅 ৯০ দিনের রোডম্যাপ</div>
+        <div class="pg-s">প্রতিদিনের কাজ সম্পন্ন করুন</div>
         <div id="taskContent"></div>
       </div>
 
-      <!-- ── MARKETPLACE PAGE ── -->
+      <!-- ── MARKETPLACE ── -->
       <div id="pg-market" class="hidden">
-        <div class="pg-title">🛍️ মার্কেটপ্লেস</div>
-        <div class="pg-sub">এজেন্সি সার্ভিস ও ডিজিটাল প্রোডাক্ট কিনুন</div>
+        <div class="pg-t">🛍️ মার্কেটপ্লেস</div>
+        <div class="pg-s">সার্ভিস, ইবুক ও কোর্স কিনুন</div>
         <div id="marketContent"></div>
       </div>
 
-      <!-- ── ORDERS PAGE ── -->
+      <!-- ── ORDERS ── -->
       <div id="pg-orders" class="hidden">
-        <div class="pg-title">📦 আমার অর্ডার</div>
-        <div class="pg-sub">আপনার কেনা সার্ভিস ও প্রোডাক্ট</div>
+        <div class="pg-t">📦 আমার অর্ডার</div>
+        <div class="pg-s">কেনা সার্ভিস ও প্রোডাক্টের তালিকা</div>
         <div id="ordersContent"></div>
       </div>
 
-      <!-- ── HELP PAGE ── -->
+      <!-- ── AGENCY ── -->
+      <div id="pg-agency" class="hidden">
+        <div class="pg-t">🏢 এজেন্সি সার্ভিস</div>
+        <div class="pg-s">সময় নেই? আমরা করে দেব!</div>
+        <div class="agency-cta">
+          <div style="font-size:2rem;margin-bottom:8px;">⚡</div>
+          <h3>দ্রুত বিজনেস শুরু করতে চান?</h3>
+          <p>কন্টেন্ট, মার্কেটিং, সার্ভিস সেটআপ — সব আমরা করে দেব। আপনি শুধু ব্যবসায় মনোযোগ দিন।</p>
+          <a href="https://nexora-pilot.vercel.app/" target="_blank" class="btn btn-gd btn-lg">🚀 Nexora Agency — এখনই দেখুন</a>
+          <div style="font-size:.75rem;color:var(--text2);margin-top:10px;">ফ্রি কনসালটেশন উপলব্ধ</div>
+        </div>
+        <!-- Why agency section -->
+        <div class="gaut" style="margin-bottom:20px;">
+          <div class="card card-glow"><div style="font-size:1.5rem;margin-bottom:8px;">⏰</div><h3 style="margin-bottom:5px;font-size:.95rem;">সময় বাঁচান</h3><p style="font-size:.82rem;">কন্টেন্ট তৈরি থেকে সেলস — সব আমরা সামলাই</p></div>
+          <div class="card card-glow"><div style="font-size:1.5rem;margin-bottom:8px;">📈</div><h3 style="margin-bottom:5px;font-size:.95rem;">দ্রুত গ্রোথ</h3><p style="font-size:.82rem;">প্রমাণিত কৌশলে আপনার বিজনেস ত্বরান্বিত করুন</p></div>
+          <div class="card card-glow"><div style="font-size:1.5rem;margin-bottom:8px;">💰</div><h3 style="margin-bottom:5px;font-size:.95rem;">ROI নিশ্চিত</h3><p style="font-size:.82rem;">বিনিয়োগের চেয়ে বেশি রিটার্ন না পেলে আমরা আবার করব</p></div>
+          <div class="card card-glow"><div style="font-size:1.5rem;margin-bottom:8px;">🤝</div><h3 style="margin-bottom:5px;font-size:.95rem;">এক্সপার্ট টিম</h3><p style="font-size:.82rem;">অভিজ্ঞ ডিজিটাল মার্কেটিং এক্সপার্টদের সাথে কাজ করুন</p></div>
+        </div>
+        <div style="text-align:center;">
+          <a href="https://nexora-pilot.vercel.app/" target="_blank" class="btn btn-p btn-lg">🏢 Nexora Agency ভিজিট করুন →</a>
+        </div>
+      </div>
+
+      <!-- ── HELP ── -->
       <div id="pg-help" class="hidden">
-        <div class="pg-title">💬 হেল্প ও সাপোর্ট</div>
-        <div class="pg-sub">যেকোনো সমস্যায় আমরা পাশে আছি</div>
+        <div class="pg-t">💬 হেল্প ও সাপোর্ট</div>
+        <div class="pg-s">যেকোনো সমস্যায় আমরা পাশে</div>
         <div class="card mb2">
-          <h3 style="margin-bottom:14px;">📨 সাহায্যের জন্য বার্তা পাঠান</h3>
-          <div class="fg mb2">
-            <label class="fl">বিষয়</label>
-            <input class="fc" id="h-subject" placeholder="কি বিষয়ে সাহায্য দরকার?">
-          </div>
-          <div class="fg mb2">
-            <label class="fl">বিস্তারিত</label>
-            <textarea class="fc" id="h-msg" rows="4" placeholder="বিস্তারিত লিখুন..."></textarea>
-          </div>
+          <h3 style="margin-bottom:13px;">বার্তা পাঠান</h3>
+          <div class="fg mb2"><label class="fl">বিষয়</label><input class="fc" id="h-sub" placeholder="কি বিষয়ে সাহায্য দরকার?"></div>
+          <div class="fg mb2"><label class="fl">বিস্তারিত</label><textarea class="fc" id="h-msg" rows="4" placeholder="বিস্তারিত লিখুন..."></textarea></div>
           <button class="btn btn-p" onclick="sendHelp()">📨 পাঠান</button>
         </div>
-        <div class="alert a-i">
-          <span>💬</span>
-          <div>সরাসরি WhatsApp-এ যোগাযোগ করুন — সবচেয়ে দ্রুত সাড়া পাবেন।<br>
-          <a id="wa-link" href="#" target="_blank" class="btn btn-g mt1 btn-sm">📱 WhatsApp করুন</a></div>
-        </div>
+        <div class="alert a-i">💬 সরাসরি WhatsApp: <a id="waLink" href="#" target="_blank" style="color:var(--accent3);font-weight:600;">এখানে ক্লিক করুন</a></div>
       </div>
 
     </main>
   </div>
 </div>
 
-<!-- API KEY MODAL -->
+<!-- API MODAL -->
 <div class="mo hidden" id="apiModal">
-  <div class="mb" style="max-width:420px;">
-    <div class="mh"><h3>⚙️ API Key সেটআপ</h3><button class="mc" onclick="Modal.hide('apiModal')">✕</button></div>
+  <div class="mb" style="max-width:400px;">
+    <div class="mh"><h3>⚙️ API Key</h3><button class="mc" onclick="Modal.hide('apiModal')">✕</button></div>
     <div class="mbody">
-      <div class="alert a-i mb2" style="font-size:.8rem;">console.anthropic.com থেকে ফ্রি API Key নিন।</div>
-      <div class="fg mb2"><label class="fl">API Key</label><input type="password" class="fc" id="akInput" placeholder="sk-ant-..."></div>
-      <button class="btn btn-p btn-fw" onclick="saveAK()">💾 সেভ করুন</button>
+      <div class="alert a-i mb2" style="font-size:.79rem;">console.anthropic.com থেকে ফ্রি API Key নিন।</div>
+      <div class="fg mb2"><label class="fl">API Key</label><input type="password" class="fc" id="akInp" placeholder="sk-ant-..."></div>
+      <button class="btn btn-p btn-fw" onclick="saveAK()">💾 সেভ</button>
     </div>
   </div>
 </div>
 
-<!-- BUY MODAL -->
-<div class="mo hidden" id="buyModal">
-  <div class="mb" style="max-width:460px;">
-    <div class="mh"><h3 id="buyTitle">প্রোডাক্ট কিনুন</h3><button class="mc" onclick="Modal.hide('buyModal')">✕</button></div>
-    <div class="mbody" id="buyBody"></div>
-  </div>
-</div>
-
-<!-- TASK DETAIL MODAL -->
+<!-- TASK MODAL -->
 <div class="mo hidden" id="taskModal">
-  <div class="mb" style="max-width:520px;">
+  <div class="mb">
     <div class="mh"><h3 id="tmTitle"></h3><button class="mc" onclick="Modal.hide('taskModal')">✕</button></div>
     <div class="mbody" id="tmBody"></div>
   </div>
 </div>
 
-<script src="assets/js/app.js"></script>
+<!-- BUY MODAL -->
+<div class="mo hidden" id="buyModal">
+  <div class="mb">
+    <div class="mh"><h3 id="buyTitle">কিনুন</h3><button class="mc" onclick="Modal.hide('buyModal')">✕</button></div>
+    <div class="mbody" id="buyBody"></div>
+  </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/db.js"></script>
 <script>
-/* ════════════════════════════════════════════════
-   TOOL CONFIG
-════════════════════════════════════════════════ */
-const TOOLS = {
-  content_ideas:{ ico:'💡', label:'কন্টেন্ট আইডিয়া', desc:'২০টি ভাইরাল ভিডিও আইডিয়া — হুক, স্ক্রিপ্ট, হ্যাশট্যাগ সহ', fields:['niche','audience','topic'] },
-  hook_script:{ ico:'🎣', label:'হুক & স্ক্রিপ্ট', desc:'৫টি শক্তিশালী হুক + সম্পূর্ণ ৩০ সেকেন্ডের স্ক্রিপ্ট', fields:['niche','audience','topic'] },
-  niche_finder:{ ico:'🔍', label:'নিশ ফাইন্ডার', desc:'আপনার দক্ষতা অনুযায়ী সবচেয়ে প্রফিটেবল নিশ', fields:['skills','interests','experience'] },
-  product_ideas:{ ico:'🛍️', label:'প্রোডাক্ট আইডিয়া', desc:'কন্টেন্ট থেকে কোন ডিজিটাল প্রোডাক্ট বিক্রি করবেন', fields:['niche','followers','skills'] },
-  service_package:{ ico:'📦', label:'সার্ভিস প্যাকেজ', desc:'Basic/Standard/Premium তিনটি সার্ভিস প্যাকেজ + দাম', fields:['niche','skills','experience'] },
-  bio_optimizer:{ ico:'📝', label:'Bio অপটিমাইজার', desc:'সব প্ল্যাটফর্মের পারফেক্ট প্রোফাইল বায়ো', fields:['niche','platform','goal'] },
-  course_outline:{ ico:'🎓', label:'কোর্স আউটলাইন', desc:'সম্পূর্ণ কোর্স কারিকুলাম, মডিউল ও সেলস পয়েন্ট', fields:['topic','level','duration'] },
-  growth_plan:{ ico:'📈', label:'গ্রোথ প্ল্যান', desc:'৭ দিনের পোস্টিং সময়সূচি ও এনগেজমেন্ট স্ট্র্যাটেজি', fields:['niche','followers','goal'] },
-  engagement_reply:{ ico:'💬', label:'এনগেজমেন্ট', desc:'১০টি কমেন্ট + ১০টি DM রিপ্লাই সফট সেলিং সহ', fields:['niche','product','topic'] },
-  content_analysis:{ ico:'📊', label:'অ্যানালাইসিস', desc:'কন্টেন্টের সমস্যা চিহ্নিত করে সমাধান', fields:['niche','problem','current'] },
-  funnel_builder:{ ico:'🎯', label:'ফানেল বিল্ডার', desc:'কন্টেন্ট → লিড → সেল — সম্পূর্ণ মার্কেটিং ফানেল', fields:['niche','product','price'] },
-};
-const FIELDS = {
-  niche:{ l:'আপনার নিশ', p:'যেমন: ফিটনেস, রান্না' },
-  audience:{ l:'টার্গেট অডিয়েন্স', p:'যেমন: ১৮-৩০ বছর বয়সী' },
-  topic:{ l:'ভিডিও টপিক', p:'যেমন: ৩০ দিনে ওজন কমানো' },
-  followers:{ l:'বর্তমান ফলোয়ার', p:'যেমন: ৫০০০' },
-  product:{ l:'প্রোডাক্ট/সার্ভিস', p:'যেমন: অনলাইন কোর্স' },
-  problem:{ l:'সমস্যা', p:'কন্টেন্টের সমস্যা বলুন', t:'textarea' },
-  skills:{ l:'আপনার দক্ষতা', p:'যেমন: ভিডিও এডিটিং' },
-  interests:{ l:'আপনার আগ্রহ', p:'যেমন: রান্না, ব্যবসা' },
-  experience:{ l:'অভিজ্ঞতা', p:'যেমন: ২ বছর কন্টেন্ট বানাই' },
-  platform:{ l:'প্ল্যাটফর্ম', p:'', t:'select', opts:['Facebook','TikTok','YouTube','Instagram'] },
-  goal:{ l:'লক্ষ্য', p:'', t:'select', opts:['ফলোয়ার বাড়ানো','পণ্য বিক্রি','কোর্স লঞ্চ','ফ্রিল্যান্সার হওয়া'] },
-  level:{ l:'লেভেল', p:'', t:'select', opts:['বিগিনার','ইন্টারমিডিয়েট','এক্সপার্ট'] },
-  duration:{ l:'দৈর্ঘ্য', p:'', t:'select', opts:['১ সপ্তাহ','২ সপ্তাহ','৪ সপ্তাহ','৮ সপ্তাহ'] },
-  price:{ l:'দাম (টাকায়)', p:'যেমন: ৪৯৯০' },
-  current:{ l:'বর্তমান অবস্থা', p:'যেমন: গড় ভিউ ৫০০' },
-};
+/* ════════════════════════════════════════
+   BOOT
+════════════════════════════════════════ */
+let currentUser = null;
 
-const PROMPTS = {
-  content_ideas: v=>`বাংলাদেশের ক্রিয়েটরের জন্য ২০টি ভাইরাল কন্টেন্ট আইডিয়া দাও।নিশ:${v.niche} অডিয়েন্স:${v.audience} টপিক:${v.topic}
-{"ideas":[{"id":1,"title":"...","hook":"...","script":"...","caption":"...","hashtags":["#..."],"cta":"...","emotion":"curiosity/fear/humor/greed"},...]}`,
-  hook_script: v=>`৫টি ভাইরাল হুক ও স্ক্রিপ্ট তৈরি করো। নিশ:${v.niche} টপিক:${v.topic}
-{"hooks":[{"id":1,"hook_type":"curiosity","hook":"...","script":"...","cta":"...","why":"..."},...]}`,
-  niche_finder: v=>`সবচেয়ে প্রফিটেবল নিশ বের করো। স্কিল:${v.skills} আগ্রহ:${v.interests}
-{"niches":[{"rank":1,"niche":"...","why":"...","monetization":["..."],"competition":"low/medium/high","income_potential":"...","starter_content":["..."]},...5টি],"recommendation":"..."}`,
-  product_ideas: v=>`ডিজিটাল প্রোডাক্ট আইডিয়া দাও। নিশ:${v.niche} ফলোয়ার:${v.followers}
-{"products":[{"type":"course/ebook/service","name":"...","description":"...","price_bdt":"...","effort":"low/medium/high","time_to_create":"..."},...6টি],"recommended":"..."}`,
-  service_package: v=>`৩টি সার্ভিস প্যাকেজ তৈরি করো। নিশ:${v.niche} স্কিল:${v.skills}
-{"packages":[{"name":"Basic","price_bdt":"...","delivery_days":"...","includes":["..."],"best_for":"..."},{"name":"Standard","price_bdt":"...","delivery_days":"...","includes":["..."],"best_for":"..."},{"name":"Premium","price_bdt":"...","delivery_days":"...","includes":["..."],"best_for":"..."}],"pitch":"..."}`,
-  bio_optimizer: v=>`সোশ্যাল মিডিয়া বায়ো অপটিমাইজ করো। নিশ:${v.niche} প্ল্যাটফর্ম:${v.platform}
-{"bios":{"facebook":"...","instagram":"...","tiktok":"...","youtube":"..."},"keywords":["..."],"profile_tips":["...",...5টি]}`,
-  course_outline: v=>`কোর্স আউটলাইন তৈরি করো। টপিক:${v.topic} লেভেল:${v.level}
-{"title":"...","tagline":"...","price_bdt":"...","modules":[{"number":1,"title":"...","duration":"...","lessons":["..."]},...5টি],"sales_points":["...",...5টি]}`,
-  growth_plan: v=>`৭ দিনের গ্রোথ প্ল্যান। নিশ:${v.niche} ফলোয়ার:${v.followers}
-{"plan":[{"day":1,"day_name":"...","content":"...","posting_time":"...","engagement_strategy":"...","goal":"..."},...7টি],"expected_growth":"..."}`,
-  engagement_reply: v=>`এনগেজমেন্ট রিপ্লাই তৈরি করো। নিশ:${v.niche} প্রোডাক্ট:${v.product}
-{"comment_replies":[{"type":"...","reply":"..."},...10টি],"dm_replies":[{"stage":"awareness/interest/desire/action","message":"..."},...10টি]}`,
-  content_analysis: v=>`কন্টেন্ট বিশ্লেষণ করো। সমস্যা:${v.problem} নিশ:${v.niche}
-{"scores":{"hook":7,"retention":6,"engagement":7,"cta":5},"problems":["...",...5টি],"solutions":[{"step":1,"title":"...","action":"..."},...6টি],"quick_wins":["...",...3টি]}`,
-  funnel_builder: v=>`মার্কেটিং ফানেল তৈরি করো। নিশ:${v.niche} প্রোডাক্ট:${v.product} দাম:${v.price}
-{"funnel":{"awareness":{"content":"...","example":"..."},"interest":{"content":"...","lead_magnet":"..."},"desire":{"content":"...","social_proof":"..."},"action":{"cta":"...","offer":"...","urgency":"..."}},"monthly_target":"..."}`,
-};
+async function boot() {
+  await DB.init();
+  const savedPhone = localStorage.getItem('c2b_phone');
+  if (savedPhone) {
+    await routeByPhone(savedPhone);
+  } else {
+    showScreen('screenPhone');
+  }
+  loadNotifications();
+}
 
-/* ════════════════════════════════════════════════
+function showScreen(id) {
+  ['screenPhone','screenOnboard','screenPending','screenRejected','screenApp']
+    .forEach(s => document.getElementById(s)?.classList.add('hidden'));
+  document.getElementById(id)?.classList.remove('hidden');
+}
+
+async function routeByPhone(phone) {
+  const user = await DB.getUserByPhone(phone);
+  if (!user) {
+    // new user → show onboarding
+    document.getElementById('ob-wa').value = phone;
+    showScreen('screenOnboard');
+  } else if (user.status === 'approved') {
+    currentUser = user;
+    localStorage.setItem('c2b_phone', phone);
+    initApp();
+    showScreen('screenApp');
+  } else if (user.status === 'rejected') {
+    document.getElementById('rejReason').textContent =
+      user.rejectReason || 'আপনার আবেদন গ্রহণ করা হয়নি।';
+    showScreen('screenRejected');
+  } else {
+    document.getElementById('pendWa').textContent = phone;
+    showScreen('screenPending');
+  }
+}
+
+async function checkPhone() {
+  const raw = document.getElementById('phoneInput').value.trim();
+  const phone = raw.replace(/\D/g,'').replace(/^880/,'0');
+  const err = document.getElementById('phoneErr');
+  if (!phone || phone.length < 10) {
+    err.textContent = '⚠️ সঠিক WhatsApp নম্বর দিন'; err.classList.remove('hidden'); return;
+  }
+  err.classList.add('hidden');
+  const btn = document.getElementById('phoneBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span> চেক হচ্ছে...';
+  localStorage.setItem('c2b_phone', phone);
+  await routeByPhone(phone);
+  btn.disabled = false; btn.innerHTML = '➤ প্রবেশ করুন';
+}
+
+function logoutUser() {
+  localStorage.removeItem('c2b_phone');
+  currentUser = null;
+  location.reload();
+}
+
+/* ════════════════════════════════════════
    ONBOARDING
-════════════════════════════════════════════════ */
-function submitOnboard(){
-  const name=document.getElementById('ob-name').value.trim();
-  const addr=document.getElementById('ob-addr').value.trim();
-  const wa=document.getElementById('ob-wa').value.trim();
-  const errEl=document.getElementById('ob-err');
-  if(!name||!addr||!wa){ errEl.textContent='⚠️ নাম, ঠিকানা ও WhatsApp নম্বর আবশ্যক।'; errEl.classList.remove('hidden'); return; }
+════════════════════════════════════════ */
+let photoBase64 = null;
+
+function handlePhoto(input) {
+  const file = input.files[0];
+  if (!file || file.size > 2097152) { Toast.error('ছবি ২MB-এর বেশি নয়'); return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    photoBase64 = e.target.result;
+    const pu = document.getElementById('photoUpload');
+    pu.innerHTML = `<img src="${photoBase64}" alt="photo">`;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function submitOnboard() {
+  const name = document.getElementById('ob-name').value.trim();
+  const addr = document.getElementById('ob-addr').value.trim();
+  const wa   = document.getElementById('ob-wa').value.trim();
+  const errEl = document.getElementById('obErr');
+  if (!name || !addr) {
+    errEl.textContent = '⚠️ নাম ও ঠিকানা আবশ্যক।';
+    errEl.classList.remove('hidden'); return;
+  }
   errEl.classList.add('hidden');
-  Store.addRegistration({
-    name, address:addr, whatsapp:wa,
-    facebook:document.getElementById('ob-fb').value.trim(),
-    tiktok:document.getElementById('ob-tt').value.trim(),
-    niche:document.getElementById('ob-niche').value.trim(),
-    description:document.getElementById('ob-desc').value.trim(),
-  });
-  routeUser();
-}
-function reapply(){
-  const d=Store.getData(); d.profile=null; Store.setData(d); location.reload();
-}
-
-/* ════════════════════════════════════════════════
-   ROUTING
-════════════════════════════════════════════════ */
-function routeUser(){
-  ['screenOnboard','screenPending','screenRejected','screenApp'].forEach(id=>document.getElementById(id)?.classList.add('hidden'));
-  const st=Store.getStatus();
-  if(st==='none'){ document.getElementById('screenOnboard').classList.remove('hidden'); }
-  else if(st==='pending'){ document.getElementById('screenPending').classList.remove('hidden'); const p=Store.getProfile(); document.getElementById('pend-wa').textContent=p?.whatsapp||''; }
-  else if(st==='rejected'){ document.getElementById('screenRejected').classList.remove('hidden'); const p=Store.getProfile(); document.getElementById('rej-reason').textContent=p?.rejectReason||'আপনার আবেদন গ্রহণ করা যায়নি।'; }
-  else if(st==='approved'){ initApp(); document.getElementById('screenApp').classList.remove('hidden'); }
+  const btn = document.getElementById('obBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span> সাবমিট হচ্ছে...';
+  try {
+    await DB.saveUser({
+      name, address: addr, whatsapp: wa,
+      facebook: document.getElementById('ob-fb').value.trim(),
+      tiktok:   document.getElementById('ob-tt').value.trim(),
+      niche:    document.getElementById('ob-niche').value.trim(),
+      description: document.getElementById('ob-desc').value.trim(),
+      profilePhoto: photoBase64,
+    });
+    document.getElementById('pendWa').textContent = wa;
+    showScreen('screenPending');
+  } catch(e) { errEl.textContent = '⚠️ সমস্যা হয়েছে: ' + e.message; errEl.classList.remove('hidden'); }
+  btn.disabled = false; btn.innerHTML = '📨 রেজিস্ট্রেশন সাবমিট করুন';
 }
 
-/* ════════════════════════════════════════════════
+/* ════════════════════════════════════════
    MAIN APP INIT
-════════════════════════════════════════════════ */
-let curTool='content_ideas', lastResult=null;
-
-function initApp(){
-  // Profile badge in sidebar
-  const p=Store.getProfile()||{};
-  const initials=(p.name||'ব্যবহারকারী').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  document.getElementById('sideProfile').innerHTML=`
-    <div class="prof-badge">
-      <div class="pb-av">${initials}</div>
-      <div><div style="font-weight:700;color:#fff;font-size:.85rem;">${p.name||''}</div><div class="tag tg" style="font-size:.65rem;margin-top:3px;">✅ অনুমোদিত</div></div>
+════════════════════════════════════════ */
+function initApp() {
+  const p = currentUser;
+  const initials = (p.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('sideProfile').innerHTML = `
+    <div style="display:flex;align-items:center;gap:9px;padding:8px 6px;">
+      ${p.profilePhoto
+        ? `<img src="${p.profilePhoto}" class="avatar-sm">`
+        : `<div class="avatar-sm avatar-init" style="font-size:.75rem;">${initials}</div>`}
+      <div><div style="font-weight:700;color:#fff;font-size:.82rem;">${sanitize(p.name||'')}</div>
+      <span class="tag tg" style="font-size:.6rem;padding:1px 6px;">✅ অনুমোদিত</span></div>
     </div>`;
-
-  // WA link
-  const waLink=document.getElementById('wa-link');
-  if(waLink) waLink.href=`https://wa.me/${(p.whatsapp||'').replace(/\D/g,'')}`;
+  const wa = (p.whatsapp||'').replace(/\D/g,'');
+  const waLink = document.getElementById('waLink');
+  if(waLink) waLink.href = 'https://wa.me/' + wa;
 
   buildToolTabs();
-  renderFields(TOOLS[curTool].fields);
-  document.getElementById('tdescTxt').textContent=TOOLS[curTool].desc;
+  renderFields(TOOLS['content_ideas'].fields);
+  document.getElementById('tdescTxt').textContent = TOOLS['content_ideas'].desc;
+
+  // Load notifications
+  loadNotifications();
 }
 
-/* ════════════════════════════════════════════════
-   TOOLS
-════════════════════════════════════════════════ */
-function buildToolTabs(){
-  document.getElementById('toolTabs').innerHTML=Object.entries(TOOLS).map(([k,v])=>`
-    <button class="ttab${k===curTool?' on':''}" onclick="selectTool('${k}',this)">
-      <span class="ti">${v.ico}</span>${v.label}
-    </button>`).join('');
+/* ════════════════════════════════════════
+   NOTIFICATIONS
+════════════════════════════════════════ */
+function loadNotifications() {
+  DB.onNotificationsChange(notifs => {
+    const area = document.getElementById('notifArea');
+    if (!area) return;
+    if (!notifs.length) { area.innerHTML = ''; return; }
+    area.innerHTML = notifs.slice(0, 3).map(n => `
+      <div class="notif-banner">
+        <div class="nb-icon">📢</div>
+        <div class="nb-body">
+          <div class="nb-title">${sanitize(n.title||'নোটিফিকেশন')}</div>
+          <div class="nb-msg">${sanitize(n.message||'')}</div>
+          <div class="nb-date">${fmtDate(n.createdAt)}</div>
+        </div>
+        <button style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:.9rem;flex-shrink:0;align-self:flex-start;" onclick="this.closest('.notif-banner').remove()">✕</button>
+      </div>`).join('');
+  });
 }
-function selectTool(tool,btn){
-  curTool=tool;
-  document.querySelectorAll('.ttab').forEach(b=>b.classList.remove('on'));
+
+/* ════════════════════════════════════════
+   PAGE NAV
+════════════════════════════════════════ */
+function showPage(pg, btn) {
+  document.querySelectorAll('[id^="pg-"]').forEach(p => p.classList.add('hidden'));
+  document.getElementById('pg-' + pg)?.classList.remove('hidden');
+  document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+  if (pg==='tasks')  renderTasks();
+  if (pg==='market') renderMarket();
+  if (pg==='orders') renderOrders();
+}
+
+/* ════════════════════════════════════════
+   TOOLS
+════════════════════════════════════════ */
+const TOOLS = {
+  content_ideas:{ico:'💡',label:'কন্টেন্ট আইডিয়া',desc:'২০টি ভাইরাল আইডিয়া — হুক, স্ক্রিপ্ট, হ্যাশট্যাগ সহ',fields:['niche','audience','topic']},
+  hook_script:{ico:'🎣',label:'হুক & স্ক্রিপ্ট',desc:'৫টি শক্তিশালী হুক + সম্পূর্ণ স্ক্রিপ্ট',fields:['niche','audience','topic']},
+  niche_finder:{ico:'🔍',label:'নিশ ফাইন্ডার',desc:'সবচেয়ে প্রফিটেবল নিশ খুঁজে পান',fields:['skills','interests','experience']},
+  product_ideas:{ico:'🛍️',label:'প্রোডাক্ট আইডিয়া',desc:'কী বিক্রি করবেন — ৬টি আইডিয়া',fields:['niche','followers','skills']},
+  service_package:{ico:'📦',label:'সার্ভিস প্যাকেজ',desc:'তিনটি সার্ভিস প্যাকেজ + দাম',fields:['niche','skills','experience']},
+  bio_optimizer:{ico:'📝',label:'Bio অপটিমাইজার',desc:'সব প্ল্যাটফর্মের পারফেক্ট বায়ো',fields:['niche','platform','goal']},
+  course_outline:{ico:'🎓',label:'কোর্স আউটলাইন',desc:'সম্পূর্ণ কোর্স কারিকুলাম',fields:['topic','level','duration']},
+  growth_plan:{ico:'📈',label:'গ্রোথ প্ল্যান',desc:'৭ দিনের পোস্টিং ও এনগেজমেন্ট প্ল্যান',fields:['niche','followers','goal']},
+  engagement_reply:{ico:'💬',label:'এনগেজমেন্ট',desc:'কমেন্ট + DM রিপ্লাই — সফট সেলিং',fields:['niche','product','topic']},
+  content_analysis:{ico:'📊',label:'অ্যানালাইসিস',desc:'কন্টেন্টের সমস্যা ও সমাধান',fields:['niche','problem','current']},
+  funnel_builder:{ico:'🎯',label:'ফানেল বিল্ডার',desc:'কন্টেন্ট থেকে সেল পর্যন্ত',fields:['niche','product','price']},
+};
+const FIELDS = {
+  niche:{l:'নিশ',p:'যেমন: ফিটনেস, রান্না'},audience:{l:'অডিয়েন্স',p:'যেমন: ১৮-৩০ বছর বয়সী'},
+  topic:{l:'টপিক',p:'যেমন: ৩০ দিনে ওজন কমানো'},followers:{l:'ফলোয়ার',p:'যেমন: ৫০০০'},
+  product:{l:'প্রোডাক্ট',p:'যেমন: অনলাইন কোর্স'},skills:{l:'দক্ষতা',p:'যেমন: ভিডিও এডিটিং'},
+  interests:{l:'আগ্রহ',p:'যেমন: রান্না, ব্যবসা'},experience:{l:'অভিজ্ঞতা',p:'যেমন: ২ বছর'},
+  platform:{l:'প্ল্যাটফর্ম',p:'',t:'select',opts:['Facebook','TikTok','YouTube','Instagram']},
+  goal:{l:'লক্ষ্য',p:'',t:'select',opts:['ফলোয়ার বাড়ানো','পণ্য বিক্রি','কোর্স লঞ্চ','ফ্রিল্যান্সার হওয়া']},
+  level:{l:'লেভেল',p:'',t:'select',opts:['বিগিনার','ইন্টারমিডিয়েট','এক্সপার্ট']},
+  duration:{l:'দৈর্ঘ্য',p:'',t:'select',opts:['১ সপ্তাহ','৪ সপ্তাহ','৮ সপ্তাহ']},
+  price:{l:'দাম (৳)',p:'যেমন: ৪৯৯০'},current:{l:'বর্তমান অবস্থা',p:'যেমন: গড় ভিউ ৫০০'},
+  problem:{l:'সমস্যা',p:'কন্টেন্টের সমস্যা',t:'textarea'},
+};
+const PROMPTS = {
+  content_ideas:v=>`বাংলাদেশের ক্রিয়েটরের জন্য ২০টি ভাইরাল কন্টেন্ট আইডিয়া। নিশ:${v.niche} অডিয়েন্স:${v.audience} টপিক:${v.topic}\n{"ideas":[{"id":1,"title":"...","hook":"...","script":"...","caption":"...","hashtags":["#..."],"cta":"...","emotion":"curiosity/fear/humor/greed"},...]}`,
+  hook_script:v=>`৫টি ভাইরাল হুক ও স্ক্রিপ্ট। নিশ:${v.niche} টপিক:${v.topic}\n{"hooks":[{"id":1,"hook_type":"curiosity","hook":"...","script":"...","cta":"...","why":"..."},...]}`,
+  niche_finder:v=>`প্রফিটেবল নিশ বের করো। স্কিল:${v.skills} আগ্রহ:${v.interests}\n{"niches":[{"rank":1,"niche":"...","why":"...","monetization":["..."],"competition":"low/medium/high","income_potential":"..."},...5টি],"recommendation":"..."}`,
+  product_ideas:v=>`ডিজিটাল প্রোডাক্ট আইডিয়া। নিশ:${v.niche} ফলোয়ার:${v.followers}\n{"products":[{"type":"course/ebook/service","name":"...","description":"...","price_bdt":"...","effort":"low/medium/high"},...6টি],"recommended":"..."}`,
+  service_package:v=>`৩টি সার্ভিস প্যাকেজ। নিশ:${v.niche} স্কিল:${v.skills}\n{"packages":[{"name":"Basic","price_bdt":"...","delivery_days":"...","includes":["..."],"best_for":"..."},{"name":"Standard","price_bdt":"...","delivery_days":"...","includes":["..."],"best_for":"..."},{"name":"Premium","price_bdt":"...","delivery_days":"...","includes":["..."],"best_for":"..."}],"pitch":"..."}`,
+  bio_optimizer:v=>`সোশ্যাল মিডিয়া বায়ো। নিশ:${v.niche} প্ল্যাটফর্ম:${v.platform}\n{"bios":{"facebook":"...","instagram":"...","tiktok":"...","youtube":"..."},"keywords":["..."],"profile_tips":["..."]}`,
+  course_outline:v=>`কোর্স আউটলাইন। টপিক:${v.topic} লেভেল:${v.level}\n{"title":"...","tagline":"...","price_bdt":"...","modules":[{"number":1,"title":"...","duration":"...","lessons":["..."]},...5টি],"sales_points":["..."]}`,
+  growth_plan:v=>`৭ দিনের গ্রোথ প্ল্যান। নিশ:${v.niche} ফলোয়ার:${v.followers}\n{"plan":[{"day":1,"day_name":"...","content":"...","posting_time":"...","engagement_strategy":"...","goal":"..."},...7টি],"expected_growth":"..."}`,
+  engagement_reply:v=>`এনগেজমেন্ট রিপ্লাই। নিশ:${v.niche} প্রোডাক্ট:${v.product}\n{"comment_replies":[{"type":"...","reply":"..."},...10টি],"dm_replies":[{"stage":"awareness/interest/desire/action","message":"..."},...10টি]}`,
+  content_analysis:v=>`কন্টেন্ট বিশ্লেষণ। সমস্যা:${v.problem} নিশ:${v.niche}\n{"scores":{"hook":7,"retention":6,"engagement":7,"cta":5},"problems":["...",...5টি],"solutions":[{"step":1,"title":"...","action":"..."},...6টি],"quick_wins":["..."]}`,
+  funnel_builder:v=>`মার্কেটিং ফানেল। নিশ:${v.niche} প্রোডাক্ট:${v.product} দাম:${v.price}\n{"funnel":{"awareness":{"content":"...","example":"..."},"interest":{"content":"...","lead_magnet":"..."},"desire":{"content":"...","social_proof":"..."},"action":{"cta":"...","offer":"...","urgency":"..."}},"monthly_target":"..."}`,
+};
+let curTool = 'content_ideas';
+
+function buildToolTabs() {
+  document.getElementById('toolTabs').innerHTML = Object.entries(TOOLS).map(([k,v]) =>
+    `<button class="ttab${k===curTool?' on':''}" onclick="selectTool('${k}',this)">
+      <span class="ti">${v.ico}</span>${v.label}</button>`).join('');
+}
+function selectTool(t, btn) {
+  curTool = t;
+  document.querySelectorAll('.ttab').forEach(b => b.classList.remove('on'));
   btn.classList.add('on');
-  document.getElementById('tdescTxt').textContent=TOOLS[tool].desc;
-  renderFields(TOOLS[tool].fields);
+  document.getElementById('tdescTxt').textContent = TOOLS[t].desc;
+  renderFields(TOOLS[t].fields);
   document.getElementById('outCard').classList.add('hidden');
 }
-function renderFields(fields){
-  document.getElementById('fcFields').innerHTML=fields.map(f=>{
-    const fc=FIELDS[f]||{l:f,p:''};
+function renderFields(fields) {
+  document.getElementById('fcFields').innerHTML = fields.map(f => {
+    const fc = FIELDS[f]||{l:f,p:''};
     let inp;
     if(fc.t==='textarea') inp=`<textarea class="fc" id="f_${f}" rows="3" placeholder="${fc.p}"></textarea>`;
     else if(fc.t==='select') inp=`<select class="fc" id="f_${f}">${(fc.opts||[]).map(o=>`<option>${o}</option>`).join('')}</select>`;
@@ -470,284 +513,251 @@ function renderFields(fields){
     return `<div class="fg${fc.t==='textarea'?' fc-full2':''}"><label class="fl">${fc.l}</label>${inp}</div>`;
   }).join('');
 }
-function getVals(){ const v={}; TOOLS[curTool].fields.forEach(f=>{ const el=document.getElementById('f_'+f); if(el) v[f]=el.value.trim(); }); return v; }
-
-async function generate(){
-  const btn=document.getElementById('genBtn');
-  const oc=document.getElementById('outCard');
-  const cfg=TOOLS[curTool];
-  btn.disabled=true; btn.innerHTML='<span class="spin"></span> তৈরি হচ্ছে...';
-  document.getElementById('outIco').textContent=cfg.ico;
-  document.getElementById('outTitle').textContent=cfg.label+' — ফলাফল';
+function getVals() {
+  const v={};
+  TOOLS[curTool].fields.forEach(f => { const el=document.getElementById('f_'+f); if(el) v[f]=el.value.trim(); });
+  return v;
+}
+async function generate() {
+  const btn = document.getElementById('genBtn');
+  const oc  = document.getElementById('outCard');
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span> তৈরি হচ্ছে...';
+  document.getElementById('outIco').textContent = TOOLS[curTool].ico;
+  document.getElementById('outTitle').textContent = TOOLS[curTool].label + ' — ফলাফল';
   oc.classList.remove('hidden');
-  document.getElementById('outBody').innerHTML=`<div class="skel mb1" style="height:14px;width:60%"></div><div class="skel mb1" style="height:12px;width:80%"></div><div class="skel" style="height:12px;width:70%"></div>`;
-  try{
-    const data=await AI.call(PROMPTS[curTool](getVals()));
-    lastResult=data; Store.log('generate',{tool:curTool});
+  document.getElementById('outBody').innerHTML = `<div class="skel mb1" style="height:14px;width:60%"></div><div class="skel mb1" style="height:12px;width:85%"></div><div class="skel" style="height:12px;width:70%"></div>`;
+  try {
+    const data = await AI.call(PROMPTS[curTool](getVals()));
     renderResult(data);
     oc.scrollIntoView({behavior:'smooth',block:'start'});
-  } catch(e){ document.getElementById('outBody').innerHTML=`<div class="alert a-e">⚠️ ${e.message}</div>`; }
-  btn.disabled=false; btn.innerHTML='✨ AI দিয়ে তৈরি করুন';
+  } catch(e) {
+    document.getElementById('outBody').innerHTML = `<div class="alert a-e">⚠️ ${sanitize(e.message)}</div>`;
+  }
+  btn.disabled = false; btn.innerHTML = '✨ তৈরি করুন';
 }
 
-function renderResult(data){
-  const body=document.getElementById('outBody'); let html='';
-  if(curTool==='content_ideas'&&data.ideas){
-    html='<div class="gaut">'+data.ideas.map((it,i)=>{
+function renderResult(data) {
+  const body = document.getElementById('outBody');
+  let h = '';
+  if(curTool==='content_ideas'&&data.ideas) {
+    h='<div class="gaut">'+data.ideas.map((it,i)=>{
       const ec={curiosity:'tp',fear:'tr',humor:'tg',greed:'tgo'}[it.emotion]||'tp';
-      return `<div class="ri card-glow">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;">
-          <span class="tag ${ec}">${it.emotion||'আইডিয়া'}</span><span class="tag tgr">#${it.id||i+1}</span>
-        </div>
-        <div style="font-weight:700;color:#fff;margin-bottom:7px;font-size:.93rem;">${it.title}</div>
-        <div class="mb1"><span class="tag tr" style="margin-right:4px;font-size:.66rem;">হুক</span><span style="color:var(--text2);font-size:.82rem;">${it.hook}</span></div>
-        <hr class="dv"><p style="font-size:.82rem;white-space:pre-line;margin-bottom:7px;">${it.script}</p>
-        <p style="font-size:.79rem;color:var(--text2);margin-bottom:7px;">${it.caption}</p>
-        <div style="display:flex;flex-wrap:wrap;gap:5px;">${(it.hashtags||[]).map(h=>`<span class="tag tp" style="font-size:.66rem;">${h}</span>`).join('')}</div>
-        ${it.cta?`<div style="background:rgba(108,99,255,.1);border-radius:6px;padding:7px;margin-top:7px;font-size:.78rem;color:#a78bfa;font-weight:600;">📢 ${it.cta}</div>`:''}
+      return `<div class="ri card-glow"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span class="tag ${ec}">${it.emotion||'আইডিয়া'}</span><span class="tag tgr">#${it.id||i+1}</span></div>
+      <div style="font-weight:700;color:#fff;margin-bottom:6px;font-size:.92rem;">${sanitize(it.title)}</div>
+      <div class="mb1"><span class="tag tr" style="margin-right:4px;font-size:.65rem;">হুক</span><span style="color:var(--text2);font-size:.8rem;">${sanitize(it.hook)}</span></div>
+      <div class="dv"></div><p style="font-size:.81rem;white-space:pre-line;margin-bottom:6px;">${sanitize(it.script)}</p>
+      <p style="font-size:.78rem;color:var(--text2);margin-bottom:6px;">${sanitize(it.caption)}</p>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;">${(it.hashtags||[]).map(ht=>`<span class="tag tp" style="font-size:.66rem;">${sanitize(ht)}</span>`).join('')}</div>
+      ${it.cta?`<div style="background:rgba(108,99,255,.1);border-radius:5px;padding:6px;margin-top:6px;font-size:.76rem;color:#a78bfa;font-weight:600;">📢 ${sanitize(it.cta)}</div>`:''}
       </div>`;
     }).join('')+'</div>';
-  } else if(curTool==='hook_script'&&data.hooks){
-    data.hooks.forEach((it,i)=>{
-      const cc={curiosity:'tp',fear:'tr',humor:'tg',greed:'tgo',emotion:'tp'}[it.hook_type]||'tp';
-      html+=`<div class="ri mb1"><div style="display:flex;gap:7px;align-items:center;margin-bottom:7px;"><span class="tag ${cc}">${it.hook_type}</span><span class="tag tgr">#${i+1}</span></div>
-      <div style="font-size:.97rem;font-weight:700;color:#fff;margin-bottom:9px;">"${it.hook}"</div>
-      <span class="tag tg mb1" style="font-size:.66rem;">স্ক্রিপ্ট</span>
-      <p style="font-size:.84rem;white-space:pre-line;margin-bottom:8px;margin-top:5px;">${it.script}</p>
-      ${it.why?`<p style="font-size:.79rem;color:var(--text2);">💡 ${it.why}</p>`:''}
-      ${it.cta?`<div style="background:rgba(108,99,255,.1);border-radius:6px;padding:7px;margin-top:7px;font-size:.8rem;color:#a78bfa;font-weight:600;">📢 ${it.cta}</div>`:''}
-      </div>`;
-    });
-  } else if(curTool==='service_package'&&data.packages){
-    html='<div class="grid3">'+data.packages.map((pk,i)=>{
-      const clr=['var(--text2)','var(--accent)','var(--gold)'][i];
-      return `<div class="ri" style="border-top:3px solid ${clr};text-align:center;">
-        <div style="font-family:var(--fh);font-size:1rem;font-weight:800;color:#fff;margin-bottom:3px;">${pk.name}</div>
-        <div style="font-size:1.5rem;font-weight:800;color:${clr};margin-bottom:2px;">৳${pk.price_bdt}</div>
-        <div style="font-size:.73rem;color:var(--text2);margin-bottom:10px;">⏰ ${pk.delivery_days} দিন</div>
-        <div style="text-align:left;">${(pk.includes||[]).map(inc=>`<div style="font-size:.8rem;padding:2px 0;">✅ ${inc}</div>`).join('')}</div>
-        <div style="font-size:.73rem;color:var(--text2);background:var(--bg);border-radius:5px;padding:5px;margin-top:8px;">🎯 ${pk.best_for}</div>
-      </div>`;
-    }).join('')+'</div>';
-    if(data.pitch) html+=`<div class="ri mt2"><span class="tag tp mb1">পিচ টেমপ্লেট</span><p style="font-size:.84rem;white-space:pre-line;margin-top:6px;">${data.pitch}</p></div>`;
-  } else if(curTool==='growth_plan'&&data.plan){
+  } else if(curTool==='growth_plan'&&data.plan) {
     const clrs=['#6c63ff','#ff6584','#43e97b','#f5c518','#6c63ff','#ff6584','#43e97b'];
-    data.plan.forEach((day,i)=>{
-      html+=`<div class="ri mb1" style="border-left:3px solid ${clrs[i]};">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">
-          <div style="font-family:var(--fh);font-weight:700;color:${clrs[i]};font-size:.87rem;">📅 ${day.day_name||'দিন '+day.day}</div>
-          <div style="background:rgba(245,197,24,.12);color:var(--gold);border-radius:5px;padding:2px 9px;font-size:.71rem;font-weight:600;">⏰ ${day.posting_time}</div>
-        </div>
-        <div style="font-weight:600;color:var(--text3);margin-bottom:4px;font-size:.86rem;">${day.content}</div>
-        <div style="font-size:.8rem;color:var(--text2);">📌 ${day.engagement_strategy}</div>
-        ${day.goal?`<span class="tag tg mt1" style="font-size:.67rem;">🎯 ${day.goal}</span>`:''}
+    data.plan.forEach((d,i)=>{
+      h+=`<div class="ri mb1" style="border-left:3px solid ${clrs[i]};border-radius:0 var(--r2) var(--r2) 0;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+        <div style="font-family:var(--fh);font-weight:700;color:${clrs[i]};font-size:.85rem;">📅 ${sanitize(d.day_name||'দিন '+d.day)}</div>
+        <div style="background:rgba(245,197,24,.1);color:var(--gold);border-radius:5px;padding:1px 8px;font-size:.7rem;font-weight:600;">⏰ ${sanitize(d.posting_time)}</div>
+      </div>
+      <div style="font-weight:600;color:var(--text3);margin-bottom:3px;font-size:.84rem;">${sanitize(d.content)}</div>
+      <div style="font-size:.79rem;color:var(--text2);">📌 ${sanitize(d.engagement_strategy)}</div>
+      ${d.goal?`<span class="tag tg mt1" style="font-size:.66rem;">🎯 ${sanitize(d.goal)}</span>`:''}
       </div>`;
     });
-    if(data.expected_growth) html+=`<div class="alert a-s mt2">📈 <strong>প্রত্যাশিত ফলাফল:</strong> ${data.expected_growth}</div>`;
-  } else if(curTool==='funnel_builder'&&data.funnel){
-    const steps=[['awareness','🎯 সচেতনতা','var(--accent)'],['interest','🔍 আগ্রহ','var(--gold)'],['desire','❤️ ইচ্ছা','var(--accent2)'],['action','💰 সেল','var(--accent3)']];
-    steps.forEach(([k,lb,clr],i)=>{ const d=data.funnel[k]||{};
-      html+=`<div class="ri mb2" style="border-left:3px solid ${clr};display:flex;gap:13px;">
-        <div style="width:30px;height:30px;border-radius:50%;background:${clr};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.8rem;flex-shrink:0;">${i+1}</div>
-        <div style="flex:1;"><div style="font-family:var(--fh);font-weight:700;color:#fff;margin-bottom:6px;">${lb}</div>
-        ${d.content?`<div style="font-size:.83rem;margin-bottom:3px;"><strong>কন্টেন্ট:</strong> ${d.content}</div>`:''}
-        ${d.example?`<div style="font-size:.81rem;color:var(--text2);">উদাহরণ: ${d.example}</div>`:''}
-        ${d.lead_magnet?`<div style="font-size:.8rem;color:var(--accent3);margin-top:4px;">🧲 ${d.lead_magnet}</div>`:''}
-        ${d.cta?`<div style="background:rgba(108,99,255,.1);border-radius:5px;padding:6px;margin-top:6px;font-size:.8rem;color:#a78bfa;font-weight:600;">📢 ${d.cta}</div>`:''}
-        ${d.offer?`<div style="font-size:.8rem;color:var(--accent2);margin-top:3px;">🎁 ${d.offer}</div>`:''}
-        </div></div>${i<steps.length-1?'<div style="text-align:center;color:var(--accent);font-size:1.1rem;font-weight:900;margin:-8px 0 4px;">↓</div>':''}`;
-    });
-    if(data.monthly_target) html+=`<div class="alert a-s mt2">📈 <strong>মাসিক লক্ষ্য:</strong> ${data.monthly_target}</div>`;
+    if(data.expected_growth) h+=`<div class="alert a-s mt2">📈 <strong>প্রত্যাশিত ফলাফল:</strong> ${sanitize(data.expected_growth)}</div>`;
+  } else if(curTool==='service_package'&&data.packages) {
+    h='<div class="grid3">'+data.packages.map((pk,i)=>{
+      const clr=['var(--text2)','var(--accent)','var(--gold)'][i];
+      return `<div class="ri" style="border-top:3px solid ${clr};text-align:center;border-radius:0 0 var(--r2) var(--r2);">
+      <div style="font-family:var(--fh);font-size:.97rem;font-weight:800;color:#fff;margin-bottom:3px;">${sanitize(pk.name)}</div>
+      <div style="font-size:1.4rem;font-weight:800;color:${clr};margin-bottom:2px;">৳${sanitize(pk.price_bdt)}</div>
+      <div style="font-size:.71rem;color:var(--text2);margin-bottom:9px;">⏰ ${sanitize(pk.delivery_days)} দিন</div>
+      <div style="text-align:left;">${(pk.includes||[]).map(inc=>`<div style="font-size:.79rem;padding:2px 0;">✅ ${sanitize(inc)}</div>`).join('')}</div>
+      <div style="font-size:.72rem;color:var(--text2);background:var(--bg);border-radius:5px;padding:5px;margin-top:7px;">🎯 ${sanitize(pk.best_for)}</div>
+      </div>`;
+    }).join('')+'</div>';
+    if(data.pitch) h+=`<div class="ri mt2"><span class="tag tp mb1">পিচ টেমপ্লেট</span><p style="font-size:.83rem;white-space:pre-line;margin-top:5px;">${sanitize(data.pitch)}</p></div>`;
   } else {
-    html=`<pre style="color:var(--text2);font-size:.8rem;overflow-x:auto;white-space:pre-wrap;">${JSON.stringify(data,null,2)}</pre>`;
+    h=`<pre style="color:var(--text2);font-size:.79rem;overflow-x:auto;white-space:pre-wrap;">${JSON.stringify(data,null,2)}</pre>`;
   }
-  body.innerHTML=html;
+  body.innerHTML = h;
 }
 
-/* ════════════════════════════════════════════════
-   PAGE NAVIGATION
-════════════════════════════════════════════════ */
-function showPage(pg,btn){
-  document.querySelectorAll('[id^="pg-"]').forEach(p=>p.classList.add('hidden'));
-  document.getElementById('pg-'+pg)?.classList.remove('hidden');
-  document.querySelectorAll('.sb-btn').forEach(b=>b.classList.remove('on'));
-  if(btn) btn.classList.add('on');
-  if(pg==='tasks') renderTasks();
-  if(pg==='market') renderMarket();
-  if(pg==='orders') renderOrders();
-}
-
-/* ════════════════════════════════════════════════
-   90-DAY TASKS
-════════════════════════════════════════════════ */
-function renderTasks(){
-  const tasks=Store.getTasks();
-  const prog=Store.getUserTaskProgress();
-  const el=document.getElementById('taskContent');
-  if(!tasks.length){
-    el.innerHTML=`<div class="alert a-i">📅 অ্যাডমিন এখনো ৯০ দিনের প্ল্যান তৈরি করেননি। শীঘ্রই আসছে!</div>`; return;
+/* ════════════════════════════════════════
+   TASKS
+════════════════════════════════════════ */
+async function renderTasks() {
+  const el = document.getElementById('taskContent');
+  el.innerHTML = `<div class="skel" style="height:120px;margin-bottom:16px;"></div>`;
+  const [tasks, prog] = await Promise.all([
+    DB.getTasks(),
+    DB.getProgress(localStorage.getItem('c2b_phone')||'')
+  ]);
+  if (!tasks.length) {
+    el.innerHTML = `<div class="alert a-i">📅 অ্যাডমিন এখনো ৯০ দিনের প্ল্যান তৈরি করেননি। শীঘ্রই আসছে!</div>`;
+    return;
   }
-  const done=Object.values(prog).filter(Boolean).length;
-  el.innerHTML=`
-    <div class="card mb2" style="background:linear-gradient(135deg,rgba(108,99,255,.12),rgba(67,233,123,.06));">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-        <div style="font-family:var(--fh);font-size:1.1rem;font-weight:800;color:#fff;">আপনার অগ্রগতি</div>
-        <div style="font-family:var(--fh);font-size:1.4rem;font-weight:800;color:var(--accent3);">${done}<span style="font-size:.9rem;color:var(--text2);">/৯০</span></div>
+  const progKeys = Object.keys(prog||{}).filter(k => prog[k]);
+  const done = progKeys.length;
+  el.innerHTML = `
+    <div class="card mb2" style="background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(67,233,123,.05));">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div style="font-family:var(--fh);font-size:1rem;font-weight:800;color:#fff;">আপনার অগ্রগতি</div>
+        <div style="font-family:var(--fh);font-size:1.3rem;font-weight:800;color:var(--accent3);">${done}<span style="font-size:.85rem;color:var(--text2);">/৯০</span></div>
       </div>
-      <div style="background:var(--border);border-radius:4px;height:8px;overflow:hidden;">
-        <div style="width:${Math.round(done/90*100)}%;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent3));border-radius:4px;transition:width .5s;"></div>
-      </div>
-      <div style="font-size:.78rem;color:var(--text2);margin-top:6px;">${Math.round(done/90*100)}% সম্পন্ন</div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${Math.round(done/90*100)}%"></div></div>
+      <div style="font-size:.75rem;color:var(--text2);margin-top:5px;">${Math.round(done/90*100)}% সম্পন্ন</div>
     </div>
     <div class="day-grid">
       ${Array.from({length:90},(_,i)=>{
         const day=i+1; const task=tasks.find(t=>t.day===day);
-        const isDone=prog[day]; const cls=isDone?'done':'';
-        return `<div class="day-cell ${cls}" onclick="openTask(${day})" title="${task?task.title:'কাজ নেই'}">
-          <div class="dc-num">${isDone?'✅':day}</div>
-          <div class="dc-lbl">${task?task.type||'কাজ':'—'}</div>
+        const isDone=prog&&prog['day'+day];
+        return `<div class="day-cell${isDone?' done':''}" onclick="openTask(${day})">
+          <div class="dc-n">${isDone?'✅':day}</div>
+          <div class="dc-l">${task?task.type||'—':'—'}</div>
         </div>`;
       }).join('')}
     </div>`;
 }
 
-function openTask(day){
-  const tasks=Store.getTasks();
-  const task=tasks.find(t=>t.day===day);
-  const prog=Store.getUserTaskProgress();
-  const isDone=prog[day];
-  document.getElementById('tmTitle').textContent=`দিন ${day} ${task?'— '+task.title:'(কাজ নেই)'}`;
-  document.getElementById('tmBody').innerHTML=task?`
-    <div class="tag ${({content:'tp',analysis:'tgo',business:'tg',mindset:'tr'}[task.type]||'tp')} mb2">${task.type||'কাজ'}</div>
-    <p style="font-size:.9rem;line-height:1.8;margin-bottom:16px;">${task.description||''}</p>
-    ${task.resources?`<div class="alert a-i mb2" style="font-size:.82rem;">📚 রিসোর্স: ${task.resources}</div>`:''}
-    <button class="btn ${isDone?'btn-s':'btn-g'} btn-fw" onclick="toggleTaskDone(${day})">
+async function openTask(day) {
+  const tasks = await DB.getTasks();
+  const task = tasks.find(t=>t.day===day);
+  const phone = localStorage.getItem('c2b_phone')||'';
+  const prog = await DB.getProgress(phone);
+  const isDone = prog&&prog['day'+day];
+  document.getElementById('tmTitle').textContent = `দিন ${day}${task?' — '+task.title:''}`;
+  document.getElementById('tmBody').innerHTML = task ? `
+    <span class="tag ${({content:'tp',analysis:'tgo',business:'tg',mindset:'tr',growth:'tp',engagement:'tgr',monetization:'tgo'}[task.type]||'tp')} mb2">${task.type||'কাজ'}</span>
+    <p style="font-size:.88rem;line-height:1.8;margin-bottom:14px;">${sanitize(task.description||'')}</p>
+    ${task.resources?`<div class="alert a-i mb2" style="font-size:.8rem;">📚 ${sanitize(task.resources)}</div>`:''}
+    <button class="btn ${isDone?'btn-s':'btn-g'} btn-fw" onclick="toggleTask(${day})">
       ${isDone?'↩️ অসম্পন্ন করুন':'✅ সম্পন্ন হয়েছে'}
-    </button>`:`<p class="text-muted">এই দিনের জন্য কোনো কাজ নির্ধারিত নেই।</p>`;
+    </button>` : `<p class="text-muted">এই দিনের জন্য কোনো কাজ নেই।</p>`;
   Modal.show('taskModal');
 }
-function toggleTaskDone(day){
-  const p=Store.getUserTaskProgress();
-  Store.setTaskDone(day,!p[day]);
+
+async function toggleTask(day) {
+  const phone = localStorage.getItem('c2b_phone')||'';
+  const prog = await DB.getProgress(phone);
+  await DB.setProgress(phone, day, !prog['day'+day]);
   Modal.hide('taskModal');
   renderTasks();
-  Toast.success(p[day]?'কাজ অসম্পন্ন করা হয়েছে':'🎉 দিন '+day+' সম্পন্ন!');
+  Toast.success(!prog['day'+day] ? '🎉 দিন '+day+' সম্পন্ন!' : 'অসম্পন্ন করা হয়েছে');
 }
 
-/* ════════════════════════════════════════════════
+/* ════════════════════════════════════════
    MARKETPLACE
-════════════════════════════════════════════════ */
-function renderMarket(){
-  const prods=Store.getProducts().filter(p=>p.active);
-  const el=document.getElementById('marketContent');
-  if(!prods.length){ el.innerHTML=`<div class="alert a-i">🛍️ এখনো কোনো প্রোডাক্ট যোগ করা হয়নি। শীঘ্রই আসছে!</div>`; return; }
-  // Filter tabs
-  const types=[...new Set(prods.map(p=>p.type))];
-  el.innerHTML=`
-    <div class="tab-bar mb2" id="mktTabs">
-      <button class="tbn on" onclick="filterMarket('all',this)">সব</button>
-      ${types.map(t=>`<button class="tbn" onclick="filterMarket('${t}',this)">${{service:'সার্ভিস',ebook:'ইবুক',course:'কোর্স',template:'টেমপ্লেট'}[t]||t}</button>`).join('')}
+════════════════════════════════════════ */
+async function renderMarket() {
+  const el = document.getElementById('marketContent');
+  el.innerHTML = `<div class="skel" style="height:80px;"></div>`;
+  const prods = (await DB.getProducts()).filter(p=>p.active);
+  if (!prods.length) { el.innerHTML = `<div class="alert a-i">🛍️ এখনো কোনো প্রোডাক্ট নেই। শীঘ্রই আসছে!</div>`; return; }
+  const types = [...new Set(prods.map(p=>p.type))];
+  el.innerHTML = `
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;" id="mktTabs">
+      <button class="btn btn-sm btn-p" onclick="filterMkt('all',this)">সব (${prods.length})</button>
+      ${types.map(t=>`<button class="btn btn-sm btn-s" onclick="filterMkt('${t}',this)">${{service:'সার্ভিস',ebook:'ইবুক',course:'কোর্স',template:'টেমপ্লেট'}[t]||t}</button>`).join('')}
     </div>
-    <div class="prod-grid" id="prodGrid">${renderProdCards(prods)}</div>`;
+    <div class="gaut" id="prodGrid">${renderProdCards(prods)}</div>`;
 }
-function renderProdCards(prods){
+function renderProdCards(prods) {
+  const typeIco = {service:'🏢',ebook:'📖',course:'🎓',template:'📄'};
+  const typeLbl = {service:'সার্ভিস',ebook:'ইবুক',course:'কোর্স',template:'টেমপ্লেট'};
+  const typeTag = {service:'tp',ebook:'tgo',course:'tg',template:'tr'};
   return prods.map(p=>`
     <div class="prod-card">
-      <div class="prod-thumb">${{service:'🏢',ebook:'📖',course:'🎓',template:'📄'}[p.type]||'📦'}</div>
+      <div class="prod-thumb">${typeIco[p.type]||'📦'}</div>
       <div class="prod-body">
-        <div class="tag ${{service:'tp',ebook:'tgo',course:'tg',template:'tr'}[p.type]||'tp'} mb1">${{service:'সার্ভিস',ebook:'ইবুক',course:'কোর্স',template:'টেমপ্লেট'}[p.type]||p.type}</div>
-        <div class="prod-name">${p.name}</div>
-        <div class="prod-desc">${p.description}</div>
-        <div class="prod-price">৳${Number(p.price).toLocaleString('bn-BD')}</div>
-        <button class="btn btn-p btn-fw" onclick="openBuy(${p.id})">🛒 কিনুন</button>
+        <span class="tag ${typeTag[p.type]||'tp'} mb1">${typeLbl[p.type]||p.type}</span>
+        <div style="font-weight:700;color:#fff;margin-bottom:4px;font-size:.92rem;">${sanitize(p.name)}</div>
+        <p style="font-size:.8rem;margin-bottom:8px;flex:1;line-height:1.5;">${sanitize(p.description)}</p>
+        <div class="prod-price">৳${Number(p.price||0).toLocaleString('bn-BD')}</div>
+        <button class="btn btn-p btn-fw btn-sm" onclick="openBuy('${p.id}')">🛒 কিনুন</button>
       </div>
     </div>`).join('');
 }
-function filterMarket(type,btn){
-  document.querySelectorAll('#mktTabs .tbn').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  const prods=Store.getProducts().filter(p=>p.active&&(type==='all'||p.type===type));
-  document.getElementById('prodGrid').innerHTML=renderProdCards(prods);
+async function filterMkt(type, btn) {
+  document.querySelectorAll('#mktTabs .btn').forEach(b=>b.className='btn btn-sm btn-s');
+  btn.className='btn btn-sm btn-p';
+  const prods = (await DB.getProducts()).filter(p=>p.active&&(type==='all'||p.type===type));
+  document.getElementById('prodGrid').innerHTML = renderProdCards(prods);
 }
 
-let buyProdId=null;
-function openBuy(id){
-  const p=Store.getProducts().find(pr=>pr.id===id); if(!p) return;
-  buyProdId=id;
-  document.getElementById('buyTitle').textContent=p.name;
-  document.getElementById('buyBody').innerHTML=`
-    <div class="ri mb2" style="text-align:center;">
-      <div style="font-size:2.5rem;margin-bottom:8px;">${{service:'🏢',ebook:'📖',course:'🎓',template:'📄'}[p.type]||'📦'}</div>
-      <div style="font-family:var(--fh);font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:5px;">${p.name}</div>
-      <div style="font-size:.85rem;color:var(--text2);margin-bottom:10px;">${p.description}</div>
-      <div style="font-family:var(--fh);font-size:1.8rem;font-weight:800;color:var(--gold);">৳${Number(p.price).toLocaleString('bn-BD')}</div>
+let buyId = null;
+async function openBuy(id) {
+  buyId = id;
+  const prods = await DB.getProducts();
+  const p = prods.find(x=>x.id===id); if(!p) return;
+  document.getElementById('buyTitle').textContent = sanitize(p.name);
+  document.getElementById('buyBody').innerHTML = `
+    <div class="ri mb2 tc2">
+      <div style="font-size:2.5rem;margin-bottom:7px;">${{service:'🏢',ebook:'📖',course:'🎓',template:'📄'}[p.type]||'📦'}</div>
+      <div style="font-family:var(--fh);font-size:1rem;font-weight:800;color:#fff;margin-bottom:4px;">${sanitize(p.name)}</div>
+      <div style="font-size:.83rem;color:var(--text2);margin-bottom:8px;">${sanitize(p.description)}</div>
+      <div style="font-family:var(--fh);font-size:1.6rem;font-weight:800;color:var(--gold);">৳${Number(p.price||0).toLocaleString('bn-BD')}</div>
     </div>
-    ${p.details?`<div class="alert a-i mb2" style="font-size:.82rem;">${p.details}</div>`:''}
+    ${p.details?`<div class="alert a-i mb2" style="font-size:.8rem;">${sanitize(p.details)}</div>`:''}
     <div class="fg mb2"><label class="fl">পেমেন্ট পদ্ধতি</label>
-      <select class="fc" id="payMethod"><option value="bkash">bKash</option><option value="nagad">Nagad</option><option value="card">Card</option></select>
+      <select class="fc" id="payMeth"><option value="bkash">bKash</option><option value="nagad">Nagad</option><option value="card">Card</option></select>
     </div>
-    <div class="fg mb3"><label class="fl">নোট (ঐচ্ছিক)</label><input class="fc" id="buyNote" placeholder="কোনো বিশেষ নির্দেশনা..."></div>
-    <button class="btn btn-p btn-fw" onclick="confirmBuy()">✅ অর্ডার কনফার্ম করুন</button>
-    <div style="font-size:.75rem;color:var(--text2);text-align:center;margin-top:8px;">অর্ডারের পর আমরা WhatsApp-এ পেমেন্ট নির্দেশনা পাঠাব</div>`;
+    <div class="fg mb3"><label class="fl">নোট (ঐচ্ছিক)</label><input class="fc" id="buyNote" placeholder="বিশেষ নির্দেশনা..."></div>
+    <button class="btn btn-p btn-fw" onclick="confirmBuy()">✅ অর্ডার করুন</button>
+    <div style="text-align:center;font-size:.73rem;color:var(--text2);margin-top:7px;">পেমেন্ট নির্দেশনা WhatsApp-এ পাবেন</div>`;
   Modal.show('buyModal');
 }
-function confirmBuy(){
-  const p=Store.getProducts().find(pr=>pr.id===buyProdId); if(!p) return;
-  const prof=Store.getProfile()||{};
-  Store.addOrder({ productId:buyProdId, productName:p.name, price:p.price, type:p.type, payMethod:document.getElementById('payMethod').value, note:document.getElementById('buyNote').value, userName:prof.name, userWa:prof.whatsapp });
+
+async function confirmBuy() {
+  const prods = await DB.getProducts();
+  const p = prods.find(x=>x.id===buyId); if(!p) return;
+  await DB.addOrder({
+    productId: buyId, productName: p.name, price: p.price, type: p.type,
+    payMethod: document.getElementById('payMeth').value,
+    note: document.getElementById('buyNote').value,
+    userPhone: localStorage.getItem('c2b_phone'),
+    userName: currentUser?.name||'',
+  });
   Modal.hide('buyModal');
-  Toast.success('অর্ডার সফল! আমরা WhatsApp-এ যোগাযোগ করব।');
-  renderOrders();
+  Toast.success('অর্ডার সফল! WhatsApp-এ যোগাযোগ করব।');
 }
 
-/* ════════════════════════════════════════════════
-   ORDERS
-════════════════════════════════════════════════ */
-function renderOrders(){
-  const orders=Store.getOrders();
-  const el=document.getElementById('ordersContent');
-  if(!orders.length){ el.innerHTML=`<div class="alert a-i">📦 এখনো কোনো অর্ডার নেই। মার্কেটপ্লেস থেকে কিনুন।</div>`; return; }
-  el.innerHTML=orders.map(o=>`
+async function renderOrders() {
+  const phone = localStorage.getItem('c2b_phone')||'';
+  const orders = await DB.getOrdersByPhone(phone);
+  const el = document.getElementById('ordersContent');
+  if(!orders.length) { el.innerHTML=`<div class="alert a-i">📦 কোনো অর্ডার নেই।</div>`; return; }
+  el.innerHTML = orders.map(o=>`
     <div class="ri mb2">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
-        <div style="font-weight:700;color:#fff;">${o.productName}</div>
-        <div style="display:flex;gap:7px;align-items:center;">
-          <span class="tag tgo">${fmtBDT(o.price)}</span>
-          <span class="tag ${{pending:'tgr',confirmed:'tp',completed:'tg',cancelled:'tr'}[o.status]||'tgr'}">${{pending:'পেন্ডিং',confirmed:'কনফার্ম',completed:'সম্পন্ন',cancelled:'বাতিল'}[o.status]||o.status}</span>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:7px;">
+        <div style="font-weight:700;color:#fff;">${sanitize(o.productName)}</div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <span class="tag tgo">৳${Number(o.price||0).toLocaleString('bn-BD')}</span>
+          <span class="pill ${{pending:'p-pend',confirmed:'p-new',completed:'p-appr',cancelled:'p-rej'}[o.status]||'p-pend'}">${{pending:'পেন্ডিং',confirmed:'কনফার্ম',completed:'সম্পন্ন',cancelled:'বাতিল'}[o.status]||o.status}</span>
         </div>
       </div>
-      <div style="font-size:.8rem;color:var(--text2);">📅 ${fmtDate(o.date)} | 💳 ${o.payMethod}</div>
-      ${o.note?`<div style="font-size:.79rem;color:var(--text2);margin-top:4px;">📝 ${o.note}</div>`:''}
+      <div style="font-size:.78rem;color:var(--text2);">📅 ${fmtDate(o.date)} | 💳 ${o.payMethod||'—'}</div>
     </div>`).join('');
 }
 
-/* ════════════════════════════════════════════════
-   HELP
-════════════════════════════════════════════════ */
-function sendHelp(){
-  const sub=document.getElementById('h-subject').value.trim();
-  const msg=document.getElementById('h-msg').value.trim();
-  if(!sub||!msg){ Toast.error('বিষয় ও বার্তা দিন'); return; }
-  Store.log('help_request',{subject:sub,message:msg});
-  document.getElementById('h-subject').value='';
-  document.getElementById('h-msg').value='';
-  Toast.success('বার্তা পাঠানো হয়েছে! আমরা শীঘ্রই যোগাযোগ করব।');
+async function sendHelp() {
+  const sub = document.getElementById('h-sub').value.trim();
+  const msg = document.getElementById('h-msg').value.trim();
+  if(!sub||!msg) { Toast.error('বিষয় ও বার্তা দিন'); return; }
+  await DB.addHelpMsg({ subject:sub, message:msg, userPhone:localStorage.getItem('c2b_phone'), userName:currentUser?.name||'' });
+  document.getElementById('h-sub').value=''; document.getElementById('h-msg').value='';
+  Toast.success('বার্তা পাঠানো হয়েছে! শীঘ্রই যোগাযোগ করব।');
 }
 
-/* ════════════════════════════════════════════════
-   API KEY
-════════════════════════════════════════════════ */
-function showApiModal(){ document.getElementById('akInput').value=Store.getAK()||''; Modal.show('apiModal'); }
-function saveAK(){
-  const k=document.getElementById('akInput').value.trim();
-  if(!k||!k.startsWith('sk-ant-')){ Toast.error('সঠিক API Key দিন'); return; }
-  Store.setAK(k); Modal.hide('apiModal'); Toast.success('API Key সেভ হয়েছে! ✅');
+function saveAK() {
+  const k = document.getElementById('akInp').value.trim();
+  if(!k||!k.startsWith('sk-ant-')) { Toast.error('সঠিক API Key দিন'); return; }
+  localStorage.setItem('c2b_ak', k); Modal.hide('apiModal'); Toast.success('API Key সেভ হয়েছে ✅');
 }
 
-/* ════════════════════════════════════════════════
-   BOOT
-════════════════════════════════════════════════ */
-routeUser();
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+boot();
 </script>
 </body>
 </html>
