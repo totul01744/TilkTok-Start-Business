@@ -3,64 +3,179 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Admin — Creator2Business</title>
-<link rel="stylesheet" href="../assets/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Exo+2:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
-body{font-size:14px}
+:root{
+  --bg:#080c18;--bg2:#0d1220;--bg3:#121929;
+  --card:#0f1624;--card2:#161e30;
+  --border:#1a2540;--border2:#243050;
+  --accent:#6c63ff;--accent2:#ff6584;--accent3:#43e97b;--gold:#f5c518;
+  --text:#e2e8f0;--text2:#8892b0;--text3:#cdd6f4;
+  --r:14px;--r2:9px;--r3:6px;
+  --font:'Hind Siliguri',sans-serif;--fh:'Exo 2',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 15% 0%,rgba(108,99,255,.1),transparent 55%);pointer-events:none;z-index:0}
+.hidden{display:none!important}
+a{color:var(--accent);text-decoration:none}
+
+/* BTN */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--r2);padding:8px 16px;font-family:var(--font);font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s;border:none;text-decoration:none;white-space:nowrap}
+.btn-p{background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff}
+.btn-p:hover{transform:translateY(-1px);color:#fff}
+.btn-s{background:var(--card2);color:var(--text3);border:1px solid var(--border2)}
+.btn-s:hover{border-color:var(--accent);color:#fff}
+.btn-d{background:rgba(255,101,132,.1);color:var(--accent2);border:1px solid rgba(255,101,132,.3)}
+.btn-d:hover{background:rgba(255,101,132,.2)}
+.btn-g{background:rgba(67,233,123,.1);color:var(--accent3);border:1px solid rgba(67,233,123,.3)}
+.btn-g:hover{background:rgba(67,233,123,.2)}
+.btn-o{background:rgba(245,197,24,.1);color:var(--gold);border:1px solid rgba(245,197,24,.3)}
+.btn-o:hover{background:rgba(245,197,24,.2)}
+.btn-sm{padding:5px 10px;font-size:.72rem}
+.btn-fw{width:100%}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .75s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* CARD */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fl{font-size:.68rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
+.fc{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r2);color:var(--text);font-family:var(--font);font-size:.84rem;padding:9px 12px;outline:none;transition:border-color .2s;width:100%}
+.fc:focus{border-color:var(--accent)}
+.fc::placeholder{color:var(--text2);opacity:.65}
+textarea.fc{resize:vertical;min-height:80px}
+select.fc option{background:var(--card)}
+
+/* TAGS */
+.tag{display:inline-flex;align-items:center;gap:3px;border-radius:5px;font-size:.67rem;font-weight:600;padding:2px 8px}
+.tp{background:rgba(108,99,255,.15);color:#a78bfa}
+.tr{background:rgba(255,101,132,.15);color:#fb7185}
+.tg{background:rgba(67,233,123,.15);color:#4ade80}
+.tgo{background:rgba(245,197,24,.15);color:#fbbf24}
+.tgr{background:rgba(136,146,176,.15);color:var(--text2)}
+
+/* ALERT */
+.alert{border-radius:var(--r2);padding:11px 14px;display:flex;align-items:flex-start;gap:8px;font-size:.84rem}
+.a-e{background:rgba(255,101,132,.1);border:1px solid rgba(255,101,132,.25);color:#fb7185}
+.a-s{background:rgba(67,233,123,.1);border:1px solid rgba(67,233,123,.25);color:#4ade80}
+.a-i{background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.25);color:#a78bfa}
+.a-w{background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.25);color:#fbbf24}
+
+/* TOAST */
+.tc{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--card2);border:1px solid var(--border2);border-radius:var(--r2);padding:10px 14px;display:flex;align-items:center;gap:8px;font-size:.82rem;font-weight:500;color:var(--text);min-width:220px;animation:slin .3s ease}
+.toast.s{border-color:rgba(67,233,123,.4)}.toast.e{border-color:rgba(255,101,132,.4)}
+@keyframes slin{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+
+/* MODAL */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}
+.mb{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);max-width:520px;width:100%;max-height:90vh;overflow-y:auto}
+.mh{padding:16px 18px 0;display:flex;align-items:center;justify-content:space-between}
+.mbody{padding:14px 18px 18px}
+.mc{background:none;border:none;color:var(--text2);cursor:pointer;font-size:1.1rem;padding:3px}
+.mc:hover{color:var(--accent2)}
+
+/* LAYOUT */
 .adm{display:flex;min-height:100vh}
-.sb{width:225px;background:var(--card);border-right:1px solid var(--border);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:50;display:flex;flex-direction:column}
+.sb{width:220px;background:var(--card);border-right:1px solid var(--border);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:50;display:flex;flex-direction:column}
 .sb-logo{padding:16px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px}
+.logo-ic{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
 .sb-lt{font-family:var(--fh);font-weight:800;font-size:.86rem;color:#fff;line-height:1.2}
 .sb-lt small{display:block;color:var(--accent);font-size:.6rem;letter-spacing:1px;text-transform:uppercase}
-.sb-sec{padding:8px 10px 3px;font-size:.6rem;color:var(--text2);text-transform:uppercase;letter-spacing:.7px;font-weight:600}
-.sbl{display:flex;align-items:center;gap:8px;padding:8px 11px;color:var(--text2);border-radius:var(--r3);margin:2px 6px;cursor:pointer;font-size:.8rem;font-weight:500;transition:all .2s;border:none;background:none;width:calc(100%-12px);text-align:left}
+.sb-sec{padding:8px 10px 3px;font-size:.6rem;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+.sbl{display:flex;align-items:center;gap:8px;padding:8px 11px;color:var(--text2);border-radius:var(--r3);margin:2px 6px;cursor:pointer;font-size:.8rem;font-weight:500;transition:all .2s;border:none;background:none;width:calc(100% - 12px);text-align:left;font-family:var(--font)}
 .sbl:hover{color:var(--text);background:var(--card2)}
 .sbl.on{color:#fff;background:rgba(108,99,255,.15)}
 .sbl .si{font-size:.85rem;width:16px;text-align:center}
-.sbl .sdg{margin-left:auto;background:var(--accent2);color:#fff;border-radius:10px;font-size:.6rem;padding:1px 6px;font-weight:700}
-.main{margin-left:225px;flex:1;padding:20px;min-height:100vh}
-.adm-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:9px}
-.pg-t{font-family:var(--fh);font-size:1.15rem;font-weight:800;color:#fff}
-/* STAT GRID */
+.sdg{margin-left:auto;background:var(--accent2);color:#fff;border-radius:10px;font-size:.6rem;padding:1px 6px;font-weight:700;min-width:18px;text-align:center}
+.main{margin-left:220px;flex:1;padding:20px;min-height:100vh;position:relative;z-index:1}
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:9px}
+.pt{font-family:var(--fh);font-size:1.15rem;font-weight:800;color:#fff}
+.ps{font-size:.78rem;color:var(--text2)}
+
+/* STATS */
 .sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:11px;margin-bottom:18px}
-.scard{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:15px}
+.scard{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:14px}
 .snum{font-family:var(--fh);font-size:1.7rem;font-weight:800;color:#fff}
-.slbl{font-size:.71rem;color:var(--text2);margin-top:2px}
-/* USER PROFILE CARD */
-.upc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px;transition:border-color .2s}
-.upc:hover{border-color:var(--border2)}
-.upc-photo{width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--border2);flex-shrink:0}
-.upc-init{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-family:var(--fh);font-size:1.1rem;flex-shrink:0}
-.upc-body{flex:1;min-width:0}
-.upc-name{font-weight:700;color:#fff;font-size:.95rem;margin-bottom:3px}
-.upc-meta{font-size:.76rem;color:var(--text2);line-height:1.7}
-.upc-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.slbl{font-size:.7rem;color:var(--text2);margin-top:2px}
+.ssub{font-size:.67rem;color:var(--gold);margin-top:3px}
+
+/* USER CARDS */
+.ucard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;display:flex;gap:14px;align-items:flex-start;transition:border-color .2s}
+.ucard:hover{border-color:var(--border2)}
+.uav{width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid var(--border2);flex-shrink:0}
+.uav-ini{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-family:var(--fh);font-size:.95rem;flex-shrink:0}
+.uinfo{flex:1;min-width:0}
+.uname{font-weight:700;color:#fff;font-size:.92rem;margin-bottom:3px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.umeta{font-size:.76rem;color:var(--text2);line-height:1.7;margin-bottom:6px}
+.uactions{display:flex;gap:6px;flex-wrap:wrap}
+
+/* PILL */
+.pill{display:inline-flex;border-radius:20px;padding:2px 9px;font-size:.67rem;font-weight:600}
+.p-pend{background:rgba(245,197,24,.12);color:var(--gold)}
+.p-appr{background:rgba(67,233,123,.12);color:var(--accent3)}
+.p-rej{background:rgba(255,101,132,.12);color:var(--accent2)}
+.p-new{background:rgba(108,99,255,.12);color:#a78bfa}
+
+/* TABLE */
+.tbl-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:14px}
+.tbl-hdr{padding:11px 15px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--card2);flex-wrap:wrap;gap:7px}
+.tbl-t{font-weight:700;color:#fff;font-size:.85rem}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:8px 13px;font-size:.66rem;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)}
+td{padding:10px 13px;font-size:.8rem;color:var(--text);border-bottom:1px solid rgba(26,37,64,.5);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--card2)}
+.ab{background:none;border:1px solid var(--border);border-radius:5px;padding:3px 8px;cursor:pointer;font-size:.68rem;color:var(--text2);font-family:var(--font);transition:all .2s;margin:0 2px}
+.ab:hover{border-color:var(--accent);color:var(--accent)}
+.ab.g:hover{border-color:var(--accent3);color:var(--accent3)}
+.ab.r:hover{border-color:var(--accent2);color:var(--accent2)}
+.ab.o:hover{border-color:var(--gold);color:var(--gold)}
+
 /* TASK EDITOR */
 .task-row{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:11px;margin-bottom:7px;display:flex;align-items:flex-start;gap:9px}
-.task-num{font-family:var(--fh);font-weight:800;color:var(--accent);font-size:.88rem;min-width:50px;padding-top:8px}
-.task-body{flex:1}
-.ti{background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font);font-size:.81rem;padding:6px 9px;width:100%;outline:none;margin-bottom:5px}
+.task-num{font-family:var(--fh);font-weight:800;color:var(--accent);font-size:.88rem;min-width:50px;padding-top:7px}
+.ti{background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:var(--font);font-size:.8rem;padding:6px 9px;width:100%;outline:none;margin-bottom:5px}
 .ti:focus{border-color:var(--accent)}
-.ti-sm{width:110px}
-.drb-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.drb{padding:5px 11px;border-radius:6px;border:1px solid var(--border);background:var(--card2);color:var(--text2);cursor:pointer;font-size:.76rem;transition:all .2s}
+.ti.sm{width:110px}
+.drb-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:13px}
+.drb{padding:5px 11px;border-radius:5px;border:1px solid var(--border);background:var(--card2);color:var(--text2);cursor:pointer;font-size:.75rem;transition:all .2s;font-family:var(--font)}
 .drb.on{border-color:var(--accent);color:#fff;background:rgba(108,99,255,.15)}
-/* NOTIF EDITOR */
-.notif-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:12px;margin-bottom:8px}
-/* PRODUCT FORM */
 .pf2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 .pf2-full{grid-column:1/-1}
+
+/* NOTIF ITEM */
+.ni{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:13px;margin-bottom:8px}
+
 /* LOGIN */
 .lw{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.lbox{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:32px;max-width:340px;width:100%}
+
+/* UTILS */
+.mt1{margin-top:8px}.mt2{margin-top:14px}.mt3{margin-top:22px}
+.mb1{margin-bottom:8px}.mb2{margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.empty{text-align:center;padding:32px 20px;color:var(--text2);font-size:.85rem}
+.skel{background:linear-gradient(90deg,var(--bg2) 25%,var(--bg3) 50%,var(--bg2) 75%);background-size:200% 100%;animation:shim 1.5s infinite;border-radius:7px}
+@keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes fup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
 @media(max-width:900px){.sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.main{margin-left:0}}
 </style>
 </head>
 <body>
 
+<!-- LOGIN -->
 <div id="loginWrap" class="lw">
-  <div class="login-box">
+  <div class="lbox">
     <div style="text-align:center;margin-bottom:20px;">
       <div class="logo-ic" style="width:44px;height:44px;font-size:1.1rem;margin:0 auto 9px;border-radius:11px;">🚀</div>
       <div style="font-family:var(--fh);font-weight:800;font-size:1rem;color:#fff;">Admin Panel</div>
+      <div style="font-size:.75rem;color:var(--text2);">Creator2Business</div>
     </div>
     <div class="fg mb2"><label class="fl">পাসওয়ার্ড</label>
       <input type="password" class="fc" id="lpass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
@@ -70,11 +185,13 @@ body{font-size:14px}
   </div>
 </div>
 
+<!-- ADMIN APP -->
 <div id="admApp" class="adm hidden">
+  <!-- Sidebar -->
   <aside class="sb" id="sb">
     <div class="sb-logo">
-      <div class="logo-ic" style="width:29px;height:29px;font-size:.82rem;border-radius:7px;">🚀</div>
-      <div class="sb-lt">Creator2Biz<small>Admin v3</small></div>
+      <div class="logo-ic">🚀</div>
+      <div class="sb-lt">Creator2Biz<small>Admin</small></div>
     </div>
     <div style="padding:7px 5px;flex:1;">
       <div class="sb-sec">ড্যাশবোর্ড</div>
@@ -90,33 +207,45 @@ body{font-size:14px}
       <div class="sb-sec">সেটিংস</div>
       <button class="sbl" data-page="settings" onclick="showPg('settings',this)"><span class="si">⚙️</span>সেটিংস</button>
     </div>
-    <div style="padding:6px 5px;border-top:1px solid var(--border);">
+    <div style="padding:7px 5px;border-top:1px solid var(--border);">
       <button class="sbl" style="color:var(--accent2);" onclick="doLogout()"><span class="si">🚪</span>লগআউট</button>
     </div>
   </aside>
 
+  <!-- MAIN -->
   <main class="main">
+
     <!-- DASHBOARD -->
     <div id="pg-dash">
-      <div class="adm-hdr">
-        <div><div class="pg-t">📊 ড্যাশবোর্ড</div><div style="font-size:.78rem;color:var(--text2);" id="dashDate"></div></div>
-        <div style="display:flex;gap:7px;"><button class="btn btn-sm btn-s" onclick="refresh()">🔄</button><a href="../index.html" target="_blank" class="btn btn-sm btn-s">🌐 সাইট</a></div>
+      <div class="ph">
+        <div><div class="pt">📊 ড্যাশবোর্ড</div><div class="ps" id="dashDate"></div></div>
+        <div style="display:flex;gap:7px;">
+          <button class="btn btn-sm btn-s" onclick="refresh()">🔄 রিফ্রেশ</button>
+          <a href="../index.html" target="_blank" class="btn btn-sm btn-s">🌐 সাইট</a>
+        </div>
       </div>
-      <div class="sgrid" id="statGrid"></div>
+      <div class="sgrid" id="statGrid">
+        <div class="scard"><div class="skel" style="height:28px;width:50%;margin-bottom:6px;"></div><div class="skel" style="height:12px;width:70%;"></div></div>
+        <div class="scard"><div class="skel" style="height:28px;width:50%;margin-bottom:6px;"></div><div class="skel" style="height:12px;width:70%;"></div></div>
+        <div class="scard"><div class="skel" style="height:28px;width:50%;margin-bottom:6px;"></div><div class="skel" style="height:12px;width:70%;"></div></div>
+        <div class="scard"><div class="skel" style="height:28px;width:50%;margin-bottom:6px;"></div><div class="skel" style="height:12px;width:70%;"></div></div>
+      </div>
       <div class="tbl-card">
         <div class="tbl-hdr"><div class="tbl-t">👥 সাম্প্রতিক ইউজার</div><button class="btn btn-sm btn-s" onclick="showPg('users',document.querySelector('[data-page=users]'))">সব দেখুন</button></div>
-        <div id="recentUsers"></div>
+        <div id="dashUsers"><div style="padding:16px;"><div class="skel" style="height:14px;margin-bottom:8px;"></div><div class="skel" style="height:14px;width:80%;"></div></div></div>
       </div>
     </div>
 
     <!-- USERS -->
     <div id="pg-users" class="hidden">
-      <div class="adm-hdr">
-        <div><div class="pg-t">👥 ইউজার ম্যানেজমেন্ট</div></div>
+      <div class="ph">
+        <div><div class="pt">👥 ইউজার ম্যানেজমেন্ট</div></div>
         <div style="display:flex;gap:7px;align-items:center;">
-          <select class="fc" id="ufil" onchange="renderUsers()" style="width:auto;padding:6px 10px;font-size:.78rem;">
-            <option value="all">সব</option><option value="pending">পেন্ডিং</option>
-            <option value="approved">অনুমোদিত</option><option value="rejected">প্রত্যাখ্যাত</option>
+          <select class="fc" id="uFilter" onchange="renderUsers()" style="width:auto;padding:6px 10px;font-size:.78rem;">
+            <option value="all">সব</option>
+            <option value="pending">পেন্ডিং</option>
+            <option value="approved">অনুমোদিত</option>
+            <option value="rejected">প্রত্যাখ্যাত</option>
           </select>
           <button class="btn btn-sm btn-s" onclick="exportUsers()">⬇️ Export</button>
         </div>
@@ -125,17 +254,17 @@ body{font-size:14px}
     </div>
 
     <!-- USER DETAIL -->
-    <div id="pg-userdetail" class="hidden">
-      <div class="adm-hdr">
+    <div id="pg-udetail" class="hidden">
+      <div class="ph">
         <button class="btn btn-sm btn-s" onclick="showPg('users',document.querySelector('[data-page=users]'))">← ফিরে যান</button>
       </div>
-      <div id="userDetailContent"></div>
+      <div id="uDetailContent"></div>
     </div>
 
     <!-- ORDERS -->
     <div id="pg-orders" class="hidden">
-      <div class="adm-hdr">
-        <div class="pg-t">📦 অর্ডার</div>
+      <div class="ph">
+        <div class="pt">📦 অর্ডার</div>
         <button class="btn btn-sm btn-s" onclick="exportOrders()">⬇️ Export</button>
       </div>
       <div class="tbl-card"><div id="orderTable"></div></div>
@@ -143,23 +272,23 @@ body{font-size:14px}
 
     <!-- HELP -->
     <div id="pg-help" class="hidden">
-      <div class="adm-hdr"><div class="pg-t">💬 হেল্প মেসেজ</div></div>
+      <div class="ph"><div class="pt">💬 হেল্প মেসেজ</div></div>
       <div class="tbl-card"><div id="helpTable"></div></div>
     </div>
 
     <!-- NOTIFICATIONS -->
     <div id="pg-notif" class="hidden">
-      <div class="adm-hdr">
-        <div><div class="pg-t">📢 নোটিফিকেশন</div><div style="font-size:.77rem;color:var(--text2);">সব ইউজার দেখতে পাবে</div></div>
-        <button class="btn btn-sm btn-p" onclick="openNotifModal()">+ নতুন নোটিফিকেশন</button>
+      <div class="ph">
+        <div><div class="pt">📢 নোটিফিকেশন</div><div class="ps">সব অনুমোদিত ইউজার দেখতে পাবে</div></div>
+        <button class="btn btn-sm btn-p" onclick="Modal.show('notifMo')">+ নতুন পাঠান</button>
       </div>
       <div id="notifList"></div>
     </div>
 
     <!-- TASKS -->
     <div id="pg-tasks" class="hidden">
-      <div class="adm-hdr">
-        <div><div class="pg-t">📅 ৯০ দিনের প্ল্যান</div></div>
+      <div class="ph">
+        <div><div class="pt">📅 ৯০ দিনের প্ল্যান</div><div class="ps">প্রতিটি দিনের কাজ নির্ধারণ করুন</div></div>
         <button class="btn btn-sm btn-p" onclick="saveTasks()">💾 সেভ করুন</button>
       </div>
       <div class="drb-bar" id="drbBar"></div>
@@ -168,30 +297,30 @@ body{font-size:14px}
 
     <!-- MARKETPLACE -->
     <div id="pg-market" class="hidden">
-      <div class="adm-hdr">
-        <div class="pg-t">🛍️ মার্কেটপ্লেস</div>
-        <button class="btn btn-sm btn-p" onclick="openProdModal()">+ প্রোডাক্ট যোগ করুন</button>
+      <div class="ph">
+        <div class="pt">🛍️ মার্কেটপ্লেস</div>
+        <button class="btn btn-sm btn-p" onclick="openProdMo()">+ প্রোডাক্ট যোগ</button>
       </div>
       <div class="tbl-card"><div id="prodTable"></div></div>
     </div>
 
     <!-- SETTINGS -->
     <div id="pg-settings" class="hidden">
-      <div class="adm-hdr"><div class="pg-t">⚙️ সেটিংস</div><button class="btn btn-sm btn-p" onclick="saveSettings()">💾 সেভ</button></div>
+      <div class="ph"><div class="pt">⚙️ সেটিংস</div><button class="btn btn-sm btn-p" onclick="saveSettings()">💾 সেভ</button></div>
       <div class="card mb2">
-        <h3 style="margin-bottom:13px;">🔑 Admin পাসওয়ার্ড</h3>
+        <h3 style="font-size:.92rem;margin-bottom:13px;">🔑 পাসওয়ার্ড পরিবর্তন</h3>
         <div class="fg mb2"><label class="fl">নতুন পাসওয়ার্ড</label><input type="password" class="fc" id="newPass" placeholder="কমপক্ষে ৬ অক্ষর"></div>
         <button class="btn btn-sm btn-s" onclick="changePass()">পরিবর্তন করুন</button>
       </div>
       <div class="card mb2">
-        <h3 style="margin-bottom:13px;">📞 যোগাযোগ</h3>
-        <div class="pf2">
+        <h3 style="font-size:.92rem;margin-bottom:13px;">📞 যোগাযোগ</h3>
+        <div class="grid2">
           <div class="fg"><label class="fl">WhatsApp</label><input class="fc" id="s-wa" placeholder="+880..."></div>
           <div class="fg"><label class="fl">ইমেইল</label><input class="fc" id="s-email" placeholder="admin@..."></div>
         </div>
       </div>
       <div class="card">
-        <h3 style="margin-bottom:13px;">🗑️ ডেটা</h3>
+        <h3 style="font-size:.92rem;margin-bottom:13px;">🗑️ ডেটা</h3>
         <button class="btn btn-sm btn-s" onclick="exportAll()">⬇️ ফুল ব্যাকআপ</button>
       </div>
     </div>
@@ -200,13 +329,11 @@ body{font-size:14px}
 </div>
 
 <!-- REJECT MODAL -->
-<div class="mo hidden" id="rejModal">
+<div class="mo hidden" id="rejMo">
   <div class="mb" style="max-width:380px;">
-    <div class="mh"><h3>❌ প্রত্যাখ্যান</h3><button class="mc" onclick="Modal.hide('rejModal')">✕</button></div>
+    <div class="mh"><h3 style="font-size:.95rem;">❌ প্রত্যাখ্যান করুন</h3><button class="mc" onclick="Modal.hide('rejMo')">✕</button></div>
     <div class="mbody">
-      <div class="fg mb2"><label class="fl">কারণ</label>
-        <textarea class="fc" id="rejReason" rows="3" placeholder="কেন প্রত্যাখ্যান করা হচ্ছে..."></textarea>
-      </div>
+      <div class="fg mb2"><label class="fl">কারণ</label><textarea class="fc" id="rejReason" rows="3" placeholder="কেন প্রত্যাখ্যান করছেন..."></textarea></div>
       <input type="hidden" id="rejPhone">
       <button class="btn btn-d btn-fw" onclick="confirmReject()">❌ প্রত্যাখ্যান করুন</button>
     </div>
@@ -214,14 +341,14 @@ body{font-size:14px}
 </div>
 
 <!-- NOTIFICATION MODAL -->
-<div class="mo hidden" id="notifModal">
+<div class="mo hidden" id="notifMo">
   <div class="mb" style="max-width:460px;">
-    <div class="mh"><h3 id="nmTitle">📢 নতুন নোটিফিকেশন</h3><button class="mc" onclick="Modal.hide('notifModal')">✕</button></div>
+    <div class="mh"><h3 style="font-size:.95rem;">📢 নোটিফিকেশন পাঠান</h3><button class="mc" onclick="Modal.hide('notifMo')">✕</button></div>
     <div class="mbody">
-      <div class="fg mb2"><label class="fl">শিরোনাম *</label><input class="fc" id="nm-title" placeholder="নোটিফিকেশন শিরোনাম"></div>
-      <div class="fg mb2"><label class="fl">বার্তা *</label><textarea class="fc" id="nm-msg" rows="4" placeholder="বিস্তারিত বার্তা..."></textarea></div>
+      <div class="fg mb2"><label class="fl">শিরোনাম *</label><input class="fc" id="nm-t" placeholder="নোটিফিকেশন শিরোনাম"></div>
+      <div class="fg mb2"><label class="fl">বার্তা *</label><textarea class="fc" id="nm-m" rows="4" placeholder="বিস্তারিত বার্তা..."></textarea></div>
       <div class="fg mb3"><label class="fl">ধরন</label>
-        <select class="fc" id="nm-type"><option value="info">তথ্য</option><option value="announcement">ঘোষণা</option><option value="task">টাস্ক রিমাইন্ডার</option><option value="promo">প্রমো</option></select>
+        <select class="fc" id="nm-ty"><option value="info">তথ্য</option><option value="announcement">ঘোষণা</option><option value="task">টাস্ক রিমাইন্ডার</option><option value="promo">প্রমো</option></select>
       </div>
       <button class="btn btn-p btn-fw" onclick="sendNotif()">📢 পাঠান</button>
     </div>
@@ -229,9 +356,9 @@ body{font-size:14px}
 </div>
 
 <!-- PRODUCT MODAL -->
-<div class="mo hidden" id="prodModal">
+<div class="mo hidden" id="prodMo">
   <div class="mb" style="max-width:560px;">
-    <div class="mh"><h3 id="pmTitle">+ প্রোডাক্ট যোগ করুন</h3><button class="mc" onclick="Modal.hide('prodModal')">✕</button></div>
+    <div class="mh"><h3 id="pmT" style="font-size:.95rem;">+ প্রোডাক্ট যোগ</h3><button class="mc" onclick="Modal.hide('prodMo')">✕</button></div>
     <div class="mbody">
       <div class="pf2">
         <div class="fg pf2-full"><label class="fl">ধরন *</label>
@@ -239,7 +366,7 @@ body{font-size:14px}
         </div>
         <div class="fg pf2-full"><label class="fl">নাম *</label><input class="fc" id="pm-name" placeholder="প্রোডাক্টের নাম"></div>
         <div class="fg"><label class="fl">দাম (৳) *</label><input class="fc" id="pm-price" type="number" placeholder="৪৯৯"></div>
-        <div class="fg"><label class="fl">ডেলিভারি</label><input class="fc" id="pm-del" placeholder="যেমন: তাৎক্ষণিক, ৭ দিন"></div>
+        <div class="fg"><label class="fl">ডেলিভারি</label><input class="fc" id="pm-del" placeholder="তাৎক্ষণিক / ৭ দিন"></div>
         <div class="fg pf2-full"><label class="fl">বিবরণ *</label><textarea class="fc" id="pm-desc" rows="3" placeholder="সংক্ষিপ্ত বিবরণ..."></textarea></div>
         <div class="fg pf2-full"><label class="fl">বিস্তারিত (কী কী পাবে)</label><textarea class="fc" id="pm-details" rows="4" placeholder="অন্তর্ভুক্ত সুবিধাগুলো..."></textarea></div>
         <div class="fg pf2-full"><label class="fl">ডাউনলোড লিংক (ইবুক/টেমপ্লেট)</label><input class="fc" id="pm-link" placeholder="https://..."></div>
@@ -247,399 +374,638 @@ body{font-size:14px}
       <div id="pm-err" class="alert a-e mt2 hidden"></div>
       <div style="display:flex;gap:7px;margin-top:14px;">
         <button class="btn btn-p" style="flex:1" onclick="saveProd()">💾 সেভ</button>
-        <button class="btn btn-s" onclick="Modal.hide('prodModal')">বাতিল</button>
+        <button class="btn btn-s" onclick="Modal.hide('prodMo')">বাতিল</button>
       </div>
     </div>
   </div>
 </div>
 
-<script src="../assets/js/app_admin.js"></script>
-<script>
-/* ══════════════ AUTH ══════════════ */
-function doLogin(){
-  const p=document.getElementById('lpass').value;
-  if(p===ADMIN_PASSWORD||p===Store_getAdminPass()){
-    localStorage.setItem('c2b_adm','1');
-    bootAdmin();
-  } else document.getElementById('lerr').classList.remove('hidden');
-}
-function Store_getAdminPass(){ return localStorage.getItem('c2b_admin_pass')||ADMIN_PASSWORD; }
-function doLogout(){ localStorage.removeItem('c2b_adm'); location.reload(); }
+<!-- USER LIMIT MODAL -->
+<div class="mo hidden" id="limitMo">
+  <div class="mb" style="max-width:380px;">
+    <div class="mh"><h3 style="font-size:.95rem;">⏱️ টুল লিমিট সেট করুন</h3><button class="mc" onclick="Modal.hide('limitMo')">✕</button></div>
+    <div class="mbody">
+      <div id="limitUserInfo" style="font-size:.83rem;color:var(--text2);margin-bottom:12px;"></div>
+      <div class="fg mb2"><label class="fl">দৈনিক AI জেনারেশন লিমিট</label>
+        <select class="fc" id="limitVal">
+          <option value="3">৩টি (ডিফল্ট ফ্রি)</option>
+          <option value="10">১০টি</option>
+          <option value="20">২০টি</option>
+          <option value="50">৫০টি</option>
+          <option value="999">আনলিমিটেড (Pro)</option>
+          <option value="0">০ (সম্পূর্ণ বন্ধ)</option>
+        </select>
+      </div>
+      <div class="fg mb3"><label class="fl">মেয়াদ শেষ তারিখ (ঐচ্ছিক)</label>
+        <input class="fc" type="date" id="limitExpiry">
+      </div>
+      <input type="hidden" id="limitPhone">
+      <button class="btn btn-p btn-fw" onclick="saveLimit()">💾 সেভ করুন</button>
+    </div>
+  </div>
+</div>
 
-async function bootAdmin(){
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="../assets/js/config.js"></script>
+
+<script>
+'use strict';
+
+/* ══ TOAST ══ */
+const T = {
+  el: null,
+  _i() { if(!this.el){this.el=document.createElement('div');this.el.className='tc';document.body.appendChild(this.el);} },
+  _s(msg, type, ms=3400) {
+    this._i();
+    const ic={ok:'✅',err:'❌',info:'ℹ️',warn:'⚠️'};
+    const t=document.createElement('div');
+    t.className='toast '+(type==='ok'?'s':type==='err'?'e':'');
+    t.innerHTML=`<span>${ic[type]||'ℹ️'}</span><span>${msg}</span>`;
+    this.el.appendChild(t);
+    setTimeout(()=>{t.style.cssText='opacity:0;transform:translateX(16px);transition:.3s';setTimeout(()=>t.remove(),310);},ms);
+  },
+  ok(m){this._s(m,'ok');},err(m){this._s(m,'err');},info(m){this._s(m,'info');},warn(m){this._s(m,'warn');}
+};
+
+const Modal = {
+  show(id){document.getElementById(id)?.classList.remove('hidden');},
+  hide(id){document.getElementById(id)?.classList.add('hidden');},
+};
+
+function esc(s){return(s||'').replace(/[<>"&]/g,c=>({'<':'&lt;','>':'&gt;','"':'&quot;','&':'&amp;'}[c]));}
+function fmtD(iso){if(!iso)return'—';return new Date(iso).toLocaleDateString('bn-BD',{day:'numeric',month:'short',year:'numeric'})+' '+new Date(iso).toLocaleTimeString('bn-BD',{hour:'2-digit',minute:'2-digit'});}
+function pkey(ph){return(ph||'').replace(/\D/g,'').replace(/^880/,'0');}
+function dlJSON(data,name){const b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();}
+
+/* ══ FIREBASE ══ */
+let fdb = null;
+
+function fbInit() {
+  try {
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    fdb = firebase.database();
+    return true;
+  } catch(e) {
+    console.error('Firebase init:', e.message);
+    return false;
+  }
+}
+
+const DB = {
+  async getAll(path) {
+    const s = await fdb.ref(path).get();
+    if (!s.exists()) return [];
+    return Object.values(s.val() || {});
+  },
+  async get(path) {
+    const s = await fdb.ref(path).get();
+    return s.exists() ? s.val() : null;
+  },
+  async set(path, data) { await fdb.ref(path).set(data); },
+  async update(path, data) { await fdb.ref(path).update(data); },
+  async push(path, data) {
+    const ref = fdb.ref(path).push();
+    await ref.set({ ...data, id: ref.key });
+    return ref.key;
+  },
+  async remove(path) { await fdb.ref(path).remove(); },
+  listen(path, cb) {
+    fdb.ref(path).on('value', snap => {
+      cb(snap.exists() ? snap.val() : null);
+    });
+  },
+};
+
+/* ══ AUTH ══ */
+function doLogin() {
+  const pass = document.getElementById('lpass').value;
+  const correct = localStorage.getItem('c2b_admin_pass') || ADMIN_PASSWORD;
+  if (pass === correct) {
+    localStorage.setItem('c2b_adm', '1');
+    bootAdmin();
+  } else {
+    document.getElementById('lerr').classList.remove('hidden');
+  }
+}
+function doLogout() { localStorage.removeItem('c2b_adm'); location.reload(); }
+
+async function bootAdmin() {
   document.getElementById('loginWrap').classList.add('hidden');
   document.getElementById('admApp').classList.remove('hidden');
-  await DB.init();
-  document.getElementById('dashDate').textContent = new Date().toLocaleDateString('bn-BD',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  refresh();
-  buildDrbBar();
+  document.getElementById('dashDate').textContent = new Date().toLocaleDateString('bn-BD', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  await refresh();
+  buildDrb();
   loadSettings();
-  listenBadges();
+  startLiveBadges();
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
-  Toast.init();
-  if(localStorage.getItem('c2b_adm')==='1') bootAdmin();
-  document.getElementById('lpass').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
-});
-
-/* ══════════════ LIVE BADGES ══════════════ */
-function listenBadges(){
-  DB.onUsersChange(users=>{
-    const pend=users.filter(u=>u.status==='pending').length;
-    document.getElementById('dg-pend').textContent=pend;
+/* ══ LIVE BADGES ══ */
+function startLiveBadges() {
+  DB.listen('users', val => {
+    const users = val ? Object.values(val) : [];
+    document.getElementById('dg-pend').textContent = users.filter(u => u.status === 'pending').length;
   });
-  DB.onOrdersChange(orders=>{
-    const p=orders.filter(o=>o.status==='pending').length;
-    document.getElementById('dg-ord').textContent=p;
+  DB.listen('orders', val => {
+    const orders = val ? Object.values(val) : [];
+    document.getElementById('dg-ord').textContent = orders.filter(o => o.status === 'pending').length;
   });
-  DB.ref('help').on('value',snap=>{
-    if(!snap.exists()){document.getElementById('dg-help').textContent=0;return;}
-    const n=Object.values(snap.val()).filter(h=>h.status==='new').length;
-    document.getElementById('dg-help').textContent=n;
+  DB.listen('help', val => {
+    const help = val ? Object.values(val) : [];
+    document.getElementById('dg-help').textContent = help.filter(h => h.status === 'new').length;
   });
 }
 
-/* ══════════════ PAGE NAV ══════════════ */
-function showPg(pg,btn){
-  document.querySelectorAll('[id^="pg-"]').forEach(p=>p.classList.add('hidden'));
-  document.getElementById('pg-'+pg)?.classList.remove('hidden');
-  document.querySelectorAll('.sbl').forEach(b=>b.classList.remove('on'));
-  if(btn) btn.classList.add('on');
-  if(pg==='users') renderUsers();
-  if(pg==='orders') renderOrders();
-  if(pg==='help') renderHelp();
-  if(pg==='notif') renderNotifs();
-  if(pg==='tasks') renderTaskEditor();
-  if(pg==='market') renderProdTable();
+/* ══ PAGE NAV ══ */
+function showPg(pg, btn) {
+  document.querySelectorAll('[id^="pg-"]').forEach(p => p.classList.add('hidden'));
+  document.getElementById('pg-' + pg)?.classList.remove('hidden');
+  document.querySelectorAll('.sbl').forEach(b => b.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+  if (pg === 'users') renderUsers();
+  if (pg === 'orders') renderOrders();
+  if (pg === 'help') renderHelp();
+  if (pg === 'notif') renderNotifs();
+  if (pg === 'tasks') renderTaskEditor();
+  if (pg === 'market') renderProds();
 }
 
-/* ══════════════ DASHBOARD ══════════════ */
-async function refresh(){
-  const [users,orders,prods] = await Promise.all([DB.getAllUsers(),DB.getOrders(),DB.getProducts()]);
-  const pend=users.filter(u=>u.status==='pending').length;
-  const appr=users.filter(u=>u.status==='approved').length;
-  const pOrd=orders.filter(o=>o.status==='pending').length;
-  const rev=orders.filter(o=>o.status==='completed').reduce((s,o)=>s+Number(o.price||0),0);
-  document.getElementById('statGrid').innerHTML=`
-    <div class="scard"><div class="snum">${users.length}</div><div class="slbl">মোট ইউজার</div><div style="font-size:.68rem;color:var(--gold);margin-top:3px;">${pend}টি পেন্ডিং</div></div>
-    <div class="scard"><div class="snum">${appr}</div><div class="slbl">অনুমোদিত</div></div>
-    <div class="scard"><div class="snum">${orders.length}</div><div class="slbl">মোট অর্ডার</div><div style="font-size:.68rem;color:var(--gold);margin-top:3px;">${pOrd}টি পেন্ডিং</div></div>
-    <div class="scard"><div class="snum">${prods.length}</div><div class="slbl">প্রোডাক্ট</div></div>
-    <div class="scard"><div class="snum" style="color:var(--gold);font-size:1.4rem;">৳${rev.toLocaleString('bn-BD')}</div><div class="slbl">সম্পন্ন সেল</div></div>`;
-  renderRecentUsers(users.slice(0,4));
+/* ══ DASHBOARD ══ */
+async function refresh() {
+  try {
+    const [users, orders, prods] = await Promise.all([
+      DB.getAll('users'),
+      DB.getAll('orders'),
+      DB.getAll('products'),
+    ]);
+    const pend = users.filter(u => u.status === 'pending').length;
+    const appr = users.filter(u => u.status === 'approved').length;
+    const pOrd = orders.filter(o => o.status === 'pending').length;
+    const rev  = orders.filter(o => o.status === 'completed').reduce((s,o) => s + Number(o.price||0), 0);
+
+    document.getElementById('statGrid').innerHTML = `
+      <div class="scard"><div class="snum">${users.length}</div><div class="slbl">মোট ইউজার</div><div class="ssub">${pend}টি পেন্ডিং</div></div>
+      <div class="scard"><div class="snum">${appr}</div><div class="slbl">অনুমোদিত</div></div>
+      <div class="scard"><div class="snum">${orders.length}</div><div class="slbl">মোট অর্ডার</div><div class="ssub">${pOrd}টি পেন্ডিং</div></div>
+      <div class="scard"><div class="snum" style="color:var(--gold);font-size:1.4rem;">৳${rev.toLocaleString('bn-BD')}</div><div class="slbl">সম্পন্ন সেল</div></div>`;
+
+    // Recent users in dashboard
+    const recent = users.sort((a,b)=>new Date(b.submittedAt||0)-new Date(a.submittedAt||0)).slice(0,5);
+    document.getElementById('dashUsers').innerHTML = recent.length
+      ? recent.map(u => miniUserRow(u)).join('')
+      : `<div class="empty">কোনো ইউজার নেই</div>`;
+  } catch(e) { T.err('লোড সমস্যা: ' + e.message); }
 }
 
-function renderRecentUsers(users){
-  document.getElementById('recentUsers').innerHTML=users.length
-    ?'<div style="padding:10px 14px;">'+users.map(u=>miniUserRow(u)).join('')+'</div>'
-    :`<div style="padding:20px;text-align:center;color:var(--text2);">কোনো ইউজার নেই</div>`;
-}
-function miniUserRow(u){
-  const init=(u.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  return `<div style="display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(--border);">
-    ${u.profilePhoto?`<img src="${u.profilePhoto}" style="width:34px;height:34px;border-radius:50%;object-fit:cover;border:1px solid var(--border);">`
-    :`<div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.72rem;">${init}</div>`}
-    <div style="flex:1;"><div style="font-weight:600;color:#fff;font-size:.82rem;">${sanitize(u.name)}</div>
-    <div style="font-size:.71rem;color:var(--text2);">${sanitize(u.whatsapp||'')} · ${sanitize(u.niche||'—')}</div></div>
+function miniUserRow(u) {
+  const ini = (u.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  return `<div style="display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="viewUser('${esc(u.whatsapp||u.id||'')}')">
+    ${u.profilePhoto ? `<img src="${u.profilePhoto}" style="width:34px;height:34px;border-radius:50%;object-fit:cover;flex-shrink:0;">` : `<div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.72rem;flex-shrink:0;">${ini}</div>`}
+    <div style="flex:1;min-width:0;">
+      <div style="font-weight:600;color:#fff;font-size:.82rem;">${esc(u.name||'—')}</div>
+      <div style="font-size:.72rem;color:var(--text2);">${esc(u.whatsapp||'')} · ${esc(u.niche||'—')}</div>
+    </div>
     <span class="pill ${{pending:'p-pend',approved:'p-appr',rejected:'p-rej'}[u.status]||'p-pend'}">${{pending:'পেন্ডিং',approved:'অনুমোদিত',rejected:'প্রত্যাখ্যাত'}[u.status]||u.status}</span>
   </div>`;
 }
 
-/* ══════════════ USERS ══════════════ */
-async function renderUsers(){
-  const fil=document.getElementById('ufil')?.value||'all';
-  const users=(await DB.getAllUsers()).filter(u=>fil==='all'||u.status===fil);
-  const el=document.getElementById('userList');
-  if(!users.length){el.innerHTML=`<div class="alert a-i">কোনো ইউজার নেই</div>`;return;}
-  el.innerHTML=users.map(u=>{
-    const init=(u.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-    return `<div class="upc">
-      ${u.profilePhoto
-        ?`<img src="${u.profilePhoto}" class="upc-photo">`
-        :`<div class="upc-photo upc-init">${init}</div>`}
-      <div class="upc-body">
-        <div class="upc-name">${sanitize(u.name)} <span class="pill ${{pending:'p-pend',approved:'p-appr',rejected:'p-rej'}[u.status]||'p-pend'}" style="margin-left:6px;">${{pending:'পেন্ডিং',approved:'✅ অনুমোদিত',rejected:'❌ প্রত্যাখ্যাত'}[u.status]||u.status}</span></div>
-        <div class="upc-meta">
-          📱 <a href="https://wa.me/${(u.whatsapp||'').replace(/\D/g,'')}" target="_blank" style="color:var(--accent3);">${sanitize(u.whatsapp)}</a> &nbsp;
-          📍 ${sanitize(u.address||'—')} &nbsp; 🎯 ${sanitize(u.niche||'—')} &nbsp; 📅 ${fmtDate(u.submittedAt)}
-          ${u.facebook?`<br>🔗 <a href="${u.facebook}" target="_blank" style="font-size:.75rem;">Facebook</a>`:''}
-          ${u.tiktok?` &nbsp; 🎵 ${sanitize(u.tiktok)}`:''}
-          ${u.description?`<br><span style="font-style:italic;color:var(--text2);">"${sanitize(u.description.slice(0,100))}${u.description.length>100?'...':''}"</span>`:''}
-        </div>
-        <div class="upc-actions">
-          <button class="btn btn-sm btn-s" onclick="viewUser('${u.whatsapp?.replace(/[^0-9]/g,'')}')">👁️ বিস্তারিত</button>
-          ${u.status==='pending'?`<button class="btn btn-sm btn-g" onclick="approveUser('${u.whatsapp}')">✅ অনুমোদন</button><button class="btn btn-sm btn-d" onclick="openReject('${u.whatsapp}')">❌ প্রত্যাখ্যান</button>`:''}
-          <a href="https://wa.me/${(u.whatsapp||'').replace(/\D/g,'')}" target="_blank" class="btn btn-sm btn-p">💬 WhatsApp</a>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
+/* ══ USERS ══ */
+async function renderUsers() {
+  const el = document.getElementById('userList');
+  el.innerHTML = `<div class="skel" style="height:80px;border-radius:var(--r);margin-bottom:10px;"></div>`;
+  try {
+    const fil = document.getElementById('uFilter')?.value || 'all';
+    let users = await DB.getAll('users');
+    users.sort((a,b) => new Date(b.submittedAt||0) - new Date(a.submittedAt||0));
+    if (fil !== 'all') users = users.filter(u => u.status === fil);
+    if (!users.length) { el.innerHTML = `<div class="card"><div class="empty">কোনো ইউজার নেই</div></div>`; return; }
+    el.innerHTML = users.map(u => renderUserCard(u)).join('');
+  } catch(e) {
+    el.innerHTML = `<div class="alert a-e">⚠️ ${esc(e.message)}</div>`;
+  }
 }
 
-async function viewUser(phone){
-  const users=await DB.getAllUsers();
-  const u=users.find(x=>DB._key(x.whatsapp)===phone||x.whatsapp?.replace(/\D/g,'')===phone);
-  if(!u) return;
-  const init=(u.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  const [progress,orders]=await Promise.all([DB.getProgress(u.whatsapp),DB.getOrdersByPhone(u.whatsapp)]);
-  const doneDays=Object.values(progress||{}).filter(Boolean).length;
-  document.getElementById('userDetailContent').innerHTML=`
-    <div class="card mb2">
-      <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;">
-        ${u.profilePhoto?`<img src="${u.profilePhoto}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--border2);">`
-        :`<div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-family:var(--fh);font-size:1.4rem;">${init}</div>`}
-        <div style="flex:1;">
-          <h2 style="margin-bottom:5px;">${sanitize(u.name)}</h2>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
-            <span class="pill ${{pending:'p-pend',approved:'p-appr',rejected:'p-rej'}[u.status]||'p-pend'}">${{pending:'পেন্ডিং',approved:'✅ অনুমোদিত',rejected:'❌ প্রত্যাখ্যাত'}[u.status]||u.status}</span>
-            <span class="tag tgo">📅 ৯০ দিন: ${doneDays}/৯০</span>
-            <span class="tag tp">📦 অর্ডার: ${orders.length}</span>
-          </div>
-          <div class="grid2" style="font-size:.82rem;">
-            <div><strong style="color:var(--text2);">WhatsApp:</strong> <a href="https://wa.me/${(u.whatsapp||'').replace(/\D/g,'')}" target="_blank" style="color:var(--accent3);">${sanitize(u.whatsapp)}</a></div>
-            <div><strong style="color:var(--text2);">ঠিকানা:</strong> ${sanitize(u.address||'—')}</div>
-            <div><strong style="color:var(--text2);">নিশ:</strong> ${sanitize(u.niche||'—')}</div>
-            <div><strong style="color:var(--text2);">রেজিস্ট্রেশন:</strong> ${fmtDate(u.submittedAt)}</div>
-            ${u.facebook?`<div style="grid-column:1/-1;"><strong style="color:var(--text2);">Facebook:</strong> <a href="${u.facebook}" target="_blank">${sanitize(u.facebook.slice(0,50))}</a></div>`:''}
-            ${u.tiktok?`<div><strong style="color:var(--text2);">TikTok:</strong> ${sanitize(u.tiktok)}</div>`:''}
-          </div>
-          ${u.description?`<div style="margin-top:10px;background:var(--bg2);border-radius:7px;padding:10px;font-size:.83rem;color:var(--text2);font-style:italic;">"${sanitize(u.description)}"</div>`:''}
-        </div>
+function renderUserCard(u) {
+  const ini = (u.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const wa = (u.whatsapp||'').replace(/\D/g,'');
+  const statusLbl = {pending:'⏳ পেন্ডিং', approved:'✅ অনুমোদিত', rejected:'❌ প্রত্যাখ্যাত'}[u.status] || u.status;
+  const statusCls = {pending:'p-pend', approved:'p-appr', rejected:'p-rej'}[u.status] || 'p-pend';
+  const phone = u.whatsapp || u.id || '';
+  const limit = u.dailyLimit ? `${u.dailyLimit}টি/দিন` : 'ডিফল্ট';
+  const expiry = u.limitExpiry ? `মেয়াদ: ${new Date(u.limitExpiry).toLocaleDateString('bn-BD')}` : '';
+
+  return `<div class="ucard">
+    ${u.profilePhoto
+      ? `<img src="${u.profilePhoto}" class="uav">`
+      : `<div class="uav uav-ini" style="width:52px;height:52px;">${ini}</div>`}
+    <div class="uinfo">
+      <div class="uname">
+        ${esc(u.name||'—')}
+        <span class="pill ${statusCls}">${statusLbl}</span>
+        ${u.dailyLimit?`<span class="tag tgo" style="font-size:.62rem;">⚡ ${limit}${expiry?' · '+expiry:''}</span>`:''}
       </div>
-      <div class="upc-actions mt2">
-        ${u.status==='pending'?`<button class="btn btn-g" onclick="approveUser('${u.whatsapp}');showPg('users',document.querySelector('[data-page=users]'))">✅ অনুমোদন</button><button class="btn btn-d" onclick="openReject('${u.whatsapp}')">❌ প্রত্যাখ্যান</button>`:''}
-        <a href="https://wa.me/${(u.whatsapp||'').replace(/\D/g,'')}" target="_blank" class="btn btn-p">💬 WhatsApp</a>
+      <div class="umeta">
+        📱 <a href="https://wa.me/${wa}" target="_blank" style="color:var(--accent3);">${esc(u.whatsapp||'—')}</a>
+        &nbsp;·&nbsp; 📍 ${esc(u.address||'—')}
+        &nbsp;·&nbsp; 🎯 ${esc(u.niche||'—')}
+        &nbsp;·&nbsp; 📅 ${fmtD(u.submittedAt)}
+        ${u.facebook?`<br>🔗 <a href="${esc(u.facebook)}" target="_blank" style="font-size:.73rem;">Facebook</a>`:''} 
+        ${u.tiktok?`&nbsp;·&nbsp; 🎵 ${esc(u.tiktok)}`:''}
+        ${u.description?`<br><span style="font-style:italic;">"${esc(u.description.slice(0,120))}${u.description.length>120?'...':''}"</span>`:''}
+        ${u.rejectReason?`<br><span style="color:var(--accent2);">প্রত্যাখ্যানের কারণ: ${esc(u.rejectReason)}</span>`:''}
+      </div>
+      <div class="uactions">
+        <button class="btn btn-sm btn-s" onclick="viewUser('${esc(phone)}')">👁️ বিস্তারিত</button>
+        ${u.status === 'pending' ? `
+          <button class="btn btn-sm btn-g" onclick="approveUser('${esc(phone)}')">✅ অনুমোদন</button>
+          <button class="btn btn-sm btn-d" onclick="openReject('${esc(phone)}')">❌ প্রত্যাখ্যান</button>` : ''}
+        ${u.status === 'approved' ? `
+          <button class="btn btn-sm btn-d" onclick="openReject('${esc(phone)}')">❌ প্রত্যাখ্যান</button>` : ''}
+        ${u.status === 'rejected' ? `
+          <button class="btn btn-sm btn-g" onclick="approveUser('${esc(phone)}')">✅ আবার অনুমোদন</button>
+          <button class="btn btn-sm btn-s" onclick="resetUser('${esc(phone)}')">🔄 পেন্ডিংয়ে ফেরান</button>
+          <button class="btn btn-sm btn-d" onclick="deleteUser('${esc(phone)}')">🗑️ মুছুন</button>` : ''}
+        <button class="btn btn-sm btn-o" onclick="openLimit('${esc(phone)}','${esc(u.name||'')}')">⚡ লিমিট</button>
+        <a href="https://wa.me/${wa}" target="_blank" class="btn btn-sm btn-p">💬 WhatsApp</a>
       </div>
     </div>
-    ${orders.length?`<div class="card">
-      <h3 style="margin-bottom:12px;">📦 অর্ডার ইতিহাস</h3>
-      ${orders.map(o=>`<div class="ri mb1 fade">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:5px;">
-          <div style="font-weight:600;color:#fff;">${sanitize(o.productName)}</div>
-          <div style="display:flex;gap:6px;"><span class="tag tgo">৳${Number(o.price||0).toLocaleString('bn-BD')}</span>
-          <span class="pill ${{pending:'p-pend',confirmed:'p-new',completed:'p-appr',cancelled:'p-rej'}[o.status]||'p-pend'}">${{pending:'পেন্ডিং',confirmed:'কনফার্ম',completed:'সম্পন্ন',cancelled:'বাতিল'}[o.status]||o.status}</span></div>
+  </div>`;
+}
+
+/* ══ USER ACTIONS ══ */
+async function approveUser(phone) {
+  try {
+    await DB.update('users/' + pkey(phone), { status: 'approved', approvedAt: new Date().toISOString() });
+    T.ok('✅ অনুমোদন করা হয়েছে!');
+    refresh(); renderUsers();
+  } catch(e) { T.err('সমস্যা: ' + e.message); }
+}
+
+function openReject(phone) {
+  document.getElementById('rejPhone').value = phone;
+  document.getElementById('rejReason').value = '';
+  Modal.show('rejMo');
+}
+
+async function confirmReject() {
+  const phone = document.getElementById('rejPhone').value;
+  const reason = document.getElementById('rejReason').value.trim() || 'আপনার আবেদন গ্রহণ করা হয়নি।';
+  try {
+    await DB.update('users/' + pkey(phone), { status: 'rejected', rejectReason: reason, rejectedAt: new Date().toISOString() });
+    Modal.hide('rejMo');
+    T.ok('প্রত্যাখ্যান করা হয়েছে');
+    refresh(); renderUsers();
+  } catch(e) { T.err('সমস্যা: ' + e.message); }
+}
+
+async function resetUser(phone) {
+  if (!confirm('এই ইউজারকে পেন্ডিং অবস্থায় ফেরাবেন?')) return;
+  try {
+    await DB.update('users/' + pkey(phone), { status: 'pending', rejectReason: null, rejectedAt: null });
+    T.ok('পেন্ডিংয়ে ফেরানো হয়েছে');
+    refresh(); renderUsers();
+  } catch(e) { T.err('সমস্যা: ' + e.message); }
+}
+
+async function deleteUser(phone) {
+  if (!confirm('এই ইউজারকে সম্পূর্ণ মুছবেন? এটা ফেরানো যাবে না!')) return;
+  try {
+    await DB.remove('users/' + pkey(phone));
+    T.ok('ইউজার মুছা হয়েছে');
+    refresh(); renderUsers();
+  } catch(e) { T.err('সমস্যা: ' + e.message); }
+}
+
+function openLimit(phone, name) {
+  document.getElementById('limitPhone').value = phone;
+  document.getElementById('limitUserInfo').textContent = `ইউজার: ${name} (${phone})`;
+  document.getElementById('limitExpiry').value = '';
+  Modal.show('limitMo');
+}
+
+async function saveLimit() {
+  const phone = document.getElementById('limitPhone').value;
+  const limit = document.getElementById('limitVal').value;
+  const expiry = document.getElementById('limitExpiry').value;
+  try {
+    const upd = { dailyLimit: Number(limit) };
+    if (expiry) upd.limitExpiry = expiry;
+    await DB.update('users/' + pkey(phone), upd);
+    Modal.hide('limitMo');
+    T.ok('লিমিট সেট হয়েছে ✅');
+    renderUsers();
+  } catch(e) { T.err('সমস্যা: ' + e.message); }
+}
+
+async function exportUsers() {
+  const users = await DB.getAll('users');
+  dlJSON(users, 'users_' + Date.now() + '.json');
+}
+
+/* ══ USER DETAIL ══ */
+async function viewUser(phone) {
+  document.getElementById('pg-users').classList.add('hidden');
+  document.getElementById('pg-udetail').classList.remove('hidden');
+  const el = document.getElementById('uDetailContent');
+  el.innerHTML = `<div class="skel" style="height:200px;border-radius:var(--r);"></div>`;
+  try {
+    const u = await DB.get('users/' + pkey(phone));
+    if (!u) { el.innerHTML = `<div class="alert a-e">ইউজার পাওয়া যায়নি</div>`; return; }
+    const ini = (u.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    const wa = (u.whatsapp||'').replace(/\D/g,'');
+    const orders = (await DB.getAll('orders')).filter(o => pkey(o.userPhone) === pkey(phone));
+    const prog = await DB.get('progress/' + pkey(phone));
+    const done = prog ? Object.values(prog).filter(Boolean).length : 0;
+
+    el.innerHTML = `
+      <div class="card mb2">
+        <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;">
+          ${u.profilePhoto ? `<img src="${u.profilePhoto}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--border2);">` : `<div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-family:var(--fh);font-size:1.4rem;">${ini}</div>`}
+          <div style="flex:1;">
+            <h2 style="font-size:1.1rem;margin-bottom:6px;">${esc(u.name||'')}</h2>
+            <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px;">
+              <span class="pill ${{pending:'p-pend',approved:'p-appr',rejected:'p-rej'}[u.status]||'p-pend'}">${{pending:'⏳ পেন্ডিং',approved:'✅ অনুমোদিত',rejected:'❌ প্রত্যাখ্যাত'}[u.status]||u.status}</span>
+              <span class="tag tgo">📅 ৯০ দিন: ${done}/৯০</span>
+              <span class="tag tp">📦 অর্ডার: ${orders.length}</span>
+              ${u.dailyLimit ? `<span class="tag tgo">⚡ লিমিট: ${u.dailyLimit}/দিন</span>` : ''}
+            </div>
+            <div class="grid2" style="font-size:.82rem;gap:8px;">
+              <div><strong style="color:var(--text2);">WhatsApp:</strong> <a href="https://wa.me/${wa}" target="_blank" style="color:var(--accent3);">${esc(u.whatsapp||'—')}</a></div>
+              <div><strong style="color:var(--text2);">ঠিকানা:</strong> ${esc(u.address||'—')}</div>
+              <div><strong style="color:var(--text2);">নিশ:</strong> ${esc(u.niche||'—')}</div>
+              <div><strong style="color:var(--text2);">রেজিস্ট্রেশন:</strong> ${fmtD(u.submittedAt)}</div>
+              ${u.facebook?`<div style="grid-column:1/-1;"><strong style="color:var(--text2);">Facebook:</strong> <a href="${esc(u.facebook)}" target="_blank" style="font-size:.8rem;">${esc(u.facebook.slice(0,60))}</a></div>`:''}
+              ${u.tiktok?`<div><strong style="color:var(--text2);">TikTok:</strong> ${esc(u.tiktok)}</div>`:''}
+            </div>
+            ${u.description ? `<div style="margin-top:10px;background:var(--bg2);border-radius:7px;padding:10px;font-size:.82rem;color:var(--text2);font-style:italic;">"${esc(u.description)}"</div>` : ''}
+            ${u.rejectReason ? `<div style="margin-top:8px;" class="alert a-e" style="font-size:.8rem;">প্রত্যাখ্যানের কারণ: ${esc(u.rejectReason)}</div>` : ''}
+          </div>
         </div>
-        <div style="font-size:.75rem;color:var(--text2);">${fmtDate(o.date)}</div>
-      </div>`).join('')}
-    </div>`:''}`;
-  showPg('userdetail',null);
-}
-
-async function approveUser(wa){
-  await DB.updateUser(wa,{status:'approved'});
-  refresh(); renderUsers();
-  Toast.success('✅ অনুমোদন করা হয়েছে!');
-}
-function openReject(wa){
-  document.getElementById('rejPhone').value=wa;
-  document.getElementById('rejReason').value='';
-  Modal.show('rejModal');
-}
-async function confirmReject(){
-  const wa=document.getElementById('rejPhone').value;
-  const reason=document.getElementById('rejReason').value.trim()||'আপনার আবেদন গ্রহণ করা হয়নি।';
-  await DB.updateUser(wa,{status:'rejected',rejectReason:reason});
-  Modal.hide('rejModal'); refresh(); renderUsers();
-  Toast.success('প্রত্যাখ্যান করা হয়েছে');
-}
-async function exportUsers(){
-  const u=await DB.getAllUsers(); dlJSON(u,'users.json');
-}
-
-/* ══════════════ ORDERS ══════════════ */
-async function renderOrders(){
-  const orders=await DB.getOrders();
-  const el=document.getElementById('orderTable');
-  if(!orders.length){el.innerHTML=`<div style="padding:20px;text-align:center;color:var(--text2);">কোনো অর্ডার নেই</div>`;return;}
-  el.innerHTML=`<table><thead><tr><th>তারিখ</th><th>ইউজার</th><th>প্রোডাক্ট</th><th>দাম</th><th>পেমেন্ট</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead><tbody>
-  ${orders.map(o=>`<tr>
-    <td style="font-size:.74rem;white-space:nowrap;">${fmtDate(o.date)}</td>
-    <td><strong>${sanitize(o.userName||'—')}</strong><br><a href="https://wa.me/${(o.userPhone||'').replace(/\D/g,'')}" target="_blank" style="font-size:.72rem;color:var(--accent3);">${sanitize(o.userPhone||'')}</a></td>
-    <td>${sanitize(o.productName)}</td>
-    <td style="color:var(--gold);font-weight:600;">৳${Number(o.price||0).toLocaleString('bn-BD')}</td>
-    <td>${o.payMethod||'—'}</td>
-    <td><span class="pill ${{pending:'p-pend',confirmed:'p-new',completed:'p-appr',cancelled:'p-rej'}[o.status]||'p-pend'}">${{pending:'পেন্ডিং',confirmed:'কনফার্ম',completed:'সম্পন্ন',cancelled:'বাতিল'}[o.status]||o.status}</span></td>
-    <td>
-      ${o.status==='pending'?`<button class="ab grn" onclick="updOrd('${o.id}','confirmed')">✅</button>`:''}
-      ${o.status==='confirmed'?`<button class="ab grn" onclick="updOrd('${o.id}','completed')">🏁</button>`:''}
-      ${!['cancelled','completed'].includes(o.status)?`<button class="ab red" onclick="updOrd('${o.id}','cancelled')">✕</button>`:''}
-      <a href="https://wa.me/${(o.userPhone||'').replace(/\D/g,'')}" target="_blank" class="ab">📱</a>
-    </td>
-  </tr>`).join('')}
-  </tbody></table>`;
-}
-async function updOrd(id,status){ await DB.updateOrder(id,{status}); renderOrders(); refresh(); Toast.success('আপডেট হয়েছে ✅'); }
-async function exportOrders(){ const o=await DB.getOrders(); dlJSON(o,'orders.json'); }
-
-/* ══════════════ HELP ══════════════ */
-async function renderHelp(){
-  const snap=await DB.ref('help').get();
-  const msgs=snap.exists()?Object.values(snap.val()).sort((a,b)=>new Date(b.date)-new Date(a.date)):[];
-  const el=document.getElementById('helpTable');
-  if(!msgs.length){el.innerHTML=`<div style="padding:20px;text-align:center;color:var(--text2);">কোনো বার্তা নেই</div>`;return;}
-  el.innerHTML=`<table><thead><tr><th>তারিখ</th><th>ইউজার</th><th>বিষয়</th><th>বার্তা</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead><tbody>
-  ${msgs.map(m=>`<tr>
-    <td style="font-size:.73rem;white-space:nowrap;">${fmtDate(m.date)}</td>
-    <td>${sanitize(m.userName||'—')}<br><span style="font-size:.71rem;color:var(--text2);">${sanitize(m.userPhone||'')}</span></td>
-    <td>${sanitize(m.subject||'—')}</td>
-    <td style="max-width:200px;font-size:.79rem;">${sanitize((m.message||'').slice(0,80))}${(m.message||'').length>80?'...':''}</td>
-    <td><span class="pill ${m.status==='new'?'p-new':'p-appr'}">${m.status==='new'?'নতুন':'দেখা হয়েছে'}</span></td>
-    <td>
-      ${m.status==='new'?`<button class="ab grn" onclick="markHelp('${m.id}','seen')">✅</button>`:''}
-      <a href="https://wa.me/${(m.userPhone||'').replace(/\D/g,'')}" target="_blank" class="ab">📱</a>
-    </td>
-  </tr>`).join('')}
-  </tbody></table>`;
-}
-async function markHelp(id,status){ await DB.updateHelp(id,{status}); renderHelp(); }
-
-/* ══════════════ NOTIFICATIONS ══════════════ */
-function openNotifModal(){ document.getElementById('nm-title').value=''; document.getElementById('nm-msg').value=''; Modal.show('notifModal'); }
-async function sendNotif(){
-  const title=document.getElementById('nm-title').value.trim();
-  const msg=document.getElementById('nm-msg').value.trim();
-  if(!title||!msg){Toast.error('শিরোনাম ও বার্তা আবশ্যক');return;}
-  await DB.addNotification({title,message:msg,type:document.getElementById('nm-type').value});
-  Modal.hide('notifModal'); renderNotifs(); Toast.success('নোটিফিকেশন পাঠানো হয়েছে ✅');
-}
-async function renderNotifs(){
-  const snap=await DB.ref('notifications').get();
-  const notifs=snap.exists()?Object.values(snap.val()).filter(n=>n.active).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)):[];
-  const el=document.getElementById('notifList');
-  el.innerHTML=notifs.length?notifs.map(n=>`
-    <div class="notif-item">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <div style="font-weight:700;color:#fff;">${sanitize(n.title)}</div>
-        <button class="ab red" onclick="deleteNotif('${n.id}')">🗑️</button>
+        <div class="uactions mt2">
+          ${u.status === 'pending' ? `<button class="btn btn-g" onclick="approveUser('${esc(phone)}');showPg('users',document.querySelector('[data-page=users]'))">✅ অনুমোদন</button><button class="btn btn-d" onclick="openReject('${esc(phone)}')">❌ প্রত্যাখ্যান</button>` : ''}
+          ${u.status === 'approved' ? `<button class="btn btn-d" onclick="openReject('${esc(phone)}')">❌ প্রত্যাখ্যান</button>` : ''}
+          ${u.status === 'rejected' ? `<button class="btn btn-g" onclick="approveUser('${esc(phone)}');showPg('users',document.querySelector('[data-page=users]'))">✅ আবার অনুমোদন</button><button class="btn btn-s" onclick="resetUser('${esc(phone)}')">🔄 পেন্ডিং</button><button class="btn btn-d" onclick="deleteUser('${esc(phone)}')">🗑️ মুছুন</button>` : ''}
+          <button class="btn btn-o" onclick="openLimit('${esc(phone)}','${esc(u.name||'')}')">⚡ লিমিট সেট</button>
+          <a href="https://wa.me/${wa}" target="_blank" class="btn btn-p">💬 WhatsApp</a>
+        </div>
       </div>
-      <p style="font-size:.83rem;margin-bottom:5px;">${sanitize(n.message)}</p>
-      <div style="font-size:.71rem;color:var(--text2);">${fmtDate(n.createdAt)} · ${n.type||'info'}</div>
-    </div>`).join(''):`<div class="alert a-i">কোনো নোটিফিকেশন নেই। + বাটন দিয়ে যোগ করুন।</div>`;
+      ${orders.length ? `<div class="card">
+        <h3 style="font-size:.9rem;margin-bottom:12px;">📦 অর্ডার ইতিহাস (${orders.length}টি)</h3>
+        ${orders.map(o=>`<div class="ni mb1">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:5px;">
+            <div style="font-weight:600;color:#fff;">${esc(o.productName)}</div>
+            <div style="display:flex;gap:6px;"><span class="tag tgo">৳${Number(o.price||0).toLocaleString('bn-BD')}</span><span class="pill ${{pending:'p-pend',confirmed:'p-new',completed:'p-appr',cancelled:'p-rej'}[o.status]||'p-pend'}">${{pending:'পেন্ডিং',confirmed:'কনফার্ম',completed:'সম্পন্ন',cancelled:'বাতিল'}[o.status]||o.status}</span></div>
+          </div>
+          <div style="font-size:.75rem;color:var(--text2);margin-top:4px;">${fmtD(o.date)} | ${o.payMethod||'—'}</div>
+        </div>`).join('')}
+      </div>` : ''}`;
+  } catch(e) {
+    el.innerHTML = `<div class="alert a-e">⚠️ ${esc(e.message)}</div>`;
+  }
 }
-async function deleteNotif(id){ await DB.updateNotification(id,{active:false}); renderNotifs(); Toast.success('মুছা হয়েছে'); }
 
-/* ══════════════ TASKS ══════════════ */
-let editStart=1;
-const TASK_TYPES=['content','analysis','business','mindset','growth','engagement','monetization'];
-const TL={content:'কন্টেন্ট',analysis:'বিশ্লেষণ',business:'বিজনেস',mindset:'মাইন্ডসেট',growth:'গ্রোথ',engagement:'এনগেজমেন্ট',monetization:'মনিটাইজেশন'};
-
-function buildDrbBar(){
-  const bar=document.getElementById('drbBar'); if(!bar) return;
-  const rngs=[{l:'দিন ১-১৫',s:1},{l:'দিন ১৬-৩০',s:16},{l:'দিন ৩১-৪৫',s:31},{l:'দিন ৪৬-৬০',s:46},{l:'দিন ৬১-৭৫',s:61},{l:'দিন ৭৬-৯০',s:76}];
-  bar.innerHTML=rngs.map((r,i)=>`<div class="drb${i===0?' on':''}" onclick="jumpRange(${r.s},this)">${r.l}</div>`).join('');
+/* ══ ORDERS ══ */
+async function renderOrders() {
+  const el = document.getElementById('orderTable');
+  el.innerHTML = `<div style="padding:16px;"><div class="skel" style="height:14px;margin-bottom:8px;"></div><div class="skel" style="height:14px;width:80%;"></div></div>`;
+  try {
+    const orders = (await DB.getAll('orders')).sort((a,b) => new Date(b.date||0) - new Date(a.date||0));
+    if (!orders.length) { el.innerHTML = `<div class="empty">কোনো অর্ডার নেই</div>`; return; }
+    el.innerHTML = `<table><thead><tr><th>তারিখ</th><th>ইউজার</th><th>প্রোডাক্ট</th><th>দাম</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead><tbody>
+    ${orders.map(o=>`<tr>
+      <td style="font-size:.73rem;white-space:nowrap;">${fmtD(o.date)}</td>
+      <td><strong>${esc(o.userName||'—')}</strong><br><a href="https://wa.me/${(o.userPhone||'').replace(/\D/g,'')}" target="_blank" style="font-size:.71rem;color:var(--accent3);">${esc(o.userPhone||'')}</a></td>
+      <td>${esc(o.productName||'—')}</td>
+      <td style="color:var(--gold);font-weight:600;">৳${Number(o.price||0).toLocaleString('bn-BD')}</td>
+      <td><span class="pill ${{pending:'p-pend',confirmed:'p-new',completed:'p-appr',cancelled:'p-rej'}[o.status]||'p-pend'}">${{pending:'পেন্ডিং',confirmed:'কনফার্ম',completed:'সম্পন্ন',cancelled:'বাতিল'}[o.status]||o.status}</span></td>
+      <td>
+        ${o.status==='pending'?`<button class="ab g" onclick="updOrder('${o.id}','confirmed')">✅</button>`:''}
+        ${o.status==='confirmed'?`<button class="ab g" onclick="updOrder('${o.id}','completed')">🏁</button>`:''}
+        ${!['cancelled','completed'].includes(o.status)?`<button class="ab r" onclick="updOrder('${o.id}','cancelled')">✕</button>`:''}
+        <a href="https://wa.me/${(o.userPhone||'').replace(/\D/g,'')}" target="_blank" class="ab">📱</a>
+      </td>
+    </tr>`).join('')}
+    </tbody></table>`;
+  } catch(e) { el.innerHTML = `<div class="alert a-e">⚠️ ${esc(e.message)}</div>`; }
 }
-function jumpRange(s,btn){ document.querySelectorAll('.drb').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); editStart=s; renderTaskEditor(); }
+async function updOrder(id, status) {
+  await DB.update('orders/' + id, { status });
+  T.ok('আপডেট হয়েছে ✅');
+  renderOrders(); refresh();
+}
+async function exportOrders() { const o = await DB.getAll('orders'); dlJSON(o, 'orders.json'); }
 
-async function renderTaskEditor(){
-  const tasks=await DB.getTasks();
-  const el=document.getElementById('taskEditor'); if(!el) return;
-  const end=Math.min(editStart+14,90);
-  let h='';
-  for(let d=editStart;d<=end;d++){
-    const t=tasks.find(x=>x.day===d)||{day:d,title:'',description:'',type:'content',resources:''};
-    h+=`<div class="task-row">
-      <div class="task-num">দিন ${d}</div>
-      <div class="task-body">
-        <div style="display:flex;gap:7px;margin-bottom:5px;flex-wrap:wrap;">
-          <select class="ti ti-sm" id="tt-${d}">${TASK_TYPES.map(tp=>`<option value="${tp}"${t.type===tp?' selected':''}>${TL[tp]||tp}</option>`).join('')}</select>
-          <input class="ti" id="ti-${d}" value="${sanitize(t.title||'')}" placeholder="টাস্ক শিরোনাম" style="flex:1;">
+/* ══ HELP ══ */
+async function renderHelp() {
+  const el = document.getElementById('helpTable');
+  try {
+    const msgs = (await DB.getAll('help')).sort((a,b) => new Date(b.date||0) - new Date(a.date||0));
+    if (!msgs.length) { el.innerHTML = `<div class="empty">কোনো বার্তা নেই</div>`; return; }
+    el.innerHTML = `<table><thead><tr><th>তারিখ</th><th>ইউজার</th><th>বিষয়</th><th>বার্তা</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead><tbody>
+    ${msgs.map(m=>`<tr>
+      <td style="font-size:.72rem;white-space:nowrap;">${fmtD(m.date)}</td>
+      <td>${esc(m.userName||'—')}<br><span style="font-size:.71rem;color:var(--text2);">${esc(m.userPhone||'')}</span></td>
+      <td>${esc(m.subject||'—')}</td>
+      <td style="max-width:180px;font-size:.78rem;">${esc((m.message||'').slice(0,80))}${(m.message||'').length>80?'...':''}</td>
+      <td><span class="pill ${m.status==='new'?'p-new':'p-appr'}">${m.status==='new'?'নতুন':'দেখা হয়েছে'}</span></td>
+      <td>
+        ${m.status==='new'?`<button class="ab g" onclick="markHelp('${m.id}')">✅</button>`:''}
+        <a href="https://wa.me/${(m.userPhone||'').replace(/\D/g,'')}" target="_blank" class="ab">📱</a>
+      </td>
+    </tr>`).join('')}
+    </tbody></table>`;
+  } catch(e) { el.innerHTML = `<div class="alert a-e">⚠️ ${esc(e.message)}</div>`; }
+}
+async function markHelp(id) { await DB.update('help/' + id, { status: 'seen' }); renderHelp(); }
+
+/* ══ NOTIFICATIONS ══ */
+async function sendNotif() {
+  const title = document.getElementById('nm-t').value.trim();
+  const msg   = document.getElementById('nm-m').value.trim();
+  if (!title || !msg) { T.warn('শিরোনাম ও বার্তা আবশ্যক'); return; }
+  try {
+    await DB.push('notifications', { title, message: msg, type: document.getElementById('nm-ty').value, createdAt: new Date().toISOString(), active: true });
+    Modal.hide('notifMo');
+    document.getElementById('nm-t').value = '';
+    document.getElementById('nm-m').value = '';
+    T.ok('নোটিফিকেশন পাঠানো হয়েছে ✅');
+    renderNotifs();
+  } catch(e) { T.err('সমস্যা: ' + e.message); }
+}
+async function renderNotifs() {
+  const el = document.getElementById('notifList');
+  try {
+    const notifs = (await DB.getAll('notifications')).sort((a,b) => new Date(b.createdAt||0) - new Date(a.createdAt||0));
+    el.innerHTML = notifs.length ? notifs.map(n=>`
+      <div class="ni">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;">
+          <div style="font-weight:700;color:#fff;">${esc(n.title||'')}</div>
+          <button class="ab r" onclick="delNotif('${n.id}')">🗑️</button>
         </div>
-        <textarea class="ti" id="td-${d}" rows="2" placeholder="বিস্তারিত বর্ণনা — ইউজার কী করবে...">${sanitize(t.description||'')}</textarea>
-        <input class="ti" id="tr-${d}" value="${sanitize(t.resources||'')}" placeholder="রিসোর্স লিংক (ঐচ্ছিক)">
+        <p style="font-size:.82rem;margin-bottom:5px;">${esc(n.message||'')}</p>
+        <div style="font-size:.7rem;color:var(--text2);">${fmtD(n.createdAt)} · ${n.type||'info'} · ${n.active?'সক্রিয়':'বন্ধ'}</div>
+      </div>`).join('') : `<div class="alert a-i">কোনো নোটিফিকেশন নেই।</div>`;
+  } catch(e) { el.innerHTML = `<div class="alert a-e">⚠️ ${esc(e.message)}</div>`; }
+}
+async function delNotif(id) { await DB.update('notifications/' + id, { active: false }); renderNotifs(); T.ok('বন্ধ করা হয়েছে'); }
+
+/* ══ TASKS ══ */
+let eStart = 1;
+const TTYPES = ['content','analysis','business','mindset','growth','engagement','monetization'];
+const TLBL = {content:'কন্টেন্ট',analysis:'বিশ্লেষণ',business:'বিজনেস',mindset:'মাইন্ডসেট',growth:'গ্রোথ',engagement:'এনগেজমেন্ট',monetization:'মনিটাইজেশন'};
+
+function buildDrb() {
+  const bar = document.getElementById('drbBar');
+  if (!bar) return;
+  const rngs=[{l:'দিন ১-১৫',s:1},{l:'দিন ১৬-৩০',s:16},{l:'দিন ৩১-৪৫',s:31},{l:'দিন ৪৬-৬০',s:46},{l:'দিন ৬১-৭৫',s:61},{l:'দিন ৭৬-৯০',s:76}];
+  bar.innerHTML = rngs.map((r,i)=>`<button class="drb${i===0?' on':''}" onclick="jumpDrb(${r.s},this)">${r.l}</button>`).join('');
+}
+function jumpDrb(s,btn) { document.querySelectorAll('.drb').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); eStart=s; renderTaskEditor(); }
+
+async function renderTaskEditor() {
+  const el = document.getElementById('taskEditor');
+  if (!el) return;
+  const tasks = await DB.getAll('tasks');
+  const end = Math.min(eStart + 14, 90);
+  let h = '';
+  for (let d = eStart; d <= end; d++) {
+    const t = tasks.find(x => x.day === d) || { day:d,title:'',description:'',type:'content',resources:'' };
+    h += `<div class="task-row">
+      <div class="task-num">দিন ${d}</div>
+      <div style="flex:1;">
+        <div style="display:flex;gap:7px;margin-bottom:5px;flex-wrap:wrap;">
+          <select class="ti sm" id="tt-${d}">${TTYPES.map(tp=>`<option value="${tp}"${t.type===tp?' selected':''}>${TLBL[tp]||tp}</option>`).join('')}</select>
+          <input class="ti" id="ti-${d}" value="${esc(t.title||'')}" placeholder="টাস্ক শিরোনাম" style="flex:1;">
+        </div>
+        <textarea class="ti" id="td-${d}" rows="2" placeholder="বিস্তারিত বর্ণনা...">${esc(t.description||'')}</textarea>
+        <input class="ti" id="tr-${d}" value="${esc(t.resources||'')}" placeholder="রিসোর্স লিংক (ঐচ্ছিক)">
       </div>
     </div>`;
   }
-  el.innerHTML=h;
+  el.innerHTML = h;
 }
 
-async function saveTasks(){
-  const existing=await DB.getTasks();
-  const end=Math.min(editStart+14,90);
-  for(let d=editStart;d<=end;d++){
-    const title=document.getElementById('ti-'+d)?.value.trim();
-    const desc=document.getElementById('td-'+d)?.value.trim();
-    const type=document.getElementById('tt-'+d)?.value;
-    const res=document.getElementById('tr-'+d)?.value.trim();
-    const idx=existing.findIndex(t=>t.day===d);
-    const obj={day:d,title,description:desc,type,resources:res};
-    if(idx!==-1) existing[idx]=obj; else existing.push(obj);
+async function saveTasks() {
+  const existing = await DB.getAll('tasks');
+  const end = Math.min(eStart + 14, 90);
+  const updates = {};
+  for (let d = eStart; d <= end; d++) {
+    const obj = {
+      day: d,
+      title: document.getElementById('ti-'+d)?.value.trim() || '',
+      description: document.getElementById('td-'+d)?.value.trim() || '',
+      type: document.getElementById('tt-'+d)?.value || 'content',
+      resources: document.getElementById('tr-'+d)?.value.trim() || '',
+    };
+    updates['tasks/day' + d] = obj;
   }
-  await DB.saveBulkTasks(existing);
-  Toast.success(`দিন ${editStart}-${Math.min(editStart+14,90)} সেভ হয়েছে ✅`);
+  try {
+    await fdb.ref('/').update(updates);
+    T.ok(`দিন ${eStart}-${Math.min(eStart+14,90)} সেভ হয়েছে ✅`);
+  } catch(e) { T.err('সমস্যা: ' + e.message); }
 }
 
-/* ══════════════ MARKETPLACE ══════════════ */
-let editProdId=null;
-function openProdModal(){
-  editProdId=null; document.getElementById('pmTitle').textContent='+ প্রোডাক্ট যোগ করুন';
-  ['pm-name','pm-price','pm-del','pm-desc','pm-details','pm-link'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('pm-type').value='service';
+/* ══ MARKETPLACE ══ */
+let eProdId = null;
+function openProdMo() {
+  eProdId = null; document.getElementById('pmT').textContent = '+ প্রোডাক্ট যোগ';
+  ['pm-name','pm-price','pm-del','pm-desc','pm-details','pm-link'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('pm-type').value = 'service';
   document.getElementById('pm-err').classList.add('hidden');
-  Modal.show('prodModal');
+  Modal.show('prodMo');
 }
-async function renderProdTable(){
-  const prods=await DB.getProducts();
-  const el=document.getElementById('prodTable');
-  if(!prods.length){el.innerHTML=`<div style="padding:20px;text-align:center;color:var(--text2);">কোনো প্রোডাক্ট নেই। + বাটন দিয়ে যোগ করুন।</div>`;return;}
-  const typeLbl={service:'সার্ভিস',ebook:'ইবুক',course:'কোর্স',template:'টেমপ্লেট'};
-  el.innerHTML=`<table><thead><tr><th>ধরন</th><th>নাম</th><th>দাম</th><th>ডেলিভারি</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead><tbody>
-  ${prods.map(p=>`<tr>
-    <td><span class="pill ${{service:'p-new',ebook:'p-appr',course:'p-pend',template:'p-rej'}[p.type]||'p-pend'}">${typeLbl[p.type]||p.type}</span></td>
-    <td><strong>${sanitize(p.name)}</strong></td>
-    <td style="color:var(--gold);font-weight:600;">৳${Number(p.price||0).toLocaleString('bn-BD')}</td>
-    <td style="font-size:.78rem;">${sanitize(p.delivery||'—')}</td>
-    <td><span class="pill ${p.active?'p-appr':'p-rej'}">${p.active?'সক্রিয়':'অফ'}</span></td>
-    <td>
-      <button class="ab" onclick="editProd('${p.id}')">✏️</button>
-      <button class="ab" onclick="toggleProd('${p.id}',${p.active})">${p.active?'🔒':'🔓'}</button>
-      <button class="ab red" onclick="delProd('${p.id}')">🗑️</button>
-    </td>
-  </tr>`).join('')}
-  </tbody></table>`;
+async function renderProds() {
+  const el = document.getElementById('prodTable');
+  try {
+    const prods = (await DB.getAll('products')).sort((a,b) => new Date(b.createdAt||0) - new Date(a.createdAt||0));
+    const typeLbl = {service:'সার্ভিস',ebook:'ইবুক',course:'কোর্স',template:'টেমপ্লেট'};
+    el.innerHTML = prods.length ? `<table><thead><tr><th>ধরন</th><th>নাম</th><th>দাম</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead><tbody>
+    ${prods.map(p=>`<tr>
+      <td><span class="tag ${{service:'tp',ebook:'tgo',course:'tg',template:'tr'}[p.type]||'tp'}">${typeLbl[p.type]||p.type}</span></td>
+      <td><strong>${esc(p.name)}</strong><br><span style="font-size:.73rem;color:var(--text2);">${esc(p.description?.slice(0,60)||'')}</span></td>
+      <td style="color:var(--gold);font-weight:600;">৳${Number(p.price||0).toLocaleString('bn-BD')}</td>
+      <td><span class="pill ${p.active?'p-appr':'p-rej'}">${p.active?'সক্রিয়':'অফ'}</span></td>
+      <td>
+        <button class="ab" onclick="editProd('${p.id}')">✏️</button>
+        <button class="ab" onclick="toggleProd('${p.id}',${p.active})">${p.active?'🔒':'🔓'}</button>
+        <button class="ab r" onclick="delProd('${p.id}')">🗑️</button>
+      </td>
+    </tr>`).join('')}
+    </tbody></table>` : `<div class="empty">প্রোডাক্ট নেই। + বাটন দিয়ে যোগ করুন।</div>`;
+  } catch(e) { el.innerHTML = `<div class="alert a-e">⚠️ ${esc(e.message)}</div>`; }
 }
-async function editProd(id){
-  const prods=await DB.getProducts(); const p=prods.find(x=>x.id===id); if(!p) return;
-  editProdId=id; document.getElementById('pmTitle').textContent='✏️ প্রোডাক্ট সম্পাদনা';
-  document.getElementById('pm-type').value=p.type||'service';
-  document.getElementById('pm-name').value=p.name||'';
-  document.getElementById('pm-price').value=p.price||'';
-  document.getElementById('pm-del').value=p.delivery||'';
-  document.getElementById('pm-desc').value=p.description||'';
-  document.getElementById('pm-details').value=p.details||'';
-  document.getElementById('pm-link').value=p.link||'';
+async function editProd(id) {
+  const prods = await DB.getAll('products');
+  const p = prods.find(x=>x.id===id); if(!p) return;
+  eProdId = id; document.getElementById('pmT').textContent = '✏️ প্রোডাক্ট সম্পাদনা';
+  document.getElementById('pm-type').value = p.type||'service';
+  document.getElementById('pm-name').value = p.name||'';
+  document.getElementById('pm-price').value = p.price||'';
+  document.getElementById('pm-del').value = p.delivery||'';
+  document.getElementById('pm-desc').value = p.description||'';
+  document.getElementById('pm-details').value = p.details||'';
+  document.getElementById('pm-link').value = p.link||'';
+  Modal.show('prodMo');
+}
+async function saveProd() {
+  const name = document.getElementById('pm-name').value.trim();
+  const price = document.getElementById('pm-price').value;
+  const desc = document.getElementById('pm-desc').value.trim();
+  if (!name||!price||!desc) { document.getElementById('pm-err').textContent='⚠️ নাম, দাম ও বিবরণ আবশ্যক।'; document.getElementById('pm-err').classList.remove('hidden'); return; }
   document.getElementById('pm-err').classList.add('hidden');
-  Modal.show('prodModal');
+  const data = { type:document.getElementById('pm-type').value, name, price:+price, delivery:document.getElementById('pm-del').value, description:desc, details:document.getElementById('pm-details').value, link:document.getElementById('pm-link').value };
+  try {
+    if (eProdId) { await DB.update('products/' + eProdId, data); T.ok('আপডেট হয়েছে ✅'); }
+    else { const id='p'+Date.now(); await DB.set('products/'+id, {...data,id,createdAt:new Date().toISOString(),active:true}); T.ok('যোগ হয়েছে ✅'); }
+    Modal.hide('prodMo'); renderProds(); refresh();
+  } catch(e) { T.err('সমস্যা: '+e.message); }
 }
-async function saveProd(){
-  const name=document.getElementById('pm-name').value.trim();
-  const price=document.getElementById('pm-price').value;
-  const desc=document.getElementById('pm-desc').value.trim();
-  if(!name||!price||!desc){document.getElementById('pm-err').textContent='⚠️ নাম, দাম ও বিবরণ আবশ্যক।';document.getElementById('pm-err').classList.remove('hidden');return;}
-  const prod={type:document.getElementById('pm-type').value,name,price:+price,delivery:document.getElementById('pm-del').value,description:desc,details:document.getElementById('pm-details').value,link:document.getElementById('pm-link').value};
-  if(editProdId){await DB.updateProduct(editProdId,prod);Toast.success('প্রোডাক্ট আপডেট ✅');}
-  else{await DB.addProduct(prod);Toast.success('প্রোডাক্ট যোগ হয়েছে ✅');}
-  Modal.hide('prodModal'); renderProdTable(); refresh();
-}
-async function toggleProd(id,active){await DB.updateProduct(id,{active:!active});renderProdTable();Toast.success(active?'অফ করা হয়েছে':'চালু করা হয়েছে');}
-async function delProd(id){if(!confirm('মুছবেন?'))return;await DB.deleteProduct(id);renderProdTable();refresh();Toast.success('মুছা হয়েছে');}
+async function toggleProd(id,active) { await DB.update('products/'+id,{active:!active}); renderProds(); T.ok(active?'অফ করা হয়েছে':'চালু করা হয়েছে'); }
+async function delProd(id) { if(!confirm('মুছবেন?'))return; await DB.remove('products/'+id); renderProds(); refresh(); T.ok('মুছা হয়েছে'); }
 
-/* ══════════════ SETTINGS ══════════════ */
-function loadSettings(){
-  const s=JSON.parse(localStorage.getItem('c2b_settings')||'{}');
-  if(document.getElementById('s-wa')) document.getElementById('s-wa').value=s.wa||'';
-  if(document.getElementById('s-email')) document.getElementById('s-email').value=s.email||'';
+/* ══ SETTINGS ══ */
+function loadSettings() {
+  const s = JSON.parse(localStorage.getItem('c2b_settings')||'{}');
+  if(document.getElementById('s-wa')) document.getElementById('s-wa').value = s.wa||'';
+  if(document.getElementById('s-email')) document.getElementById('s-email').value = s.email||'';
 }
-function saveSettings(){
-  localStorage.setItem('c2b_settings',JSON.stringify({wa:document.getElementById('s-wa').value,email:document.getElementById('s-email').value}));
-  Toast.success('সেটিংস সেভ হয়েছে ✅');
+function saveSettings() {
+  localStorage.setItem('c2b_settings', JSON.stringify({ wa:document.getElementById('s-wa').value, email:document.getElementById('s-email').value }));
+  T.ok('সেটিংস সেভ হয়েছে ✅');
 }
-function changePass(){
-  const np=document.getElementById('newPass').value.trim();
-  if(!np||np.length<6){Toast.error('কমপক্ষে ৬ অক্ষর');return;}
-  localStorage.setItem('c2b_admin_pass',np);Toast.success('পাসওয়ার্ড পরিবর্তন হয়েছে ✅');
+function changePass() {
+  const np = document.getElementById('newPass').value.trim();
+  if(!np||np.length<6){T.err('কমপক্ষে ৬ অক্ষর');return;}
+  localStorage.setItem('c2b_admin_pass', np);
+  T.ok('পাসওয়ার্ড পরিবর্তন হয়েছে ✅');
 }
-async function exportAll(){ const d=await DB.ref('/').get(); dlJSON(d.val(),'c2b_full_backup.json'); }
+async function exportAll() {
+  const [users,orders,products,help,notifs,tasks] = await Promise.all([
+    DB.getAll('users'), DB.getAll('orders'), DB.getAll('products'),
+    DB.getAll('help'), DB.getAll('notifications'), DB.getAll('tasks'),
+  ]);
+  dlJSON({users,orders,products,help,notifs,tasks}, 'c2b_backup_'+Date.now()+'.json');
+  T.ok('ব্যাকআপ ডাউনলোড হচ্ছে');
+}
+
+/* ══ BOOT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  T._i();
+  document.querySelectorAll('.mo').forEach(o => o.addEventListener('click', e => { if(e.target===o) o.classList.add('hidden'); }));
+
+  const fbOK = fbInit();
+  if (!fbOK) {
+    alert('Firebase config সমস্যা! config.js চেক করুন।');
+    return;
+  }
+
+  document.getElementById('lpass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+  if (localStorage.getItem('c2b_adm') === '1') {
+    bootAdmin();
+  }
+});
 </script>
 </body>
 </html>
