@@ -294,95 +294,210 @@
   </div>
 </div>
 
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="assets/js/config.js"></script>
+
 <script>
 /* ════════════════════════════════════════
-   STORAGE — Phone-number keyed localStorage
+   FIREBASE + localStorage HYBRID STORAGE
+   Firebase = primary, localStorage = fallback
 ════════════════════════════════════════ */
+let _db = null;
+let _useFirebase = false;
+
+function initStorage() {
+  try {
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    _db = firebase.database();
+    _useFirebase = true;
+    console.log("✅ Firebase connected");
+    return true;
+  } catch(e) {
+    console.warn("⚠️ Firebase failed, using localStorage:", e.message);
+    _useFirebase = false;
+    return false;
+  }
+}
+
+const SK = 'c2b_v3_data';
 const SK = 'c2b_v3_data';
 
-const Store = {
+// localStorage fallback helpers
+const LS = {
   _d() { try { return JSON.parse(localStorage.getItem(SK)) || {}; } catch { return {}; } },
   _s(d) { localStorage.setItem(SK, JSON.stringify(d)); },
-
-  // normalize phone
   key(ph) { return (ph||'').replace(/\D/g,'').replace(/^880/,'0'); },
-
-  // ── users ──
-  getAllUsers() { const d=this._d(); return Object.values(d.users||{}); },
-  getUser(phone) { const d=this._d(); return (d.users||{})[this.key(phone)]||null; },
+  getUser(ph) { return (this._d().users||{})[this.key(ph)]||null; },
   saveUser(data) {
     const d=this._d(); if(!d.users) d.users={};
     const k=this.key(data.whatsapp);
-    d.users[k]={...data, id:k, submittedAt:new Date().toISOString(), status:'pending'};
+    d.users[k]={...data,id:k,submittedAt:new Date().toISOString(),status:'pending'};
     this._s(d); return k;
   },
-  updateUser(phone, upd) {
+  updateUser(ph,upd) {
     const d=this._d(); if(!d.users) d.users={};
-    const k=this.key(phone);
+    const k=this.key(ph);
     if(d.users[k]) d.users[k]={...d.users[k],...upd};
     this._s(d);
   },
+};
+
+// Hybrid Store: Firebase first, localStorage fallback
+const Store = {
+  key(ph) { return (ph||'').replace(/\D/g,'').replace(/^880/,'0'); },
+  _d() { try { return JSON.parse(localStorage.getItem(SK)) || {}; } catch { return {}; } },
+  _s(d) { localStorage.setItem(SK, JSON.stringify(d)); },
+
+  // ── users ──
+  getAllUsers() { const d=this._d(); return Object.values(d.users||{}); },
+  async getUser(phone) {
+    const k = this.key(phone);
+    if (_useFirebase) {
+      try {
+        const snap = await _db.ref('users/' + k).get();
+        const fbUser = snap.exists() ? snap.val() : null;
+        if (fbUser) {
+          // sync to localStorage
+          const d = this._d(); if(!d.users) d.users={};
+          d.users[k] = fbUser; this._s(d);
+          return fbUser;
+        }
+      } catch(e) { console.warn('Firebase getUser failed, using localStorage'); }
+    }
+    return LS.getUser(phone);
+  },
+  async saveUser(data) {
+    const k = this.key(data.whatsapp);
+    const user = {...data, id:k, submittedAt:new Date().toISOString(), status:'pending'};
+    // Always save to localStorage first
+    const d = this._d(); if(!d.users) d.users={};
+    d.users[k] = user; this._s(d);
+    // Then try Firebase
+    if (_useFirebase) {
+      try { await _db.ref('users/' + k).set(user); } catch(e) { console.warn('Firebase saveUser failed'); }
+    }
+    return k;
+  },
+  async updateUser(phone, upd) {
+    const k = this.key(phone);
+    // localStorage
+    const d = this._d(); if(!d.users) d.users={};
+    if(d.users[k]) d.users[k]={...d.users[k],...upd}; this._s(d);
+    // Firebase
+    if (_useFirebase) {
+      try { await _db.ref('users/' + k).update(upd); } catch(e) { console.warn('Firebase updateUser failed'); }
+    }
+  },
 
   // ── tasks ──
-  getTasks() { return (this._d().tasks)||[]; },
-  saveTasks(tasks) { const d=this._d(); d.tasks=tasks; this._s(d); },
+  async getTasks() {
+    if (_useFirebase) {
+      try {
+        const snap = await _db.ref('tasks').get();
+        if (snap.exists()) {
+          const tasks = Object.values(snap.val()||{}).sort((a,b)=>a.day-b.day);
+          const d=this._d(); d.tasks=tasks; this._s(d);
+          return tasks;
+        }
+      } catch(e) { console.warn('Firebase getTasks failed'); }
+    }
+    return this._d().tasks||[];
+  },
 
   // ── task progress ──
-  getProgress(phone) { const d=this._d(); return (d.progress||{})[this.key(phone)]||{}; },
-  setProgress(phone,day,done) {
-    const d=this._d(); if(!d.progress) d.progress={};
-    const k=this.key(phone);
-    if(!d.progress[k]) d.progress[k]={};
+  async getProgress(phone) {
+    const k = this.key(phone);
+    if (_useFirebase) {
+      try {
+        const snap = await _db.ref('progress/'+k).get();
+        if (snap.exists()) return snap.val();
+      } catch(e) { console.warn('Firebase getProgress failed'); }
+    }
+    return (this._d().progress||{})[k]||{};
+  },
+  async setProgress(phone, day, done) {
+    const k = this.key(phone);
+    // localStorage
+    const d=this._d(); if(!d.progress) d.progress={}; if(!d.progress[k]) d.progress[k]={};
     if(done) d.progress[k]['day'+day]=true; else delete d.progress[k]['day'+day];
     this._s(d);
+    // Firebase
+    if (_useFirebase) {
+      try {
+        const path = 'progress/'+k+'/day'+day;
+        if(done) await _db.ref(path).set(true); else await _db.ref(path).remove();
+      } catch(e) { console.warn('Firebase setProgress failed'); }
+    }
   },
 
   // ── products ──
-  getProducts() { return Object.values((this._d().products)||{}); },
-  addProduct(data) {
-    const d=this._d(); if(!d.products) d.products={};
-    const id='p'+Date.now();
-    d.products[id]={...data,id,createdAt:new Date().toISOString(),active:true};
-    this._s(d); return id;
+  async getProducts() {
+    if (_useFirebase) {
+      try {
+        const snap = await _db.ref('products').get();
+        if (snap.exists()) {
+          const prods = Object.values(snap.val()||{}).sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0));
+          const d=this._d(); d.products={}; prods.forEach(p=>d.products[p.id]=p); this._s(d);
+          return prods;
+        }
+      } catch(e) { console.warn('Firebase getProducts failed'); }
+    }
+    return Object.values(this._d().products||{});
   },
-  updateProduct(id,upd) {
-    const d=this._d();
-    if(d.products&&d.products[id]) d.products[id]={...d.products[id],...upd};
-    this._s(d);
-  },
-  deleteProduct(id) { const d=this._d(); if(d.products) delete d.products[id]; this._s(d); },
 
   // ── orders ──
-  getOrders() { return Object.values((this._d().orders)||{}).sort((a,b)=>new Date(b.date)-new Date(a.date)); },
-  getOrdersByPhone(phone) { return this.getOrders().filter(o=>Store.key(o.userPhone)===Store.key(phone)); },
-  addOrder(data) {
-    const d=this._d(); if(!d.orders) d.orders={};
-    const id='o'+Date.now();
-    d.orders[id]={...data,id,date:new Date().toISOString(),status:'pending'};
-    this._s(d); return id;
+  async getOrdersByPhone(phone) {
+    if (_useFirebase) {
+      try {
+        const snap = await _db.ref('orders').get();
+        if (snap.exists()) {
+          return Object.values(snap.val()||{})
+            .filter(o=>this.key(o.userPhone)===this.key(phone))
+            .sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));
+        }
+      } catch(e) { console.warn('Firebase getOrders failed'); }
+    }
+    return Object.values(this._d().orders||{})
+      .filter(o=>this.key(o.userPhone)===this.key(phone))
+      .sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));
   },
-  updateOrder(id,upd) {
-    const d=this._d();
-    if(d.orders&&d.orders[id]) d.orders[id]={...d.orders[id],...upd};
-    this._s(d);
+  async addOrder(data) {
+    const id = 'o'+Date.now();
+    const order = {...data,id,date:new Date().toISOString(),status:'pending'};
+    const d=this._d(); if(!d.orders) d.orders={}; d.orders[id]=order; this._s(d);
+    if (_useFirebase) {
+      try { await _db.ref('orders/'+id).set(order); } catch(e) { console.warn('Firebase addOrder failed'); }
+    }
+    return id;
   },
 
   // ── notifications ──
-  getNotifications() {
-    return Object.values((this._d().notifications)||{})
-      .filter(n=>n.active).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  onNotificationsChange(cb) {
+    if (_useFirebase) {
+      try {
+        _db.ref('notifications').on('value', snap => {
+          const arr = snap.exists() ? Object.values(snap.val()||{}).filter(n=>n.active).sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0)) : [];
+          cb(arr);
+        });
+        return;
+      } catch(e) { console.warn('Firebase notifications failed'); }
+    }
+    cb(Object.values(this._d().notifications||{}).filter(n=>n.active));
   },
 
   // ── help ──
-  addHelp(data) {
-    const d=this._d(); if(!d.help) d.help={};
+  async addHelp(data) {
     const id='h'+Date.now();
-    d.help[id]={...data,id,date:new Date().toISOString(),status:'new'};
-    this._s(d);
+    const help={...data,id,date:new Date().toISOString(),status:'new'};
+    const d=this._d(); if(!d.help) d.help={}; d.help[id]=help; this._s(d);
+    if (_useFirebase) {
+      try { await _db.ref('help/'+id).set(help); } catch(e) { console.warn('Firebase addHelp failed'); }
+    }
   },
 
-  // ── settings ──
-  getSettings() { return (this._d().settings)||{}; },
+  getSettings() { return this._d().settings||{}; },
 };
 
 /* ════════════════════════════════════════
@@ -572,8 +687,8 @@ function initApp(){
 function renderNotifications(){
   const area=document.getElementById('notifArea');
   if(!area) return;
-  const notifs=Store.getNotifications().slice(0,3);
-  area.innerHTML=notifs.map(n=>`
+  Store.onNotificationsChange(notifs => {
+  area.innerHTML=notifs.slice(0,3).map(n=>`
     <div class="notif-banner">
       <div style="font-size:1rem;flex-shrink:0;">📢</div>
       <div style="flex:1;">
@@ -583,6 +698,7 @@ function renderNotifications(){
       </div>
       <button style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:.9rem;flex-shrink:0;align-self:flex-start;" onclick="this.closest('.notif-banner').remove()">✕</button>
     </div>`).join('');
+  });
 }
 
 /* ════════════════════════════════════════
@@ -872,11 +988,11 @@ function renderOrders(){
     </div>`).join('');
 }
 
-function sendHelp(){
+async function sendHelp(){
   const sub=document.getElementById('h-sub').value.trim();
   const msg=document.getElementById('h-msg').value.trim();
   if(!sub||!msg){Toast.error('বিষয় ও বার্তা দিন');return;}
-  Store.addHelp({subject:sub,message:msg,userPhone:localStorage.getItem('c2b_phone'),userName:currentUser?.name||''});
+  await Store.addHelp({subject:sub,message:msg,userPhone:localStorage.getItem('c2b_phone'),userName:currentUser?.name||''});
   document.getElementById('h-sub').value='';
   document.getElementById('h-msg').value='';
   Toast.success('বার্তা পাঠানো হয়েছে! শীঘ্রই যোগাযোগ করব।');
@@ -893,21 +1009,30 @@ function saveAK(){
 /* ════════════════════════════════════════
    BOOT
 ════════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded', async () => {
   Toast.init();
-  // Mobile nav
-  document.querySelector('.hmb')?.addEventListener('click',()=>{
-    document.querySelector('.nav')?.classList.toggle('open');
+
+  document.querySelector('.hmb')?.addEventListener('click', () => {
+    document.getElementById('mainNav')?.classList.toggle('open');
   });
-  // Close modals on overlay
-  document.querySelectorAll('.mo').forEach(o=>{
-    o.addEventListener('click',e=>{if(e.target===o)o.classList.add('hidden');});
+  document.querySelectorAll('.mo').forEach(o => {
+    o.addEventListener('click', e => { if(e.target===o) o.classList.add('hidden'); });
   });
 
-  // Check saved phone
-  const savedPhone=localStorage.getItem('c2b_phone');
-  if(savedPhone){
-    routeByPhone(savedPhone);
+  // Init Firebase (non-blocking)
+  initStorage();
+
+  // Route by saved phone
+  const savedPhone = localStorage.getItem('c2b_phone');
+  if (savedPhone) {
+    const btn = document.getElementById('phoneBtn');
+    if(btn) { btn.disabled=true; btn.innerHTML='<span class="spin"></span> লোড হচ্ছে...'; }
+    try {
+      await routeByPhone(savedPhone);
+    } catch(e) {
+      showScreen('screenPhone');
+    }
+    if(btn) { btn.disabled=false; btn.innerHTML='➤ প্রবেশ করুন'; }
   } else {
     showScreen('screenPhone');
   }
