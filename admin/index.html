@@ -158,31 +158,13 @@ tr:hover td{background:var(--card2)}
 .mb1{margin-bottom:8px}.mb2{margin-bottom:14px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 .empty{text-align:center;padding:32px 20px;color:var(--text2);font-size:.85rem}
-.mob-topbar{display:none;align-items:center;justify-content:space-between;padding:10px 0;margin-bottom:14px;border-bottom:1px solid var(--border)}
 .skel{background:linear-gradient(90deg,var(--bg2) 25%,var(--bg3) 50%,var(--bg2) 75%);background-size:200% 100%;animation:shim 1.5s infinite;border-radius:7px}
 @keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
 @keyframes fup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 
-@media(max-width:900px){
-  .sb{transform:translateX(-100%);transition:transform .25s ease;z-index:200}
-  .sb.open{transform:translateX(0)}
-  .sb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:199}
-  #sbCloseBtn{display:block!important}
-  .main{margin-left:0;padding:14px}
-  .mob-topbar{display:flex!important}
-  .sgrid{grid-template-columns:repeat(2,1fr)}
-  .ucard{flex-direction:column}
-  .uav,.uav-ini{width:44px!important;height:44px!important}
-  .pf2{grid-template-columns:1fr}
-  .pf2-full{grid-column:1}
-  .grid2{grid-template-columns:1fr}
-  table{font-size:.73rem}
-  th,td{padding:7px 8px}
-  .ph{flex-direction:column;align-items:flex-start;gap:8px}
-}
-@media(min-width:901px){.mob-topbar{display:none!important}}
+@media(max-width:900px){.sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.main{margin-left:0}}
 </style>
 </head>
 <body>
@@ -207,12 +189,9 @@ tr:hover td{background:var(--card2)}
 <div id="admApp" class="adm hidden">
   <!-- Sidebar -->
   <aside class="sb" id="sb">
-    <div class="sb-logo" style="display:flex;align-items:center;justify-content:space-between;">
-      <div style="display:flex;align-items:center;gap:9px;">
-        <div class="logo-ic">🚀</div>
-        <div class="sb-lt">Creator2Biz<small>Admin</small></div>
-      </div>
-      <button onclick="closeSb()" style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:1.1rem;display:none;" id="sbCloseBtn">✕</button>
+    <div class="sb-logo">
+      <div class="logo-ic">🚀</div>
+      <div class="sb-lt">Creator2Biz<small>Admin</small></div>
     </div>
     <div style="padding:7px 5px;flex:1;">
       <div class="sb-sec">ড্যাশবোর্ড</div>
@@ -235,13 +214,6 @@ tr:hover td{background:var(--card2)}
 
   <!-- MAIN -->
   <main class="main">
-    <!-- Mobile top bar -->
-    <div class="mob-topbar" id="mobTopbar">
-      <button onclick="openSb()" style="background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer;padding:8px 13px;font-size:.84rem;display:flex;align-items:center;gap:7px;">☰ <span>মেনু</span></button>
-      <div style="font-family:var(--fh);font-weight:800;font-size:.9rem;color:#fff;">Admin Panel</div>
-      <button onclick="doLogout()" style="background:rgba(255,101,132,.1);border:1px solid rgba(255,101,132,.3);border-radius:8px;color:var(--accent2);cursor:pointer;padding:8px 12px;font-size:.82rem;">🚪</button>
-    </div>
-    <div class="sb-overlay hidden" id="sbOverlay" onclick="closeSb()"></div>
 
     <!-- DASHBOARD -->
     <div id="pg-dash">
@@ -393,7 +365,7 @@ tr:hover td{background:var(--card2)}
           <select class="fc" id="pm-type"><option value="service">সার্ভিস</option><option value="ebook">ইবুক</option><option value="course">কোর্স</option><option value="template">টেমপ্লেট</option></select>
         </div>
         <div class="fg pf2-full"><label class="fl">নাম *</label><input class="fc" id="pm-name" placeholder="প্রোডাক্টের নাম"></div>
-        <div class="fg"><label class="fl">দাম (৳) — ফ্রি করতে 0 দিন</label><input class="fc" id="pm-price" type="number" placeholder="0 = ফ্রি, অন্যথায় দাম দিন" min="0"></div>
+        <div class="fg"><label class="fl">দাম (৳) *</label><input class="fc" id="pm-price" type="number" placeholder="৪৯৯"></div>
         <div class="fg"><label class="fl">ডেলিভারি</label><input class="fc" id="pm-del" placeholder="তাৎক্ষণিক / ৭ দিন"></div>
         <div class="fg pf2-full"><label class="fl">বিবরণ *</label><textarea class="fc" id="pm-desc" rows="3" placeholder="সংক্ষিপ্ত বিবরণ..."></textarea></div>
         <div class="fg pf2-full"><label class="fl">বিস্তারিত (কী কী পাবে)</label><textarea class="fc" id="pm-details" rows="4" placeholder="অন্তর্ভুক্ত সুবিধাগুলো..."></textarea></div>
@@ -551,7 +523,6 @@ function showPg(pg, btn) {
   document.getElementById('pg-' + pg)?.classList.remove('hidden');
   document.querySelectorAll('.sbl').forEach(b => b.classList.remove('on'));
   if (btn) btn.classList.add('on');
-  closeSb();
   if (pg === 'users') renderUsers();
   if (pg === 'orders') renderOrders();
   if (pg === 'help') renderHelp();
@@ -953,7 +924,7 @@ async function renderProds() {
     ${prods.map(p=>`<tr>
       <td><span class="tag ${{service:'tp',ebook:'tgo',course:'tg',template:'tr'}[p.type]||'tp'}">${typeLbl[p.type]||p.type}</span></td>
       <td><strong>${esc(p.name)}</strong><br><span style="font-size:.73rem;color:var(--text2);">${esc(p.description?.slice(0,60)||'')}</span></td>
-      <td>${Number(p.price||0)===0 ? '<span class="tag tg">🎁 ফ্রি</span>' : '<span style="color:var(--gold);font-weight:600;">৳'+Number(p.price||0).toLocaleString('bn-BD')+'</span>'}</td>
+      <td style="color:var(--gold);font-weight:600;">৳${Number(p.price||0).toLocaleString('bn-BD')}</td>
       <td><span class="pill ${p.active?'p-appr':'p-rej'}">${p.active?'সক্রিয়':'অফ'}</span></td>
       <td>
         <button class="ab" onclick="editProd('${p.id}')">✏️</button>
@@ -981,7 +952,7 @@ async function saveProd() {
   const name = document.getElementById('pm-name').value.trim();
   const price = document.getElementById('pm-price').value;
   const desc = document.getElementById('pm-desc').value.trim();
-  if (!name||!desc) { document.getElementById('pm-err').textContent='⚠️ নাম ও বিবরণ আবশ্যক।'; document.getElementById('pm-err').classList.remove('hidden'); return; }
+  if (!name||!price||!desc) { document.getElementById('pm-err').textContent='⚠️ নাম, দাম ও বিবরণ আবশ্যক।'; document.getElementById('pm-err').classList.remove('hidden'); return; }
   document.getElementById('pm-err').classList.add('hidden');
   const data = { type:document.getElementById('pm-type').value, name, price:+price, delivery:document.getElementById('pm-del').value, description:desc, details:document.getElementById('pm-details').value, link:document.getElementById('pm-link').value };
   try {
@@ -1019,15 +990,6 @@ async function exportAll() {
 }
 
 /* ══ BOOT ══ */
-function openSb() {
-  document.getElementById('sb').classList.add('open');
-  document.getElementById('sbOverlay').classList.remove('hidden');
-}
-function closeSb() {
-  document.getElementById('sb').classList.remove('open');
-  document.getElementById('sbOverlay').classList.add('hidden');
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   T._i();
   document.querySelectorAll('.mo').forEach(o => o.addEventListener('click', e => { if(e.target===o) o.classList.add('hidden'); }));
