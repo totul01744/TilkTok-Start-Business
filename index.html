@@ -29,6 +29,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .btn-g{background:rgba(67,233,123,.1);color:var(--accent3);border:1px solid rgba(67,233,123,.3)}
 .btn-gd{background:linear-gradient(135deg,#f5c518,#ff9500);color:#000;font-weight:700}
 .btn-gd:hover{transform:translateY(-2px);color:#000}
+.btn-free{background:linear-gradient(135deg,#43e97b,#38f9d7);color:#000;font-weight:700}
+.btn-free:hover{transform:translateY(-2px);color:#000}
 .btn-sm{padding:6px 13px;font-size:.76rem}
 .btn-lg{padding:13px 32px;font-size:.97rem}
 .btn-fw{width:100%}
@@ -49,6 +51,7 @@ textarea.fc{resize:vertical;min-height:80px}
 .tg{background:rgba(67,233,123,.15);color:#4ade80}
 .tgo{background:rgba(245,197,24,.15);color:#fbbf24}
 .tgr{background:rgba(136,146,176,.15);color:var(--text2)}
+.tfree{background:rgba(67,233,123,.2);color:#22c55e;border:1px solid rgba(67,233,123,.4)}
 .alert{border-radius:var(--r2);padding:12px 15px;display:flex;align-items:flex-start;gap:9px;font-size:.86rem}
 .a-e{background:rgba(255,101,132,.1);border:1px solid rgba(255,101,132,.25);color:#fb7185}
 .a-s{background:rgba(67,233,123,.1);border:1px solid rgba(67,233,123,.25);color:#4ade80}
@@ -91,14 +94,23 @@ textarea.fc{resize:vertical;min-height:80px}
 .photo-upload img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 
 /* HEADER */
-.hdr{position:sticky;top:0;z-index:100;background:rgba(8,12,24,.92);backdrop-filter:blur(22px);border-bottom:1px solid var(--border);height:62px}
-.hdr-in{max-width:1160px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:100%}
+.hdr{position:sticky;top:0;z-index:200;background:rgba(8,12,24,.95);backdrop-filter:blur(22px);border-bottom:1px solid var(--border);height:62px}
+.hdr-in{max-width:1160px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:100%}
 .logo{display:flex;align-items:center;gap:10px;font-family:var(--fh);font-size:1.05rem;font-weight:800;color:#fff;text-decoration:none}
 .logo-ic{width:35px;height:35px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
 .nav{display:flex;align-items:center;gap:3px}
-.nav-a{color:var(--text2);padding:6px 12px;border-radius:var(--r3);font-size:.83rem;font-weight:500;transition:all .2s;text-decoration:none;background:none;border:none;cursor:pointer;font-family:var(--font)}
+.nav-a{color:var(--text2);padding:7px 13px;border-radius:var(--r3);font-size:.84rem;font-weight:500;transition:all .2s;text-decoration:none;background:none;border:none;cursor:pointer;font-family:var(--font)}
 .nav-a:hover,.nav-a.on{color:#fff;background:var(--card2)}
-.hmb{display:none;background:none;border:none;color:var(--text2);cursor:pointer;font-size:1.3rem;padding:4px}
+.hmb{display:none;background:none;border:none;color:var(--text);cursor:pointer;padding:8px;border-radius:8px;transition:background .2s;flex-shrink:0}
+.hmb:hover{background:var(--card2)}
+
+/* MOBILE NAV DROPDOWN */
+.mobile-nav-wrap{display:none;position:fixed;top:62px;left:0;right:0;z-index:190;background:var(--bg2);border-bottom:2px solid var(--border2);padding:10px 12px 14px;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.mobile-nav-wrap.open{display:block}
+.mobile-nav-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.mnav-btn{display:flex;align-items:center;gap:8px;padding:11px 13px;background:var(--card);border:1px solid var(--border);border-radius:var(--r2);color:var(--text2);font-size:.85rem;font-weight:500;cursor:pointer;transition:all .2s;width:100%;font-family:var(--font)}
+.mnav-btn:active,.mnav-btn.on{background:rgba(108,99,255,.15);border-color:var(--accent);color:#fff}
+.mnav-bottom{display:flex;gap:7px;margin-top:7px}
 
 /* APP */
 .app-layout{display:flex;min-height:calc(100vh - 62px)}
@@ -140,9 +152,12 @@ textarea.fc{resize:vertical;min-height:80px}
 /* MARKET */
 .prod-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:all .22s;display:flex;flex-direction:column}
 .prod-card:hover{border-color:var(--border2);transform:translateY(-2px)}
-.prod-thumb{height:110px;background:linear-gradient(135deg,var(--bg3),var(--card2));display:flex;align-items:center;justify-content:center;font-size:2.5rem;border-bottom:1px solid var(--border)}
+.prod-card.free-prod{border-color:rgba(67,233,123,.3)}
+.prod-thumb{height:110px;background:linear-gradient(135deg,var(--bg3),var(--card2));display:flex;align-items:center;justify-content:center;font-size:2.5rem;border-bottom:1px solid var(--border);position:relative}
+.free-badge{position:absolute;top:8px;right:8px;background:linear-gradient(135deg,#43e97b,#38f9d7);color:#000;font-size:.65rem;font-weight:800;padding:3px 9px;border-radius:20px}
 .prod-body{padding:14px;flex:1;display:flex;flex-direction:column}
 .prod-price{font-family:var(--fh);font-size:1.3rem;font-weight:800;color:var(--gold);margin:6px 0 10px}
+.prod-price.free{color:var(--accent3)}
 
 /* NOTIF */
 .notif-banner{background:linear-gradient(90deg,rgba(108,99,255,.15),rgba(255,101,132,.1));border:1px solid rgba(108,99,255,.3);border-radius:var(--r2);padding:12px 16px;display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
@@ -150,12 +165,24 @@ textarea.fc{resize:vertical;min-height:80px}
 /* AGENCY */
 .agency-cta{background:linear-gradient(135deg,rgba(245,197,24,.12),rgba(255,101,132,.1));border:1px solid rgba(245,197,24,.3);border-radius:var(--r);padding:24px;text-align:center;margin-bottom:20px}
 
+/* API KEY MODAL */
+.api-provider-tabs{display:flex;gap:7px;margin-bottom:14px}
+.api-tab{flex:1;padding:9px;border:1.5px solid var(--border);border-radius:var(--r2);cursor:pointer;text-align:center;font-size:.8rem;font-weight:600;color:var(--text2);background:var(--bg2);transition:all .2s}
+.api-tab.on{border-color:var(--accent);color:#fff;background:rgba(108,99,255,.1)}
+
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 
 @media(max-width:768px){
-  .nav{display:none}.nav.open{display:flex;flex-direction:column;position:fixed;top:62px;left:0;right:0;background:var(--bg2);padding:12px;border-bottom:1px solid var(--border);z-index:99}
-  .hmb{display:block}.sidebar{display:none}.app-layout{flex-direction:column}.main-c{padding:14px}
-  .form-grid,.fc-grid{grid-template-columns:1fr}.fc-full,.fc-full2{grid-column:1}.grid3{grid-template-columns:1fr}
+  .nav{display:none}
+  .hmb{display:flex;align-items:center;justify-content:center}
+  .sidebar{display:none}
+  .app-layout{flex-direction:column}
+  .main-c{padding:14px}
+  .form-grid,.fc-grid{grid-template-columns:1fr}
+  .fc-full,.fc-full2{grid-column:1}
+  .grid3{grid-template-columns:1fr}
+  .gaut{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  .tool-tabs{grid-template-columns:repeat(auto-fill,minmax(90px,1fr))}
 }
 </style>
 </head>
@@ -252,17 +279,42 @@ textarea.fc{resize:vertical;min-height:80px}
   <header class="hdr">
     <div class="hdr-in">
       <a href="index.html" class="logo"><div class="logo-ic">🚀</div><span>Creator<span style="color:var(--accent)">2</span>Business</span></a>
+      <!-- Desktop nav -->
       <nav class="nav" id="mainNav">
         <button class="nav-a on" onclick="showPage('tools',this)">🛠️ টুলস</button>
         <button class="nav-a" onclick="showPage('tasks',this)">📅 ৯০ দিন</button>
         <button class="nav-a" onclick="showPage('market',this)">🛍️ মার্কেট</button>
         <button class="nav-a" onclick="showPage('agency',this)">🏢 এজেন্সি</button>
-        <button class="btn btn-sm btn-s" onclick="Modal.show('apiModal')" style="margin-left:5px;">⚙️</button>
+        <button class="btn btn-sm btn-s" onclick="Modal.show('apiModal')" style="margin-left:5px;">⚙️ API</button>
         <button class="btn btn-sm btn-d" onclick="doLogout()">🚪</button>
       </nav>
-      <button class="hmb" onclick="document.getElementById('mainNav').classList.toggle('open')">☰</button>
+      <!-- Mobile hamburger -->
+      <button class="hmb" id="hmbBtn" onclick="toggleMobileNav()" aria-label="মেনু">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <rect id="hmbL1" y="3" width="22" height="2.5" rx="1.25" fill="currentColor"/>
+          <rect id="hmbL2" y="10" width="22" height="2.5" rx="1.25" fill="currentColor"/>
+          <rect id="hmbL3" y="17" width="22" height="2.5" rx="1.25" fill="currentColor"/>
+        </svg>
+      </button>
     </div>
   </header>
+
+  <!-- Mobile nav dropdown -->
+  <div class="mobile-nav-wrap" id="mobileNav">
+    <div class="mobile-nav-grid">
+      <button class="mnav-btn" onclick="showPage('tools');closeMobileNav()">🛠️ AI টুলস</button>
+      <button class="mnav-btn" onclick="showPage('tasks');closeMobileNav()">📅 ৯০ দিন</button>
+      <button class="mnav-btn" onclick="showPage('market');closeMobileNav()">🛍️ মার্কেট</button>
+      <button class="mnav-btn" onclick="showPage('agency');closeMobileNav()">🏢 এজেন্সি</button>
+      <button class="mnav-btn" onclick="showPage('orders');closeMobileNav()">📦 আমার অর্ডার</button>
+      <button class="mnav-btn" onclick="showPage('help');closeMobileNav()">💬 হেল্প</button>
+    </div>
+    <div class="mnav-bottom">
+      <button class="btn btn-s" style="flex:1;font-size:.82rem;" onclick="Modal.show('apiModal');closeMobileNav()">⚙️ API Key সেট করুন</button>
+      <button class="btn btn-d" style="font-size:.82rem;" onclick="doLogout()">🚪 লগআউট</button>
+    </div>
+  </div>
+
   <div class="app-layout">
     <aside class="sidebar">
       <div style="padding:12px 8px 4px;" id="sideProf"></div>
@@ -316,7 +368,7 @@ textarea.fc{resize:vertical;min-height:80px}
       <!-- MARKET PAGE -->
       <div id="pg-market" class="hidden">
         <div class="pg-t">🛍️ মার্কেটপ্লেস</div>
-        <div class="pg-s">সার্ভিস, ইবুক ও কোর্স কিনুন</div>
+        <div class="pg-s">সার্ভিস, ইবুক ও কোর্স সংগ্রহ করুন</div>
         <div id="marketArea"></div>
       </div>
 
@@ -363,34 +415,71 @@ textarea.fc{resize:vertical;min-height:80px}
 </div>
 
 <!-- MODALS -->
+<!-- API Modal (OpenRouter + Anthropic) -->
 <div class="mo hidden" id="apiModal">
-  <div class="mb" style="max-width:400px;">
-    <div class="mh"><h3>⚙️ API Key</h3><button class="mc" onclick="Modal.hide('apiModal')">✕</button></div>
+  <div class="mb" style="max-width:420px;">
+    <div class="mh"><h3>⚙️ AI API সেটিং</h3><button class="mc" onclick="Modal.hide('apiModal')">✕</button></div>
     <div class="mbody">
-      <div class="alert a-i mb2" style="font-size:.79rem;">console.anthropic.com থেকে ফ্রি API Key নিন।</div>
-      <div class="fg mb2"><label class="fl">API Key</label><input type="password" class="fc" id="akInp" placeholder="sk-ant-..."></div>
-      <button class="btn btn-p btn-fw" onclick="saveAK()">💾 সেভ করুন</button>
+      <div class="api-provider-tabs">
+        <div class="api-tab on" id="tabOR" onclick="switchApiTab('openrouter')">🤖 OpenRouter</div>
+        <div class="api-tab" id="tabAN" onclick="switchApiTab('anthropic')">🔬 Anthropic</div>
+      </div>
+      <div id="apiTabOR">
+        <div class="alert a-s mb2" style="font-size:.79rem;flex-direction:column;gap:5px;">
+          <div>✅ <strong>openrouter.ai</strong> থেকে ফ্রি API Key নিন।</div>
+          <div>• Sign up করলে কিছু ফ্রি ক্রেডিট পাবেন</div>
+          <div>• শেষ হলে নতুন account করুন</div>
+          <div>• অথবা model: <code style="background:rgba(0,0,0,.3);padding:1px 5px;border-radius:3px;">google/gemini-2.0-flash-exp:free</code> সম্পূর্ণ বিনামূল্যে</div>
+        </div>
+        <div class="fg mb2">
+          <label class="fl">OpenRouter API Key</label>
+          <input type="password" class="fc" id="orKeyInp" placeholder="sk-or-v1-...">
+        </div>
+        <div class="fg mb2">
+          <label class="fl">Model (ঐচ্ছিক — ডিফল্ট: gemini-2.0-flash-exp:free)</label>
+          <select class="fc" id="orModelSel">
+            <option value="google/gemini-2.0-flash-exp:free">google/gemini-2.0-flash-exp:free (বিনামূল্যে)</option>
+            <option value="meta-llama/llama-3.1-8b-instruct:free">meta-llama/llama-3.1-8b-instruct:free (বিনামূল্যে)</option>
+            <option value="anthropic/claude-sonnet-4-5">anthropic/claude-sonnet-4-5 (পেইড)</option>
+            <option value="openai/gpt-4o-mini">openai/gpt-4o-mini (পেইড)</option>
+          </select>
+        </div>
+        <button class="btn btn-p btn-fw" onclick="saveApiKey('openrouter')">💾 সেভ করুন</button>
+        <div style="text-align:center;margin-top:8px;"><a href="https://openrouter.ai/keys" target="_blank" style="font-size:.75rem;color:var(--accent);">🔗 openrouter.ai/keys — এখানে Key নিন</a></div>
+      </div>
+      <div id="apiTabAN" class="hidden">
+        <div class="alert a-i mb2" style="font-size:.79rem;">console.anthropic.com থেকে API Key নিন।</div>
+        <div class="fg mb2">
+          <label class="fl">Anthropic API Key</label>
+          <input type="password" class="fc" id="akInp" placeholder="sk-ant-...">
+        </div>
+        <button class="btn btn-p btn-fw" onclick="saveApiKey('anthropic')">💾 সেভ করুন</button>
+      </div>
     </div>
   </div>
 </div>
+
 <div class="mo hidden" id="taskMo">
   <div class="mb"><div class="mh"><h3 id="tmoT"></h3><button class="mc" onclick="Modal.hide('taskMo')">✕</button></div><div class="mbody" id="tmoB"></div></div>
 </div>
 <div class="mo hidden" id="buyMo">
   <div class="mb"><div class="mh"><h3 id="buyT">কিনুন</h3><button class="mc" onclick="Modal.hide('buyMo')">✕</button></div><div class="mbody" id="buyB"></div></div>
 </div>
+<div class="mo hidden" id="freeMo">
+  <div class="mb" style="max-width:460px;">
+    <div class="mh"><h3 id="freeT">🎁 ফ্রি প্রোডাক্ট</h3><button class="mc" onclick="Modal.hide('freeMo')">✕</button></div>
+    <div class="mbody" id="freeB"></div>
+  </div>
+</div>
 
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<!-- YOUR CONFIG FILE -->
 <script src="assets/js/config.js"></script>
 
 <script>
 'use strict';
-/* ══════════════════════════════════════
-   TOAST
-══════════════════════════════════════ */
+/* ══ TOAST ══ */
 const T = {
   el: null,
   _init() { if (!this.el) { this.el = document.createElement('div'); this.el.className = 'tc'; document.body.appendChild(this.el); } },
@@ -418,9 +507,66 @@ function esc(s) { return (s||'').replace(/[<>"&]/g, c => ({'<':'&lt;','>':'&gt;'
 function fmtD(iso) { if(!iso) return '—'; return new Date(iso).toLocaleDateString('bn-BD',{day:'numeric',month:'short',year:'numeric'}); }
 function pkey(ph) { return (ph||'').replace(/\D/g,'').replace(/^880/,'0'); }
 
-/* ══════════════════════════════════════
-   FIREBASE DATABASE
-══════════════════════════════════════ */
+/* ══ MOBILE NAV ══ */
+function toggleMobileNav() {
+  const nav = document.getElementById('mobileNav');
+  nav.classList.toggle('open');
+}
+function closeMobileNav() {
+  document.getElementById('mobileNav')?.classList.remove('open');
+}
+// Close mobile nav when clicking outside
+document.addEventListener('click', e => {
+  const nav = document.getElementById('mobileNav');
+  const btn = document.getElementById('hmbBtn');
+  if (nav && btn && !nav.contains(e.target) && !btn.contains(e.target)) {
+    nav.classList.remove('open');
+  }
+});
+
+/* ══ API TAB ══ */
+function switchApiTab(tab) {
+  if (tab === 'openrouter') {
+    document.getElementById('tabOR').classList.add('on');
+    document.getElementById('tabAN').classList.remove('on');
+    document.getElementById('apiTabOR').classList.remove('hidden');
+    document.getElementById('apiTabAN').classList.add('hidden');
+    // Load saved OR key
+    const saved = localStorage.getItem('c2b_or_key') || '';
+    document.getElementById('orKeyInp').value = saved;
+    const savedModel = localStorage.getItem('c2b_or_model') || 'google/gemini-2.0-flash-exp:free';
+    document.getElementById('orModelSel').value = savedModel;
+  } else {
+    document.getElementById('tabOR').classList.remove('on');
+    document.getElementById('tabAN').classList.add('on');
+    document.getElementById('apiTabOR').classList.add('hidden');
+    document.getElementById('apiTabAN').classList.remove('hidden');
+    const saved = localStorage.getItem('c2b_ak') || '';
+    document.getElementById('akInp').value = saved;
+  }
+}
+
+function saveApiKey(provider) {
+  if (provider === 'openrouter') {
+    const k = document.getElementById('orKeyInp').value.trim();
+    if (!k || !k.startsWith('sk-or-')) { T.err('সঠিক OpenRouter Key দিন (sk-or- দিয়ে শুরু)'); return; }
+    localStorage.setItem('c2b_or_key', k);
+    const model = document.getElementById('orModelSel').value;
+    localStorage.setItem('c2b_or_model', model);
+    localStorage.setItem('c2b_api_provider', 'openrouter');
+    Modal.hide('apiModal');
+    T.ok('OpenRouter API Key সেভ হয়েছে ✅');
+  } else {
+    const k = document.getElementById('akInp').value.trim();
+    if (!k || !k.startsWith('sk-ant-')) { T.err('সঠিক API Key দিন (sk-ant- দিয়ে শুরু)'); return; }
+    localStorage.setItem('c2b_ak', k);
+    localStorage.setItem('c2b_api_provider', 'anthropic');
+    Modal.hide('apiModal');
+    T.ok('Anthropic API Key সেভ হয়েছে ✅');
+  }
+}
+
+/* ══ FIREBASE ══ */
 let _fdb = null;
 
 function fbInit() {
@@ -434,7 +580,6 @@ function fbInit() {
   }
 }
 
-// All DB functions return Promises
 const DB = {
   async getUser(phone) {
     const snap = await _fdb.ref('users/' + pkey(phone)).get();
@@ -489,35 +634,27 @@ const DB = {
   },
 };
 
-/* ══════════════════════════════════════
-   APP STATE
-══════════════════════════════════════ */
-let ME = null; // current user object
+/* ══ APP STATE ══ */
+let ME = null;
 
 function showS(id) {
   ['sPhone','sOnboard','sPending','sRejected','sApp'].forEach(s => document.getElementById(s)?.classList.add('hidden'));
   document.getElementById(id)?.classList.remove('hidden');
 }
 
-/* ══════════════════════════════════════
-   LOGIN FLOW — fully async
-══════════════════════════════════════ */
+/* ══ LOGIN ══ */
 async function doLogin() {
   const raw = document.getElementById('phoneInput').value.trim();
   const phone = raw.replace(/\D/g,'').replace(/^880/,'0');
   const errEl = document.getElementById('phoneErr');
-
   if (!phone || phone.length < 10) {
     errEl.textContent = '⚠️ সঠিক WhatsApp নম্বর দিন';
     errEl.classList.remove('hidden');
     return;
   }
   errEl.classList.add('hidden');
-
   const btn = document.getElementById('phoneBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spin"></span> চেক হচ্ছে...';
-
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span> চেক হচ্ছে...';
   try {
     localStorage.setItem('c2b_ph', phone);
     await route(phone);
@@ -525,10 +662,8 @@ async function doLogin() {
     errEl.textContent = '⚠️ সমস্যা: ' + e.message;
     errEl.classList.remove('hidden');
     localStorage.removeItem('c2b_ph');
-    console.error('Login error:', e);
   } finally {
-    btn.disabled = false;
-    btn.innerHTML = '➤ প্রবেশ করুন';
+    btn.disabled = false; btn.innerHTML = '➤ প্রবেশ করুন';
   }
 }
 
@@ -538,9 +673,7 @@ async function route(phone) {
     document.getElementById('ob-wa').value = phone;
     showS('sOnboard');
   } else if (user.status === 'approved') {
-    ME = user;
-    bootApp();
-    showS('sApp');
+    ME = user; bootApp(); showS('sApp');
   } else if (user.status === 'rejected') {
     document.getElementById('rejMsg').textContent = user.rejectReason || 'আপনার আবেদন গ্রহণ করা হয়নি।';
     showS('sRejected');
@@ -551,29 +684,16 @@ async function route(phone) {
 }
 
 function doLogout() {
-  localStorage.removeItem('c2b_ph');
-  ME = null;
-  document.getElementById('phoneInput').value = '';
-  showS('sPhone');
+  localStorage.removeItem('c2b_ph'); ME = null;
+  document.getElementById('phoneInput').value = ''; showS('sPhone');
 }
 
-/* ══════════════════════════════════════
-   REGISTER
-══════════════════════════════════════ */
+/* ══ REGISTER ══ */
 let _photo = null;
 
 function handlePhoto(input) {
-  const file = input.files[0];
-  if (!file) return;
+  const file = input.files[0]; if (!file) return;
   if (file.size > 2097152) { T.err('ছবি ২MB-এর বেশি নয়'); return; }
-  new FileReader().onload = e => {
-    _photo = e.target.result;
-    const pu = document.getElementById('photoUpload');
-    let img = pu.querySelector('img');
-    if (!img) { img = document.createElement('img'); pu.appendChild(img); }
-    img.src = _photo;
-  };
-  (new FileReader()).readAsDataURL; // dummy
   const reader = new FileReader();
   reader.onload = e => {
     _photo = e.target.result;
@@ -588,43 +708,19 @@ async function doRegister() {
   const addr = document.getElementById('ob-addr').value.trim();
   const wa   = document.getElementById('ob-wa').value.trim();
   const errEl = document.getElementById('obErr');
-
-  if (!name || !addr) {
-    errEl.textContent = '⚠️ নাম ও ঠিকানা আবশ্যক।';
-    errEl.classList.remove('hidden');
-    return;
-  }
+  if (!name || !addr) { errEl.textContent = '⚠️ নাম ও ঠিকানা আবশ্যক।'; errEl.classList.remove('hidden'); return; }
   errEl.classList.add('hidden');
-
   const btn = document.getElementById('obBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spin"></span> সাবমিট হচ্ছে...';
-
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span> সাবমিট হচ্ছে...';
   try {
-    await DB.setUser({
-      name, address: addr, whatsapp: wa,
-      facebook: document.getElementById('ob-fb').value.trim(),
-      tiktok:   document.getElementById('ob-tt').value.trim(),
-      niche:    document.getElementById('ob-niche').value.trim(),
-      description: document.getElementById('ob-desc').value.trim(),
-      profilePhoto: _photo,
-    });
+    await DB.setUser({ name, address: addr, whatsapp: wa, facebook: document.getElementById('ob-fb').value.trim(), tiktok: document.getElementById('ob-tt').value.trim(), niche: document.getElementById('ob-niche').value.trim(), description: document.getElementById('ob-desc').value.trim(), profilePhoto: _photo });
     document.getElementById('pendWa').textContent = wa;
-    showS('sPending');
-    T.ok('রেজিস্ট্রেশন সফল!');
-  } catch(e) {
-    errEl.textContent = '⚠️ সমস্যা: ' + e.message;
-    errEl.classList.remove('hidden');
-    console.error('Register error:', e);
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '📨 রেজিস্ট্রেশন সাবমিট করুন';
-  }
+    showS('sPending'); T.ok('রেজিস্ট্রেশন সফল!');
+  } catch(e) { errEl.textContent = '⚠️ সমস্যা: ' + e.message; errEl.classList.remove('hidden'); }
+  finally { btn.disabled = false; btn.innerHTML = '📨 রেজিস্ট্রেশন সাবমিট করুন'; }
 }
 
-/* ══════════════════════════════════════
-   BOOT APP
-══════════════════════════════════════ */
+/* ══ BOOT APP ══ */
 function bootApp() {
   const p = ME || {};
   const ini = (p.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
@@ -642,7 +738,14 @@ function bootApp() {
   buildTools();
   pickTool('content_ideas');
 
-  // Notifications
+  // Load saved OR key/model into modal
+  const savedOrKey = localStorage.getItem('c2b_or_key') || '';
+  if (savedOrKey) document.getElementById('orKeyInp').value = savedOrKey;
+  const savedModel = localStorage.getItem('c2b_or_model') || 'google/gemini-2.0-flash-exp:free';
+  if (document.getElementById('orModelSel')) document.getElementById('orModelSel').value = savedModel;
+  const savedAk = localStorage.getItem('c2b_ak') || '';
+  if (savedAk) document.getElementById('akInp').value = savedAk;
+
   DB.listenNotifs(notifs => {
     const area = document.getElementById('notifArea');
     if (!area) return;
@@ -659,22 +762,19 @@ function bootApp() {
   });
 }
 
-/* ══════════════════════════════════════
-   PAGES
-══════════════════════════════════════ */
+/* ══ PAGES ══ */
 function showPage(pg, btn) {
   document.querySelectorAll('[id^="pg-"]').forEach(p => p.classList.add('hidden'));
   document.getElementById('pg-'+pg)?.classList.remove('hidden');
-  document.querySelectorAll('.sb-btn,.nav-a').forEach(b => b.classList.remove('on'));
+  document.querySelectorAll('.sb-btn,.nav-a,.mnav-btn').forEach(b => b.classList.remove('on'));
   if (btn) btn.classList.add('on');
   if (pg === 'tasks')  loadTasks();
   if (pg === 'market') loadMarket();
   if (pg === 'orders') loadOrders();
+  closeMobileNav();
 }
 
-/* ══════════════════════════════════════
-   TOOLS
-══════════════════════════════════════ */
+/* ══ TOOLS ══ */
 const TOOLS = {
   content_ideas:    {ico:'💡',lbl:'কন্টেন্ট আইডিয়া', desc:'২০টি ভাইরাল আইডিয়া — হুক, স্ক্রিপ্ট, হ্যাশট্যাগ', fs:['niche','audience','topic']},
   hook_script:      {ico:'🎣',lbl:'হুক & স্ক্রিপ্ট',  desc:'৫টি শক্তিশালী হুক + সম্পূর্ণ স্ক্রিপ্ট',           fs:['niche','audience','topic']},
@@ -748,6 +848,7 @@ function getVals() {
   return v;
 }
 
+/* ══ GENERATE — OpenRouter + Anthropic ══ */
 async function generate() {
   const btn = document.getElementById('genBtn');
   btn.disabled = true; btn.innerHTML = '<span class="spin"></span> তৈরি হচ্ছে...';
@@ -756,17 +857,49 @@ async function generate() {
   document.getElementById('outTt').textContent  = TOOLS[curT].lbl + ' — ফলাফল';
   oc.classList.remove('hidden');
   document.getElementById('outBody').innerHTML = `<div class="skel mb1" style="height:14px;width:60%"></div><div class="skel mb1" style="height:12px;width:85%"></div><div class="skel" style="height:12px;width:70%"></div>`;
+
   try {
-    const ak = localStorage.getItem('c2b_ak');
-    if (!ak) throw new Error('API Key দিন। ⚙️ বাটনে ক্লিক করুন।');
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type':'application/json', 'x-api-key':ak, 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-access':'true' },
-      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:4000, system:'Respond ONLY with valid JSON. No backticks.', messages:[{role:'user',content:PROMPTS[curT](getVals())}] })
-    });
-    if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.error?.message||'API Error '+r.status); }
-    const data = await r.json();
-    const parsed = JSON.parse(data.content.map(c=>c.text||'').join('').replace(/```json|```/g,'').trim());
+    const provider = localStorage.getItem('c2b_api_provider') || 'openrouter';
+    let responseText;
+
+    if (provider === 'openrouter') {
+      const orKey = localStorage.getItem('c2b_or_key');
+      if (!orKey) throw new Error('OpenRouter API Key দিন। ⚙️ API বাটনে ক্লিক করুন।');
+      const model = localStorage.getItem('c2b_or_model') || 'google/gemini-2.0-flash-exp:free';
+      const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + orKey,
+          'HTTP-Referer': location.origin,
+          'X-Title': 'Creator2Business'
+        },
+        body: JSON.stringify({
+          model,
+          max_tokens: 4000,
+          messages: [
+            { role: 'system', content: 'Respond ONLY with valid JSON. No backticks, no explanation.' },
+            { role: 'user', content: PROMPTS[curT](getVals()) }
+          ]
+        })
+      });
+      if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.error?.message || 'OpenRouter Error ' + r.status); }
+      const data = await r.json();
+      responseText = data.choices?.[0]?.message?.content || '';
+    } else {
+      const ak = localStorage.getItem('c2b_ak');
+      if (!ak) throw new Error('Anthropic API Key দিন। ⚙️ বাটনে ক্লিক করুন।');
+      const r = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json', 'x-api-key':ak, 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-access':'true' },
+        body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:4000, system:'Respond ONLY with valid JSON. No backticks.', messages:[{role:'user',content:PROMPTS[curT](getVals())}] })
+      });
+      if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.error?.message||'API Error '+r.status); }
+      const data = await r.json();
+      responseText = data.content.map(c=>c.text||'').join('');
+    }
+
+    const parsed = JSON.parse(responseText.replace(/```json|```/g,'').trim());
     renderOut(parsed);
     oc.scrollIntoView({behavior:'smooth',block:'start'});
   } catch(e) {
@@ -820,9 +953,7 @@ function renderOut(data) {
   body.innerHTML = h;
 }
 
-/* ══════════════════════════════════════
-   TASKS
-══════════════════════════════════════ */
+/* ══ TASKS ══ */
 async function loadTasks() {
   const el = document.getElementById('taskArea');
   el.innerHTML = `<div class="skel" style="height:100px;margin-bottom:14px;border-radius:var(--r);"></div>`;
@@ -873,14 +1004,11 @@ async function toggleTask(day) {
   const prog = await DB.getProgress(phone);
   const isDone = prog && prog['day'+day];
   await DB.setProgress(phone, day, !isDone);
-  Modal.hide('taskMo');
-  loadTasks();
+  Modal.hide('taskMo'); loadTasks();
   T.ok(!isDone ? '🎉 দিন '+day+' সম্পন্ন!' : 'অসম্পন্ন করা হয়েছে');
 }
 
-/* ══════════════════════════════════════
-   MARKETPLACE
-══════════════════════════════════════ */
+/* ══ MARKETPLACE ══ */
 const TIPO = {service:'🏢',ebook:'📖',course:'🎓',template:'📄'};
 const TILBL = {service:'সার্ভিস',ebook:'ইবুক',course:'কোর্স',template:'টেমপ্লেট'};
 const TITAG = {service:'tp',ebook:'tgo',course:'tg',template:'tr'};
@@ -891,26 +1019,85 @@ async function loadMarket() {
   try {
     const prods = await DB.getProducts();
     if (!prods.length) { el.innerHTML = `<div class="alert a-i">🛍️ এখনো কোনো প্রোডাক্ট নেই।</div>`; return; }
-    el.innerHTML = `<div class="gaut">${prods.map(p=>`
-      <div class="prod-card">
-        <div class="prod-thumb">${TIPO[p.type]||'📦'}</div>
-        <div class="prod-body">
-          <span class="tag ${TITAG[p.type]||'tp'} mb1">${TILBL[p.type]||p.type}</span>
-          <div style="font-weight:700;color:#fff;margin-bottom:4px;font-size:.92rem;">${esc(p.name)}</div>
-          <p style="font-size:.8rem;margin-bottom:8px;flex:1;line-height:1.5;">${esc(p.description)}</p>
-          <div class="prod-price">৳${Number(p.price||0).toLocaleString('bn-BD')}</div>
-          <button class="btn btn-p btn-fw btn-sm" onclick="openBuy('${p.id}')">🛒 কিনুন</button>
-        </div>
-      </div>`).join('')}</div>`;
+
+    const freeProds = prods.filter(p => Number(p.price||0) === 0);
+    const paidProds = prods.filter(p => Number(p.price||0) > 0);
+
+    let html = '';
+
+    if (freeProds.length) {
+      html += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <div style="width:3px;height:18px;background:var(--accent3);border-radius:2px;"></div>
+        <div style="font-family:var(--fh);font-weight:700;color:var(--accent3);font-size:.92rem;">🎁 ফ্রি প্রোডাক্ট</div>
+      </div>
+      <div class="gaut mb2">${freeProds.map(p => prodCard(p, true)).join('')}</div>`;
+    }
+
+    if (paidProds.length) {
+      html += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;${freeProds.length?'margin-top:20px;':''}">
+        <div style="width:3px;height:18px;background:var(--gold);border-radius:2px;"></div>
+        <div style="font-family:var(--fh);font-weight:700;color:var(--gold);font-size:.92rem;">💎 পেইড প্রোডাক্ট</div>
+      </div>
+      <div class="gaut">${paidProds.map(p => prodCard(p, false)).join('')}</div>`;
+    }
+
+    el.innerHTML = html;
   } catch(e) { el.innerHTML = `<div class="alert a-e">⚠️ ${esc(e.message)}</div>`; }
 }
 
+function prodCard(p, isFree) {
+  return `<div class="prod-card${isFree?' free-prod':''}">
+    <div class="prod-thumb">
+      ${TIPO[p.type]||'📦'}
+      ${isFree ? '<span class="free-badge">FREE</span>' : ''}
+    </div>
+    <div class="prod-body">
+      <span class="tag ${isFree?'tfree':TITAG[p.type]||'tp'} mb1">${isFree?'🎁 বিনামূল্যে':TILBL[p.type]||p.type}</span>
+      <div style="font-weight:700;color:#fff;margin-bottom:4px;font-size:.92rem;">${esc(p.name)}</div>
+      <p style="font-size:.8rem;margin-bottom:8px;flex:1;line-height:1.5;">${esc(p.description)}</p>
+      <div class="prod-price ${isFree?'free'}">${isFree ? '🎁 বিনামূল্যে' : '৳'+Number(p.price||0).toLocaleString('bn-BD')}</div>
+      ${isFree
+        ? `<button class="btn btn-free btn-fw btn-sm" onclick="openFree('${p.id}')">⬇️ ডাউনলোড / দেখুন</button>`
+        : `<button class="btn btn-p btn-fw btn-sm" onclick="openBuy('${p.id}')">🛒 কিনুন</button>`}
+    </div>
+  </div>`;
+}
+
+/* ══ FREE PRODUCT MODAL ══ */
+async function openFree(id) {
+  const prods = await DB.getProducts();
+  const p = prods.find(x=>x.id===id); if(!p) return;
+  document.getElementById('freeT').textContent = '🎁 ' + p.name;
+  let linkHtml = '';
+  if (p.link) {
+    linkHtml = `
+      <div style="background:rgba(67,233,123,.08);border:1.5px solid rgba(67,233,123,.3);border-radius:var(--r2);padding:14px;text-align:center;margin-bottom:12px;">
+        <div style="font-size:1.5rem;margin-bottom:6px;">⬇️</div>
+        <div style="font-size:.84rem;color:var(--text2);margin-bottom:10px;">${p.type==='ebook'||p.type==='template' ? 'ফাইলটি ডাউনলোড করুন' : 'প্রোডাক্ট অ্যাক্সেস করুন'}</div>
+        <a href="${esc(p.link)}" target="_blank" class="btn btn-free btn-fw">🔗 ${p.type==='ebook'||p.type==='template' ? 'ডাউনলোড করুন' : 'এখনই দেখুন / অ্যাক্সেস করুন'}</a>
+      </div>`;
+  } else {
+    linkHtml = `<div class="alert a-i mb2">⏳ লিংক শীঘ্রই আসবে। WhatsApp-এ যোগাযোগ করুন।</div>`;
+  }
+  document.getElementById('freeB').innerHTML = `
+    <div class="ri mb2" style="text-align:center;">
+      <div style="font-size:2.5rem;margin-bottom:7px;">${TIPO[p.type]||'📦'}</div>
+      <div style="font-family:var(--fh);font-size:1rem;font-weight:800;color:#fff;margin-bottom:4px;">${esc(p.name)}</div>
+      <div style="font-size:.83rem;color:var(--text2);">${esc(p.description)}</div>
+      <div style="margin-top:8px;"><span class="tag tfree">🎁 সম্পূর্ণ বিনামূল্যে</span></div>
+    </div>
+    ${p.details?`<div class="alert a-i mb2" style="font-size:.8rem;">${esc(p.details)}</div>`:''}
+    ${linkHtml}`;
+  Modal.show('freeMo');
+}
+
+/* ══ BUY MODAL (paid only) ══ */
 let _buyId = null;
 async function openBuy(id) {
   _buyId = id;
   const prods = await DB.getProducts();
   const p = prods.find(x=>x.id===id); if(!p) return;
-  document.getElementById('buyT').textContent = esc(p.name);
+  document.getElementById('buyT').textContent = p.name;
   document.getElementById('buyB').innerHTML = `
     <div class="ri mb2" style="text-align:center;">
       <div style="font-size:2.5rem;margin-bottom:7px;">${TIPO[p.type]||'📦'}</div>
@@ -919,11 +1106,14 @@ async function openBuy(id) {
       <div style="font-family:var(--fh);font-size:1.6rem;font-weight:800;color:var(--gold);">৳${Number(p.price||0).toLocaleString('bn-BD')}</div>
     </div>
     ${p.details?`<div class="alert a-i mb2" style="font-size:.8rem;">${esc(p.details)}</div>`:''}
-    <div class="fg mb2"><label class="fl">পেমেন্ট</label>
-      <select class="fc" id="payM"><option value="bkash">bKash</option><option value="nagad">Nagad</option><option value="card">Card</option></select>
+    <div class="alert a-i mb2" style="font-size:.8rem;">
+      💳 <strong>পেমেন্ট প্রক্রিয়া:</strong> অর্ডার করুন → অ্যাডমিন আপনার WhatsApp/Email-এ পেমেন্ট তথ্য পাঠাবেন → পেমেন্টের পর প্রোডাক্ট পাবেন
+    </div>
+    <div class="fg mb2"><label class="fl">পেমেন্ট মেথড পছন্দ</label>
+      <select class="fc" id="payM"><option value="bkash">bKash</option><option value="nagad">Nagad</option><option value="card">Card/Bank</option><option value="other">অন্য</option></select>
     </div>
     <div class="fg mb3"><label class="fl">নোট (ঐচ্ছিক)</label><input class="fc" id="buyN" placeholder="বিশেষ নির্দেশনা..."></div>
-    <button class="btn btn-p btn-fw" onclick="confirmBuy()">✅ অর্ডার করুন</button>
+    <button class="btn btn-p btn-fw" onclick="confirmBuy()">📩 অর্ডার রিকোয়েস্ট করুন</button>
     <div style="text-align:center;font-size:.73rem;color:var(--text2);margin-top:7px;">পেমেন্ট নির্দেশনা WhatsApp-এ পাবেন</div>`;
   Modal.show('buyMo');
 }
@@ -934,7 +1124,7 @@ async function confirmBuy() {
   try {
     await DB.addOrder({ productId:_buyId, productName:p.name, price:p.price, type:p.type, payMethod:document.getElementById('payM').value, note:document.getElementById('buyN').value, userPhone:localStorage.getItem('c2b_ph'), userName:ME?.name||'' });
     Modal.hide('buyMo');
-    T.ok('অর্ডার সফল! WhatsApp-এ যোগাযোগ করব।');
+    T.ok('অর্ডার হয়েছে! অ্যাডমিন WhatsApp-এ যোগাযোগ করবেন।');
   } catch(e) { T.err('সমস্যা: '+e.message); }
 }
 
@@ -959,9 +1149,7 @@ async function loadOrders() {
   } catch(e) { el.innerHTML = `<div class="alert a-e">⚠️ ${esc(e.message)}</div>`; }
 }
 
-/* ══════════════════════════════════════
-   HELP & SETTINGS
-══════════════════════════════════════ */
+/* ══ HELP ══ */
 async function sendHelp() {
   const sub = document.getElementById('hSub').value.trim();
   const msg = document.getElementById('hMsg').value.trim();
@@ -974,24 +1162,20 @@ async function sendHelp() {
   } catch(e) { T.err('সমস্যা: '+e.message); }
 }
 
-function saveAK() {
-  const k = document.getElementById('akInp').value.trim();
-  if (!k || !k.startsWith('sk-ant-')) { T.err('সঠিক API Key দিন (sk-ant- দিয়ে শুরু)'); return; }
-  localStorage.setItem('c2b_ak', k);
-  Modal.hide('apiModal');
-  T.ok('API Key সেভ হয়েছে ✅');
-}
-
-/* ══════════════════════════════════════
-   BOOT
-══════════════════════════════════════ */
+/* ══ BOOT ══ */
 document.addEventListener('DOMContentLoaded', async () => {
-  // Mobile nav
-  document.querySelector('.hmb')?.addEventListener('click', () => document.getElementById('mainNav')?.classList.toggle('open'));
-  // Close modals
   document.querySelectorAll('.mo').forEach(o => o.addEventListener('click', e => { if(e.target===o) o.classList.add('hidden'); }));
 
-  // Init Firebase
+  // Load saved keys into modal on open
+  document.getElementById('apiModal').addEventListener('transitionend', () => {
+    const orKey = localStorage.getItem('c2b_or_key') || '';
+    if (orKey) document.getElementById('orKeyInp').value = orKey;
+    const model = localStorage.getItem('c2b_or_model') || 'google/gemini-2.0-flash-exp:free';
+    document.getElementById('orModelSel').value = model;
+    const ak = localStorage.getItem('c2b_ak') || '';
+    if (ak) document.getElementById('akInp').value = ak;
+  });
+
   const fbOK = fbInit();
   if (!fbOK) {
     document.getElementById('phoneErr').textContent = '⚠️ Firebase config সমস্যা। config.js চেক করুন।';
@@ -1000,7 +1184,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  // Auto-login from saved phone
   const saved = localStorage.getItem('c2b_ph');
   if (saved) {
     const btn = document.getElementById('phoneBtn');
