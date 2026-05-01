@@ -152,10 +152,35 @@ textarea.fc{resize:vertical;min-height:80px}
 
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 
+/* SIDEBAR OVERLAY */
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:49;backdrop-filter:blur(2px);}
+.sb-overlay.open{display:block;}
 @media(max-width:768px){
-  .nav{display:none}.nav.open{display:flex;flex-direction:column;position:fixed;top:62px;left:0;right:0;background:var(--bg2);padding:12px;border-bottom:1px solid var(--border);z-index:99}
-  .hmb{display:block}.sidebar{display:none}.app-layout{flex-direction:column}.main-c{padding:14px}
-  .form-grid,.fc-grid{grid-template-columns:1fr}.fc-full,.fc-full2{grid-column:1}.grid3{grid-template-columns:1fr}
+  .nav{display:none}
+  .nav.open{display:flex;flex-direction:column;position:fixed;top:62px;left:0;right:0;background:var(--bg2);padding:12px;border-bottom:1px solid var(--border);z-index:99}
+  .hmb{display:block!important;font-size:1.4rem;width:38px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid var(--border2)!important;transition:all .2s;}
+  .hmb:hover{background:var(--card2);color:#fff;}
+  .sidebar{
+    display:flex!important;
+    flex-direction:column;
+    position:fixed;
+    top:62px;left:0;
+    height:calc(100vh - 62px);
+    width:240px;
+    z-index:50;
+    transform:translateX(-100%);
+    transition:transform .28s cubic-bezier(.4,0,.2,1);
+    box-shadow:4px 0 24px rgba(0,0,0,.5);
+  }
+  .sidebar.open{transform:translateX(0);}
+  .app-layout{flex-direction:column}
+  .main-c{padding:14px}
+  .form-grid,.fc-grid{grid-template-columns:1fr}
+  .fc-full,.fc-full2{grid-column:1}
+  .grid3{grid-template-columns:1fr}
+  .tool-tabs{grid-template-columns:repeat(auto-fill,minmax(90px,1fr));}
+  .prod-card{min-width:0;}
+  .out-hdr{flex-direction:column;align-items:flex-start;}
 }
 </style>
 </head>
@@ -260,9 +285,11 @@ textarea.fc{resize:vertical;min-height:80px}
         <button class="btn btn-sm btn-s" onclick="Modal.show('apiModal')" style="margin-left:5px;">⚙️</button>
         <button class="btn btn-sm btn-d" onclick="doLogout()">🚪</button>
       </nav>
-      <button class="hmb" onclick="document.getElementById('mainNav').classList.toggle('open')">☰</button>
+      <button class="hmb" id="hmbBtn" onclick="toggleMobileMenu()" aria-label="মেনু">☰</button>
     </div>
   </header>
+  <!-- Sidebar overlay for mobile -->
+  <div class="sb-overlay" id="sbOverlay" onclick="closeMobileMenu()"></div>
   <div class="app-layout">
     <aside class="sidebar">
       <div style="padding:12px 8px 4px;" id="sideProf"></div>
@@ -364,12 +391,34 @@ textarea.fc{resize:vertical;min-height:80px}
 
 <!-- MODALS -->
 <div class="mo hidden" id="apiModal">
-  <div class="mb" style="max-width:400px;">
-    <div class="mh"><h3>⚙️ API Key</h3><button class="mc" onclick="Modal.hide('apiModal')">✕</button></div>
+  <div class="mb" style="max-width:440px;">
+    <div class="mh"><h3>⚙️ OpenRouter AI সেটিংস</h3><button class="mc" onclick="Modal.hide('apiModal')">✕</button></div>
     <div class="mbody">
-      <div class="alert a-i mb2" style="font-size:.79rem;">console.anthropic.com থেকে ফ্রি API Key নিন।</div>
-      <div class="fg mb2"><label class="fl">API Key</label><input type="password" class="fc" id="akInp" placeholder="sk-ant-..."></div>
-      <button class="btn btn-p btn-fw" onclick="saveAK()">💾 সেভ করুন</button>
+      <div class="alert a-i mb2" style="font-size:.79rem;">
+        🔗 <a href="https://openrouter.ai/keys" target="_blank" style="color:var(--accent3);font-weight:600;">openrouter.ai</a> তে signup করুন → Keys → Create Key<br>
+        <span style="color:var(--accent3);font-weight:600;">google/gemini-2.0-flash-exp:free</span> মডেলটি সম্পূর্ণ <strong>বিনামূল্যে</strong>!
+      </div>
+      <div class="fg mb2">
+        <label class="fl">OpenRouter API Key</label>
+        <input type="password" class="fc" id="akInp" placeholder="sk-or-v1-...">
+      </div>
+      <div class="fg mb3">
+        <label class="fl">AI Model বেছে নিন</label>
+        <select class="fc" id="akModel">
+          <option value="google/gemini-2.0-flash-exp:free">✅ Gemini 2.0 Flash (সম্পূর্ণ বিনামূল্যে)</option>
+          <option value="meta-llama/llama-3.1-8b-instruct:free">✅ Llama 3.1 8B (বিনামূল্যে)</option>
+          <option value="openai/gpt-4o-mini">GPT-4o Mini (পেইড)</option>
+          <option value="anthropic/claude-3-haiku">Claude 3 Haiku (পেইড)</option>
+        </select>
+      </div>
+      <div id="ak-test-res" class="hidden mb2"></div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-p" style="flex:1" onclick="saveAK()">💾 সেভ করুন</button>
+        <button class="btn btn-s" onclick="testAK()">🧪 Test</button>
+      </div>
+      <div style="font-size:.72rem;color:var(--text2);margin-top:9px;text-align:center;">
+        ফ্রি ক্রেডিট শেষ হলে নতুন account খুলুন বা অন্য ফ্রি model ব্যবহার করুন
+      </div>
     </div>
   </div>
 </div>
@@ -660,6 +709,32 @@ function bootApp() {
 }
 
 /* ══════════════════════════════════════
+   MOBILE MENU
+══════════════════════════════════════ */
+function toggleMobileMenu() {
+  const nav = document.getElementById('mainNav');
+  const sb  = document.querySelector('.sidebar');
+  const ov  = document.getElementById('sbOverlay');
+  const btn = document.getElementById('hmbBtn');
+  const isOpen = sb?.classList.contains('open');
+  if (isOpen) {
+    closeMobileMenu();
+  } else {
+    nav?.classList.add('open');
+    sb?.classList.add('open');
+    ov?.classList.add('open');
+    btn.textContent = '✕';
+  }
+}
+function closeMobileMenu() {
+  document.getElementById('mainNav')?.classList.remove('open');
+  document.querySelector('.sidebar')?.classList.remove('open');
+  document.getElementById('sbOverlay')?.classList.remove('open');
+  const btn = document.getElementById('hmbBtn');
+  if (btn) btn.textContent = '☰';
+}
+
+/* ══════════════════════════════════════
    PAGES
 ══════════════════════════════════════ */
 function showPage(pg, btn) {
@@ -670,6 +745,7 @@ function showPage(pg, btn) {
   if (pg === 'tasks')  loadTasks();
   if (pg === 'market') loadMarket();
   if (pg === 'orders') loadOrders();
+  closeMobileMenu(); // মোবাইলে মেনু বন্ধ করুন
 }
 
 /* ══════════════════════════════════════
@@ -757,16 +833,34 @@ async function generate() {
   oc.classList.remove('hidden');
   document.getElementById('outBody').innerHTML = `<div class="skel mb1" style="height:14px;width:60%"></div><div class="skel mb1" style="height:12px;width:85%"></div><div class="skel" style="height:12px;width:70%"></div>`;
   try {
-    const ak = localStorage.getItem('c2b_ak');
-    if (!ak) throw new Error('API Key দিন। ⚙️ বাটনে ক্লিক করুন।');
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
+    const ak = localStorage.getItem('c2b_or_key');
+    const model = localStorage.getItem('c2b_or_model') || 'google/gemini-2.0-flash-exp:free';
+    if (!ak) throw new Error('OpenRouter API Key দিন। ⚙️ বাটনে ক্লিক করুন।');
+    const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type':'application/json', 'x-api-key':ak, 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-access':'true' },
-      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:4000, system:'Respond ONLY with valid JSON. No backticks.', messages:[{role:'user',content:PROMPTS[curT](getVals())}] })
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + ak,
+        'HTTP-Referer': location.origin,
+        'X-Title': 'Creator2Business'
+      },
+      body: JSON.stringify({
+        model,
+        max_tokens: 4000,
+        messages: [
+          { role: 'system', content: 'Respond ONLY with valid JSON. No backticks. No explanation.' },
+          { role: 'user', content: PROMPTS[curT](getVals()) }
+        ]
+      })
     });
-    if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.error?.message||'API Error '+r.status); }
+    if (!r.ok) {
+      const e = await r.json().catch(()=>({}));
+      throw new Error(e.error?.message || 'API Error ' + r.status);
+    }
     const data = await r.json();
-    const parsed = JSON.parse(data.content.map(c=>c.text||'').join('').replace(/```json|```/g,'').trim());
+    const rawText = data.choices?.[0]?.message?.content || '';
+    if (!rawText) throw new Error('AI কোনো জবাব দেয়নি। আবার চেষ্টা করুন।');
+    const parsed = JSON.parse(rawText.replace(/```json|```/g,'').trim());
     renderOut(parsed);
     oc.scrollIntoView({behavior:'smooth',block:'start'});
   } catch(e) {
@@ -891,17 +985,60 @@ async function loadMarket() {
   try {
     const prods = await DB.getProducts();
     if (!prods.length) { el.innerHTML = `<div class="alert a-i">🛍️ এখনো কোনো প্রোডাক্ট নেই।</div>`; return; }
-    el.innerHTML = `<div class="gaut">${prods.map(p=>`
-      <div class="prod-card">
-        <div class="prod-thumb">${TIPO[p.type]||'📦'}</div>
-        <div class="prod-body">
-          <span class="tag ${TITAG[p.type]||'tp'} mb1">${TILBL[p.type]||p.type}</span>
-          <div style="font-weight:700;color:#fff;margin-bottom:4px;font-size:.92rem;">${esc(p.name)}</div>
-          <p style="font-size:.8rem;margin-bottom:8px;flex:1;line-height:1.5;">${esc(p.description)}</p>
-          <div class="prod-price">৳${Number(p.price||0).toLocaleString('bn-BD')}</div>
-          <button class="btn btn-p btn-fw btn-sm" onclick="openBuy('${p.id}')">🛒 কিনুন</button>
+
+    const freeProds = prods.filter(p => p.isFree);
+    const paidProds = prods.filter(p => !p.isFree);
+
+    let html = '';
+
+    if (freeProds.length) {
+      html += `<div style="margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+          <span style="font-family:var(--fh);font-weight:800;color:#fff;font-size:1rem;">🆓 ফ্রি প্রোডাক্ট</span>
+          <span class="tag tg">বিনামূল্যে পাওয়া যাচ্ছে</span>
         </div>
-      </div>`).join('')}</div>`;
+        <div class="gaut">${freeProds.map(p=>`
+          <div class="prod-card" style="border-color:rgba(67,233,123,.3);">
+            <div class="prod-thumb" style="background:linear-gradient(135deg,rgba(67,233,123,.15),rgba(67,233,123,.05));">${TIPO[p.type]||'📦'}</div>
+            <div class="prod-body">
+              <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px;">
+                <span class="tag ${TITAG[p.type]||'tp'}">${TILBL[p.type]||p.type}</span>
+                <span class="tag tg">🆓 ফ্রি</span>
+              </div>
+              <div style="font-weight:700;color:#fff;margin-bottom:4px;font-size:.92rem;">${esc(p.name)}</div>
+              <p style="font-size:.8rem;margin-bottom:8px;flex:1;line-height:1.5;">${esc(p.description)}</p>
+              <div style="font-family:var(--fh);font-size:1.1rem;font-weight:800;color:var(--accent3);margin:6px 0 10px;">বিনামূল্যে</div>
+              <a href="${esc(p.link||'#')}" target="_blank" class="btn btn-g btn-fw btn-sm" ${!p.link?'style="pointer-events:none;opacity:.5;"':''}>
+                📥 ডাউনলোড / ওপেন করুন
+              </a>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>`;
+    }
+
+    if (paidProds.length) {
+      html += `<div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+          <span style="font-family:var(--fh);font-weight:800;color:#fff;font-size:1rem;">💰 পেইড প্রোডাক্ট</span>
+        </div>
+        <div class="gaut">${paidProds.map(p=>`
+          <div class="prod-card">
+            <div class="prod-thumb">${TIPO[p.type]||'📦'}</div>
+            <div class="prod-body">
+              <span class="tag ${TITAG[p.type]||'tp'} mb1">${TILBL[p.type]||p.type}</span>
+              <div style="font-weight:700;color:#fff;margin-bottom:4px;font-size:.92rem;">${esc(p.name)}</div>
+              <p style="font-size:.8rem;margin-bottom:8px;flex:1;line-height:1.5;">${esc(p.description)}</p>
+              <div class="prod-price">৳${Number(p.price||0).toLocaleString('bn-BD')}</div>
+              <button class="btn btn-p btn-fw btn-sm" onclick="openBuy('${p.id}')">🛒 অর্ডার করুন</button>
+              <div style="font-size:.69rem;color:var(--text2);text-align:center;margin-top:5px;">💬 পেমেন্টের পর WhatsApp/Email এ পাবেন</div>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>`;
+    }
+
+    el.innerHTML = html;
   } catch(e) { el.innerHTML = `<div class="alert a-e">⚠️ ${esc(e.message)}</div>`; }
 }
 
@@ -976,20 +1113,44 @@ async function sendHelp() {
 
 function saveAK() {
   const k = document.getElementById('akInp').value.trim();
-  if (!k || !k.startsWith('sk-ant-')) { T.err('সঠিক API Key দিন (sk-ant- দিয়ে শুরু)'); return; }
-  localStorage.setItem('c2b_ak', k);
+  const m = document.getElementById('akModel').value;
+  if (!k || !k.startsWith('sk-or-')) { T.err('সঠিক OpenRouter Key দিন (sk-or- দিয়ে শুরু)'); return; }
+  localStorage.setItem('c2b_or_key', k);
+  localStorage.setItem('c2b_or_model', m);
   Modal.hide('apiModal');
-  T.ok('API Key সেভ হয়েছে ✅');
+  T.ok('✅ সেভ হয়েছে! Model: ' + m.split('/').pop());
+}
+
+async function testAK() {
+  const k = document.getElementById('akInp').value.trim();
+  const m = document.getElementById('akModel').value;
+  const resEl = document.getElementById('ak-test-res');
+  if (!k) { T.warn('আগে API Key দিন'); return; }
+  resEl.className = 'alert a-i mb2'; resEl.textContent = '🔄 পরীক্ষা হচ্ছে...'; resEl.classList.remove('hidden');
+  try {
+    const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+k, 'HTTP-Referer':location.origin },
+      body: JSON.stringify({ model:m, max_tokens:10, messages:[{role:'user',content:'Say OK only.'}] })
+    });
+    const data = await r.json();
+    if (data.error) { resEl.className='alert a-e mb2'; resEl.textContent='❌ '+data.error.message; }
+    else { resEl.className='alert a-s mb2'; resEl.textContent='✅ সফল! AI কাজ করছে।'; }
+  } catch(e) { resEl.className='alert a-e mb2'; resEl.textContent='❌ সংযোগ ব্যর্থ: '+e.message; }
 }
 
 /* ══════════════════════════════════════
    BOOT
 ══════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', async () => {
-  // Mobile nav
-  document.querySelector('.hmb')?.addEventListener('click', () => document.getElementById('mainNav')?.classList.toggle('open'));
-  // Close modals
+  // Close modals on backdrop click
   document.querySelectorAll('.mo').forEach(o => o.addEventListener('click', e => { if(e.target===o) o.classList.add('hidden'); }));
+
+  // Load saved OpenRouter settings into modal fields if present
+  const savedKey = localStorage.getItem('c2b_or_key');
+  const savedModel = localStorage.getItem('c2b_or_model');
+  if (savedKey && document.getElementById('akInp')) document.getElementById('akInp').value = savedKey;
+  if (savedModel && document.getElementById('akModel')) document.getElementById('akModel').value = savedModel;
 
   // Init Firebase
   const fbOK = fbInit();

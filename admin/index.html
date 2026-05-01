@@ -162,9 +162,55 @@ tr:hover td{background:var(--card2)}
 @keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
 @keyframes fup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
+/* MOBILE TOP BAR */
+.mob-topbar{
+  display:none;
+  position:fixed;top:0;left:0;right:0;
+  height:54px;
+  background:var(--card);
+  border-bottom:1px solid var(--border);
+  z-index:60;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 14px;
+}
+.mob-topbar-logo{display:flex;align-items:center;gap:8px;}
+.mob-topbar-logo .logo-ic{width:30px;height:30px;font-size:.8rem;}
+.mob-topbar-title{font-family:var(--fh);font-weight:800;font-size:.88rem;color:#fff;}
+.mob-hamb{
+  background:none;
+  border:1px solid var(--border2);
+  border-radius:8px;
+  color:var(--text2);
+  cursor:pointer;
+  font-size:1.15rem;
+  width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.mob-hamb:hover{background:var(--card2);color:#fff;border-color:var(--accent);}
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:49;backdrop-filter:blur(2px);}
+.sb-overlay.open{display:block;}
+
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 
-@media(max-width:900px){.sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.main{margin-left:0}}
+@media(max-width:900px){
+  .mob-topbar{display:flex!important;}
+  .sb{
+    transform:translateX(-100%);
+    transition:transform .28s cubic-bezier(.4,0,.2,1);
+    top:0;
+    box-shadow:4px 0 24px rgba(0,0,0,.6);
+  }
+  .sb.open{transform:translateX(0);}
+  .main{margin-left:0;padding-top:68px;}
+  .pf2{grid-template-columns:1fr!important;}
+  .grid2{grid-template-columns:1fr!important;}
+  table{font-size:.72rem;}
+  td,th{padding:7px 8px;}
+  .ucard{flex-direction:column;}
+  .uactions{flex-wrap:wrap;}
+}
 </style>
 </head>
 <body>
@@ -187,6 +233,16 @@ tr:hover td{background:var(--card2)}
 
 <!-- ADMIN APP -->
 <div id="admApp" class="adm hidden">
+  <!-- Mobile top bar -->
+  <div class="mob-topbar" id="mobTopbar">
+    <div class="mob-topbar-logo">
+      <div class="logo-ic">🚀</div>
+      <div class="mob-topbar-title">Admin Panel</div>
+    </div>
+    <button class="mob-hamb" id="adminHamb" onclick="toggleAdminSidebar()">☰</button>
+  </div>
+  <!-- Sidebar overlay -->
+  <div class="sb-overlay" id="sbOverlay" onclick="closeAdminSidebar()"></div>
   <!-- Sidebar -->
   <aside class="sb" id="sb">
     <div class="sb-logo">
@@ -365,11 +421,36 @@ tr:hover td{background:var(--card2)}
           <select class="fc" id="pm-type"><option value="service">সার্ভিস</option><option value="ebook">ইবুক</option><option value="course">কোর্স</option><option value="template">টেমপ্লেট</option></select>
         </div>
         <div class="fg pf2-full"><label class="fl">নাম *</label><input class="fc" id="pm-name" placeholder="প্রোডাক্টের নাম"></div>
-        <div class="fg"><label class="fl">দাম (৳) *</label><input class="fc" id="pm-price" type="number" placeholder="৪৯৯"></div>
+
+        <!-- মূল্য ধরন -->
+        <div class="fg pf2-full">
+          <label class="fl">মূল্য ধরন *</label>
+          <div style="display:flex;gap:14px;margin-top:5px;">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:.85rem;color:var(--text);">
+              <input type="radio" name="pm-pricing" id="pm-isfree" value="free" onchange="togglePricing()" style="accent-color:var(--accent3);width:15px;height:15px;"> 🆓 বিনামূল্যে
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:.85rem;color:var(--text);">
+              <input type="radio" name="pm-pricing" id="pm-ispaid" value="paid" onchange="togglePricing()" checked style="accent-color:var(--accent);width:15px;height:15px;"> 💰 পেইড
+            </label>
+          </div>
+        </div>
+
+        <div class="fg" id="pm-price-wrap"><label class="fl">দাম (৳) *</label><input class="fc" id="pm-price" type="number" placeholder="৪৯৯"></div>
         <div class="fg"><label class="fl">ডেলিভারি</label><input class="fc" id="pm-del" placeholder="তাৎক্ষণিক / ৭ দিন"></div>
         <div class="fg pf2-full"><label class="fl">বিবরণ *</label><textarea class="fc" id="pm-desc" rows="3" placeholder="সংক্ষিপ্ত বিবরণ..."></textarea></div>
-        <div class="fg pf2-full"><label class="fl">বিস্তারিত (কী কী পাবে)</label><textarea class="fc" id="pm-details" rows="4" placeholder="অন্তর্ভুক্ত সুবিধাগুলো..."></textarea></div>
-        <div class="fg pf2-full"><label class="fl">ডাউনলোড লিংক (ইবুক/টেমপ্লেট)</label><input class="fc" id="pm-link" placeholder="https://..."></div>
+        <div class="fg pf2-full"><label class="fl">বিস্তারিত (কী কী পাবে)</label><textarea class="fc" id="pm-details" rows="3" placeholder="অন্তর্ভুক্ত সুবিধাগুলো..."></textarea></div>
+
+        <!-- ফ্রি প্রোডাক্টের লিংক -->
+        <div class="fg pf2-full hidden" id="pm-link-wrap">
+          <label class="fl">🔗 ডাউনলোড / ওপেন লিংক *</label>
+          <input class="fc" id="pm-link" placeholder="https://drive.google.com/... বা যেকোনো লিংক">
+          <span style="font-size:.71rem;color:var(--accent3);margin-top:3px;">ইউজার এই লিংকে ক্লিক করে সরাসরি ডাউনলোড বা ওপেন করতে পারবে</span>
+        </div>
+
+        <!-- পেইড নোট -->
+        <div class="fg pf2-full hidden" id="pm-paid-note">
+          <div class="alert a-i" style="font-size:.78rem;">💡 পেইড প্রোডাক্ট — কোনো লিংক দেওয়া হবে না। ইউজার অর্ডার করলে আপনি WhatsApp / Email এ ম্যানুয়ালি পাঠাবেন।</div>
+        </div>
       </div>
       <div id="pm-err" class="alert a-e mt2 hidden"></div>
       <div style="display:flex;gap:7px;margin-top:14px;">
@@ -517,6 +598,22 @@ function startLiveBadges() {
   });
 }
 
+/* ══ ADMIN MOBILE SIDEBAR ══ */
+function toggleAdminSidebar() {
+  const sb = document.getElementById('sb');
+  const ov = document.getElementById('sbOverlay');
+  const btn = document.getElementById('adminHamb');
+  const isOpen = sb.classList.contains('open');
+  if (isOpen) { closeAdminSidebar(); }
+  else { sb.classList.add('open'); ov.classList.add('open'); if(btn) btn.textContent='✕'; }
+}
+function closeAdminSidebar() {
+  document.getElementById('sb')?.classList.remove('open');
+  document.getElementById('sbOverlay')?.classList.remove('open');
+  const btn = document.getElementById('adminHamb');
+  if (btn) btn.textContent = '☰';
+}
+
 /* ══ PAGE NAV ══ */
 function showPg(pg, btn) {
   document.querySelectorAll('[id^="pg-"]').forEach(p => p.classList.add('hidden'));
@@ -529,6 +626,7 @@ function showPg(pg, btn) {
   if (pg === 'notif') renderNotifs();
   if (pg === 'tasks') renderTaskEditor();
   if (pg === 'market') renderProds();
+  closeAdminSidebar(); // মোবাইলে sidebar বন্ধ করুন
 }
 
 /* ══ DASHBOARD ══ */
@@ -908,23 +1006,46 @@ async function saveTasks() {
 
 /* ══ MARKETPLACE ══ */
 let eProdId = null;
+
+function togglePricing() {
+  const isFree = document.getElementById('pm-isfree')?.checked;
+  const priceWrap = document.getElementById('pm-price-wrap');
+  const linkWrap = document.getElementById('pm-link-wrap');
+  const paidNote = document.getElementById('pm-paid-note');
+  if (priceWrap) priceWrap.classList.toggle('hidden', isFree);
+  if (linkWrap) linkWrap.classList.toggle('hidden', !isFree);
+  if (paidNote) paidNote.classList.toggle('hidden', isFree);
+}
+
 function openProdMo() {
-  eProdId = null; document.getElementById('pmT').textContent = '+ প্রোডাক্ট যোগ';
+  eProdId = null;
+  document.getElementById('pmT').textContent = '+ প্রোডাক্ট যোগ';
   ['pm-name','pm-price','pm-del','pm-desc','pm-details','pm-link'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
   document.getElementById('pm-type').value = 'service';
+  const isPaid = document.getElementById('pm-ispaid');
+  if (isPaid) isPaid.checked = true;
+  togglePricing();
   document.getElementById('pm-err').classList.add('hidden');
   Modal.show('prodMo');
 }
+
 async function renderProds() {
   const el = document.getElementById('prodTable');
   try {
     const prods = (await DB.getAll('products')).sort((a,b) => new Date(b.createdAt||0) - new Date(a.createdAt||0));
     const typeLbl = {service:'সার্ভিস',ebook:'ইবুক',course:'কোর্স',template:'টেমপ্লেট'};
-    el.innerHTML = prods.length ? `<table><thead><tr><th>ধরন</th><th>নাম</th><th>দাম</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead><tbody>
+    el.innerHTML = prods.length ? `<table><thead><tr><th>ধরন</th><th>নাম</th><th>দাম/ধরন</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead><tbody>
     ${prods.map(p=>`<tr>
-      <td><span class="tag ${{service:'tp',ebook:'tgo',course:'tg',template:'tr'}[p.type]||'tp'}">${typeLbl[p.type]||p.type}</span></td>
-      <td><strong>${esc(p.name)}</strong><br><span style="font-size:.73rem;color:var(--text2);">${esc(p.description?.slice(0,60)||'')}</span></td>
-      <td style="color:var(--gold);font-weight:600;">৳${Number(p.price||0).toLocaleString('bn-BD')}</td>
+      <td>
+        <span class="tag ${{service:'tp',ebook:'tgo',course:'tg',template:'tr'}[p.type]||'tp'}">${typeLbl[p.type]||p.type}</span>
+        ${p.isFree?'<br><span class="tag tg" style="margin-top:2px;font-size:.6rem;">🆓 ফ্রি</span>':''}
+      </td>
+      <td>
+        <strong>${esc(p.name)}</strong><br>
+        <span style="font-size:.72rem;color:var(--text2);">${esc(p.description?.slice(0,55)||'')}</span>
+        ${p.isFree&&p.link?`<br><a href="${esc(p.link)}" target="_blank" style="font-size:.68rem;color:var(--accent3);">🔗 লিংক</a>`:''}
+      </td>
+      <td style="color:${p.isFree?'var(--accent3)':'var(--gold)'};font-weight:600;">${p.isFree?'বিনামূল্যে':'৳'+Number(p.price||0).toLocaleString('bn-BD')}</td>
       <td><span class="pill ${p.active?'p-appr':'p-rej'}">${p.active?'সক্রিয়':'অফ'}</span></td>
       <td>
         <button class="ab" onclick="editProd('${p.id}')">✏️</button>
@@ -935,10 +1056,12 @@ async function renderProds() {
     </tbody></table>` : `<div class="empty">প্রোডাক্ট নেই। + বাটন দিয়ে যোগ করুন।</div>`;
   } catch(e) { el.innerHTML = `<div class="alert a-e">⚠️ ${esc(e.message)}</div>`; }
 }
+
 async function editProd(id) {
   const prods = await DB.getAll('products');
   const p = prods.find(x=>x.id===id); if(!p) return;
-  eProdId = id; document.getElementById('pmT').textContent = '✏️ প্রোডাক্ট সম্পাদনা';
+  eProdId = id;
+  document.getElementById('pmT').textContent = '✏️ প্রোডাক্ট সম্পাদনা';
   document.getElementById('pm-type').value = p.type||'service';
   document.getElementById('pm-name').value = p.name||'';
   document.getElementById('pm-price').value = p.price||'';
@@ -946,21 +1069,40 @@ async function editProd(id) {
   document.getElementById('pm-desc').value = p.description||'';
   document.getElementById('pm-details').value = p.details||'';
   document.getElementById('pm-link').value = p.link||'';
+  if (p.isFree) { document.getElementById('pm-isfree').checked = true; }
+  else { document.getElementById('pm-ispaid').checked = true; }
+  togglePricing();
+  document.getElementById('pm-err').classList.add('hidden');
   Modal.show('prodMo');
 }
+
 async function saveProd() {
   const name = document.getElementById('pm-name').value.trim();
-  const price = document.getElementById('pm-price').value;
   const desc = document.getElementById('pm-desc').value.trim();
-  if (!name||!price||!desc) { document.getElementById('pm-err').textContent='⚠️ নাম, দাম ও বিবরণ আবশ্যক।'; document.getElementById('pm-err').classList.remove('hidden'); return; }
+  const isFree = document.getElementById('pm-isfree')?.checked || false;
+  const price = document.getElementById('pm-price').value;
+  const link  = document.getElementById('pm-link').value.trim();
+
+  if (!name || !desc) { document.getElementById('pm-err').textContent='⚠️ নাম ও বিবরণ আবশ্যক।'; document.getElementById('pm-err').classList.remove('hidden'); return; }
+  if (!isFree && !price) { document.getElementById('pm-err').textContent='⚠️ পেইড প্রোডাক্টের জন্য দাম দিন।'; document.getElementById('pm-err').classList.remove('hidden'); return; }
+  if (isFree && !link) { document.getElementById('pm-err').textContent='⚠️ ফ্রি প্রোডাক্টের জন্য ডাউনলোড লিংক দিন।'; document.getElementById('pm-err').classList.remove('hidden'); return; }
   document.getElementById('pm-err').classList.add('hidden');
-  const data = { type:document.getElementById('pm-type').value, name, price:+price, delivery:document.getElementById('pm-del').value, description:desc, details:document.getElementById('pm-details').value, link:document.getElementById('pm-link').value };
+
+  const data = {
+    type: document.getElementById('pm-type').value,
+    name, isFree,
+    price: isFree ? 0 : +price,
+    delivery: document.getElementById('pm-del').value,
+    description: desc,
+    details: document.getElementById('pm-details').value,
+    link: isFree ? link : '',
+  };
   try {
     if (eProdId) { await DB.update('products/' + eProdId, data); T.ok('আপডেট হয়েছে ✅'); }
     else { const id='p'+Date.now(); await DB.set('products/'+id, {...data,id,createdAt:new Date().toISOString(),active:true}); T.ok('যোগ হয়েছে ✅'); }
     Modal.hide('prodMo'); renderProds(); refresh();
   } catch(e) { T.err('সমস্যা: '+e.message); }
-}
+}}
 async function toggleProd(id,active) { await DB.update('products/'+id,{active:!active}); renderProds(); T.ok(active?'অফ করা হয়েছে':'চালু করা হয়েছে'); }
 async function delProd(id) { if(!confirm('মুছবেন?'))return; await DB.remove('products/'+id); renderProds(); refresh(); T.ok('মুছা হয়েছে'); }
 
