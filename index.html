@@ -156,10 +156,22 @@ textarea.fc{resize:vertical;min-height:80px}
 .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:49;backdrop-filter:blur(2px);}
 .sb-overlay.open{display:block;}
 @media(max-width:768px){
-  .nav{display:none}
-  .nav.open{display:flex;flex-direction:column;position:fixed;top:62px;left:0;right:0;background:var(--bg2);padding:12px;border-bottom:1px solid var(--border);z-index:99}
-  .hmb{display:block!important;font-size:1.4rem;width:38px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid var(--border2)!important;transition:all .2s;}
-  .hmb:hover{background:var(--card2);color:#fff;}
+  /* Header nav — মোবাইলে সম্পূর্ণ লুকানো, dropdown নেই */
+  .nav{display:none!important;}
+  /* ☰ বাটন দেখানো */
+  .hmb{
+    display:flex!important;
+    align-items:center;justify-content:center;
+    width:38px;height:38px;
+    font-size:1.3rem;
+    border-radius:8px;
+    border:1px solid var(--border2)!important;
+    background:var(--card2);
+    color:var(--text2);
+    transition:all .2s;
+  }
+  .hmb:hover,.hmb.active{background:rgba(108,99,255,.15);color:#fff;border-color:var(--accent)!important;}
+  /* Sidebar — পাশ থেকে slide in */
   .sidebar{
     display:flex!important;
     flex-direction:column;
@@ -170,7 +182,7 @@ textarea.fc{resize:vertical;min-height:80px}
     z-index:50;
     transform:translateX(-100%);
     transition:transform .28s cubic-bezier(.4,0,.2,1);
-    box-shadow:4px 0 24px rgba(0,0,0,.5);
+    box-shadow:4px 0 32px rgba(0,0,0,.6);
   }
   .sidebar.open{transform:translateX(0);}
   .app-layout{flex-direction:column}
@@ -179,7 +191,6 @@ textarea.fc{resize:vertical;min-height:80px}
   .fc-full,.fc-full2{grid-column:1}
   .grid3{grid-template-columns:1fr}
   .tool-tabs{grid-template-columns:repeat(auto-fill,minmax(90px,1fr));}
-  .prod-card{min-width:0;}
   .out-hdr{flex-direction:column;align-items:flex-start;}
 }
 </style>
@@ -709,29 +720,28 @@ function bootApp() {
 }
 
 /* ══════════════════════════════════════
-   MOBILE MENU
+   MOBILE MENU — শুধু পাশের sidebar
 ══════════════════════════════════════ */
 function toggleMobileMenu() {
-  const nav = document.getElementById('mainNav');
   const sb  = document.querySelector('.sidebar');
   const ov  = document.getElementById('sbOverlay');
   const btn = document.getElementById('hmbBtn');
-  const isOpen = sb?.classList.contains('open');
+  if (!sb) return;
+  const isOpen = sb.classList.contains('open');
   if (isOpen) {
     closeMobileMenu();
   } else {
-    nav?.classList.add('open');
-    sb?.classList.add('open');
+    sb.classList.add('open');
     ov?.classList.add('open');
-    btn.textContent = '✕';
+    btn?.classList.add('active');
+    btn && (btn.textContent = '✕');
   }
 }
 function closeMobileMenu() {
-  document.getElementById('mainNav')?.classList.remove('open');
   document.querySelector('.sidebar')?.classList.remove('open');
   document.getElementById('sbOverlay')?.classList.remove('open');
   const btn = document.getElementById('hmbBtn');
-  if (btn) btn.textContent = '☰';
+  if (btn) { btn.classList.remove('active'); btn.textContent = '☰'; }
 }
 
 /* ══════════════════════════════════════
