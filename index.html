@@ -312,6 +312,8 @@ textarea.fc{resize:vertical;min-height:80px}
       <button class="sb-btn" onclick="showPage('orders',this)">📦 আমার অর্ডার</button>
       <div class="sb-sec">এজেন্সি</div>
       <button class="sb-btn" onclick="showPage('agency',this)">🏢 দ্রুত সাহায্য</button>
+      <div class="sb-sec">সেটিংস</div>
+      <button class="sb-btn" onclick="Modal.show('apiModal');closeMobileMenu()">⚙️ API Key সেট করুন</button>
       <div class="sb-sec">সাপোর্ট</div>
       <button class="sb-btn" onclick="showPage('help',this)">💬 হেল্প</button>
     </aside>
@@ -406,8 +408,7 @@ textarea.fc{resize:vertical;min-height:80px}
     <div class="mh"><h3>⚙️ OpenRouter AI সেটিংস</h3><button class="mc" onclick="Modal.hide('apiModal')">✕</button></div>
     <div class="mbody">
       <div class="alert a-i mb2" style="font-size:.79rem;">
-        🔗 <a href="https://openrouter.ai/keys" target="_blank" style="color:var(--accent3);font-weight:600;">openrouter.ai</a> তে signup করুন → Keys → Create Key<br>
-        <span style="color:var(--accent3);font-weight:600;">google/gemini-2.0-flash-exp:free</span> মডেলটি সম্পূর্ণ <strong>বিনামূল্যে</strong>!
+        🔗 <a href="https://openrouter.ai/keys" target="_blank" style="color:var(--accent3);font-weight:600;">openrouter.ai</a> তে signup করুন → Keys → Create Key
       </div>
       <div class="fg mb2">
         <label class="fl">OpenRouter API Key</label>
@@ -416,19 +417,14 @@ textarea.fc{resize:vertical;min-height:80px}
       <div class="fg mb3">
         <label class="fl">AI Model বেছে নিন</label>
         <select class="fc" id="akModel">
-          <option value="google/gemini-2.0-flash-exp:free">✅ Gemini 2.0 Flash (সম্পূর্ণ বিনামূল্যে)</option>
-          <option value="meta-llama/llama-3.1-8b-instruct:free">✅ Llama 3.1 8B (বিনামূল্যে)</option>
-          <option value="openai/gpt-4o-mini">GPT-4o Mini (পেইড)</option>
-          <option value="anthropic/claude-3-haiku">Claude 3 Haiku (পেইড)</option>
+          <option value="openai/gpt-4o-mini">GPT-4o Mini</option>
+          <option value="anthropic/claude-3-haiku">Claude 3 Haiku</option>
         </select>
       </div>
       <div id="ak-test-res" class="hidden mb2"></div>
       <div style="display:flex;gap:8px;">
         <button class="btn btn-p" style="flex:1" onclick="saveAK()">💾 সেভ করুন</button>
         <button class="btn btn-s" onclick="testAK()">🧪 Test</button>
-      </div>
-      <div style="font-size:.72rem;color:var(--text2);margin-top:9px;text-align:center;">
-        ফ্রি ক্রেডিট শেষ হলে নতুন account খুলুন বা অন্য ফ্রি model ব্যবহার করুন
       </div>
     </div>
   </div>
@@ -844,7 +840,7 @@ async function generate() {
   document.getElementById('outBody').innerHTML = `<div class="skel mb1" style="height:14px;width:60%"></div><div class="skel mb1" style="height:12px;width:85%"></div><div class="skel" style="height:12px;width:70%"></div>`;
   try {
     const ak = localStorage.getItem('c2b_or_key');
-    const model = localStorage.getItem('c2b_or_model') || 'google/gemini-2.0-flash-exp:free';
+    const model = localStorage.getItem('c2b_or_model') || 'openai/gpt-4o-mini';
     if (!ak) throw new Error('OpenRouter API Key দিন। ⚙️ বাটনে ক্লিক করুন।');
     const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
@@ -882,18 +878,50 @@ async function generate() {
 function renderOut(data) {
   const body = document.getElementById('outBody');
   let h = '';
-  if (curT === 'content_ideas' && data.ideas) {
-    h = '<div class="gaut">' + data.ideas.map((it,i) => {
-      const ec = {curiosity:'tp',fear:'tr',humor:'tg',greed:'tgo'}[it.emotion]||'tp';
-      return `<div class="ri"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span class="tag ${ec}">${it.emotion||'আইডিয়া'}</span><span class="tag tgr">#${it.id||i+1}</span></div>
-        <div style="font-weight:700;color:#fff;margin-bottom:6px;font-size:.92rem;">${esc(it.title)}</div>
-        <div><span class="tag tr" style="margin-right:4px;font-size:.65rem;">হুক</span><span style="color:var(--text2);font-size:.8rem;">${esc(it.hook)}</span></div>
-        <div style="border-top:1px solid var(--border);margin:9px 0;"></div>
-        <p style="font-size:.81rem;white-space:pre-line;margin-bottom:6px;">${esc(it.script)}</p>
-        <p style="font-size:.78rem;color:var(--text2);margin-bottom:6px;">${esc(it.caption)}</p>
-        <div style="display:flex;flex-wrap:wrap;gap:4px;">${(it.hashtags||[]).map(h=>`<span class="tag tp" style="font-size:.66rem;">${esc(h)}</span>`).join('')}</div>
-        ${it.cta?`<div style="background:rgba(108,99,255,.1);border-radius:5px;padding:6px;margin-top:6px;font-size:.76rem;color:#a78bfa;font-weight:600;">📢 ${esc(it.cta)}</div>`:''}</div>`;
-    }).join('') + '</div>';
+
+  // ── হুক & স্ক্রিপ্ট ──────────────────────────────────
+  if (curT === 'hook_script' && data.hooks) {
+    const typeLabel = {curiosity:'কৌতূহল',amazing_fact:'চমকপ্রদ তথ্য',challenge:'চ্যালেঞ্জ',fear:'ভয়',humor:'হিউমার',story:'গল্প'};
+    const typeTag   = {curiosity:'tp',amazing_fact:'tgo',challenge:'tr',fear:'tr',humor:'tg',story:'tgr'};
+    h = data.hooks.map((it,i) => `
+      <div class="ri" style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <span class="tag ${typeTag[it.hook_type]||'tp'}">${typeLabel[it.hook_type]||it.hook_type||'হুক'}</span>
+          <span class="tag tgr">হুক ${it.id||i+1}</span>
+        </div>
+        <div style="background:rgba(108,99,255,.1);border-left:3px solid var(--accent);border-radius:0 var(--r2) var(--r2) 0;padding:10px 13px;margin-bottom:10px;">
+          <div style="font-size:.68rem;color:var(--text2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;">🎣 হুক</div>
+          <div style="font-weight:700;color:#fff;font-size:.92rem;line-height:1.6;">${esc(it.hook)}</div>
+        </div>
+        <div style="margin-bottom:10px;">
+          <div style="font-size:.68rem;color:var(--text2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;">📝 স্ক্রিপ্ট</div>
+          <div style="font-size:.85rem;color:var(--text3);line-height:1.8;white-space:pre-line;">${esc(it.script)}</div>
+        </div>
+        ${it.cta?`<div style="background:rgba(67,233,123,.08);border:1px solid rgba(67,233,123,.2);border-radius:var(--r3);padding:8px 11px;font-size:.81rem;color:#4ade80;">📢 CTA: ${esc(it.cta)}</div>`:''}
+        ${it.why?`<div style="margin-top:8px;font-size:.76rem;color:var(--text2);">💡 ${esc(it.why)}</div>`:''}
+      </div>`).join('<div style="border-top:1px solid var(--border);margin:4px 0 12px;"></div>');
+
+  // ── কন্টেন্ট আইডিয়া ───────────────────────────────
+  } else if (curT === 'content_ideas' && data.ideas) {
+    const ec = {curiosity:'tp',fear:'tr',humor:'tg',greed:'tgo'};
+    h = '<div class="gaut">' + data.ideas.map((it,i) => `
+      <div class="ri">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span class="tag ${ec[it.emotion]||'tp'}">${it.emotion||'আইডিয়া'}</span>
+          <span class="tag tgr">#${it.id||i+1}</span>
+        </div>
+        <div style="font-weight:700;color:#fff;margin-bottom:8px;font-size:.92rem;">${esc(it.title)}</div>
+        <div style="background:rgba(108,99,255,.08);border-radius:var(--r3);padding:8px;margin-bottom:8px;">
+          <div style="font-size:.67rem;color:var(--text2);margin-bottom:3px;">🎣 হুক</div>
+          <div style="font-size:.82rem;color:var(--text3);">${esc(it.hook)}</div>
+        </div>
+        <div style="font-size:.8rem;line-height:1.7;margin-bottom:7px;color:var(--text3);">${esc(it.script)}</div>
+        <div style="font-size:.77rem;color:var(--text2);margin-bottom:7px;">${esc(it.caption)}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:7px;">${(it.hashtags||[]).map(hh=>`<span class="tag tp" style="font-size:.65rem;">${esc(hh)}</span>`).join('')}</div>
+        ${it.cta?`<div style="background:rgba(108,99,255,.1);border-radius:5px;padding:6px;font-size:.76rem;color:#a78bfa;font-weight:600;">📢 ${esc(it.cta)}</div>`:''}
+      </div>`).join('') + '</div>';
+
+  // ── গ্রোথ প্ল্যান ──────────────────────────────────
   } else if (curT === 'growth_plan' && data.plan) {
     const cl = ['#6c63ff','#ff6584','#43e97b','#f5c518','#6c63ff','#ff6584','#43e97b'];
     data.plan.forEach((d,i) => {
@@ -902,11 +930,13 @@ function renderOut(data) {
           <div style="font-family:var(--fh);font-weight:700;color:${cl[i]};font-size:.85rem;">📅 ${esc(d.day_name||'দিন '+d.day)}</div>
           <div style="background:rgba(245,197,24,.1);color:var(--gold);border-radius:5px;padding:1px 8px;font-size:.7rem;font-weight:600;">⏰ ${esc(d.posting_time)}</div>
         </div>
-        <div style="font-weight:600;color:var(--text3);margin-bottom:3px;font-size:.84rem;">${esc(d.content)}</div>
+        <div style="font-weight:600;color:var(--text3);margin-bottom:5px;font-size:.86rem;">${esc(d.content)}</div>
         <div style="font-size:.79rem;color:var(--text2);">📌 ${esc(d.engagement_strategy)}</div>
         ${d.goal?`<span class="tag tg mt1" style="font-size:.66rem;">🎯 ${esc(d.goal)}</span>`:''}</div>`;
     });
     if (data.expected_growth) h += `<div class="alert a-s mt2">📈 ${esc(data.expected_growth)}</div>`;
+
+  // ── সার্ভিস প্যাকেজ ────────────────────────────────
   } else if (curT === 'service_package' && data.packages) {
     h = '<div class="grid3">' + data.packages.map((pk,i) => {
       const clr = ['var(--text2)','var(--accent)','var(--gold)'][i];
@@ -914,12 +944,164 @@ function renderOut(data) {
         <div style="font-family:var(--fh);font-size:.97rem;font-weight:800;color:#fff;margin-bottom:3px;">${esc(pk.name)}</div>
         <div style="font-size:1.4rem;font-weight:800;color:${clr};margin-bottom:2px;">৳${esc(pk.price_bdt)}</div>
         <div style="font-size:.71rem;color:var(--text2);margin-bottom:9px;">⏰ ${esc(pk.delivery_days)} দিন</div>
-        <div style="text-align:left;">${(pk.includes||[]).map(inc=>`<div style="font-size:.79rem;padding:2px 0;">✅ ${esc(inc)}</div>`).join('')}</div>
+        <div style="text-align:left;">${(pk.includes||[]).map(inc=>`<div style="font-size:.79rem;padding:3px 0;">✅ ${esc(inc)}</div>`).join('')}</div>
         <div style="font-size:.72rem;color:var(--text2);background:var(--bg);border-radius:5px;padding:5px;margin-top:7px;">🎯 ${esc(pk.best_for)}</div></div>`;
     }).join('') + '</div>';
-    if (data.pitch) h += `<div class="ri mt2"><span class="tag tp">পিচ টেমপ্লেট</span><p style="font-size:.83rem;white-space:pre-line;margin-top:8px;">${esc(data.pitch)}</p></div>`;
+    if (data.pitch) h += `<div class="ri mt2"><span class="tag tp">পিচ টেমপ্লেট</span><p style="font-size:.83rem;line-height:1.8;margin-top:8px;">${esc(data.pitch)}</p></div>`;
+
+  // ── নিশ ফাইন্ডার ───────────────────────────────────
+  } else if (curT === 'niche_finder' && data.niches) {
+    const compColor = {low:'tg',medium:'tgo',high:'tr'};
+    const compLabel = {low:'কম প্রতিযোগিতা',medium:'মধ্যম',high:'বেশি'};
+    h = data.niches.map((n,i) => `
+      <div class="ri" style="margin-bottom:10px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div style="font-family:var(--fh);font-weight:800;color:#fff;font-size:.95rem;">${n.rank||i+1}. ${esc(n.niche)}</div>
+          <span class="tag ${compColor[n.competition]||'tgr'}">${compLabel[n.competition]||n.competition||''}</span>
+        </div>
+        <div style="font-size:.83rem;color:var(--text3);margin-bottom:8px;line-height:1.6;">${esc(n.why)}</div>
+        <div style="margin-bottom:7px;">
+          <div style="font-size:.7rem;color:var(--text2);margin-bottom:4px;">💰 আয়ের উপায়:</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;">${(n.monetization||[]).map(m=>`<span class="tag tp" style="font-size:.73rem;">✅ ${esc(m)}</span>`).join('')}</div>
+        </div>
+        ${n.income_potential?`<div style="font-size:.79rem;color:var(--accent3);font-weight:600;">📈 সম্ভাব্য আয়: ${esc(n.income_potential)}</div>`:''}
+      </div>`).join('<div style="border-top:1px solid var(--border);margin:8px 0;"></div>');
+    if (data.recommendation) h += `<div class="alert a-s mt2">💡 সুপারিশ: ${esc(data.recommendation)}</div>`;
+
+  // ── প্রোডাক্ট আইডিয়া ──────────────────────────────
+  } else if (curT === 'product_ideas' && data.products) {
+    const effortTag = {low:'tg',medium:'tgo',high:'tr'};
+    const effortLabel = {low:'সহজ',medium:'মাঝারি',high:'কঠিন'};
+    const typeIco = {course:'🎓',ebook:'📖',service:'🏢',template:'📄',membership:'👥'};
+    h = '<div class="gaut">' + data.products.map(p => `
+      <div class="ri">
+        <div style="text-align:center;font-size:2rem;margin-bottom:8px;">${typeIco[p.type]||'📦'}</div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:4px;">
+          <span class="tag tp">${esc(p.type||'')}</span>
+          <span class="tag ${effortTag[p.effort]||'tgr'}">${effortLabel[p.effort]||p.effort||''}</span>
+        </div>
+        <div style="font-weight:700;color:#fff;margin-bottom:5px;font-size:.9rem;">${esc(p.name)}</div>
+        <div style="font-size:.8rem;color:var(--text2);margin-bottom:8px;line-height:1.6;">${esc(p.description)}</div>
+        <div style="font-family:var(--fh);font-size:1.1rem;font-weight:800;color:var(--gold);">৳${esc(p.price_bdt||'')}</div>
+      </div>`).join('') + '</div>';
+    if (data.recommended) h += `<div class="alert a-i mt2">⭐ সেরা পছন্দ: ${esc(data.recommended)}</div>`;
+
+  // ── Bio অপটিমাইজার ─────────────────────────────────
+  } else if (curT === 'bio_optimizer' && data.bios) {
+    const platIco = {facebook:'🔵',instagram:'📷',tiktok:'🎵',youtube:'▶️'};
+    const platName = {facebook:'Facebook',instagram:'Instagram',tiktok:'TikTok',youtube:'YouTube'};
+    h = Object.entries(data.bios).map(([plat, bio]) => `
+      <div class="ri" style="margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="font-size:1.3rem;">${platIco[plat]||'📱'}</span>
+          <span style="font-weight:700;color:#fff;">${platName[plat]||plat}</span>
+        </div>
+        <div style="background:var(--bg2);border-radius:var(--r3);padding:11px;font-size:.85rem;color:var(--text3);line-height:1.7;border:1px solid var(--border);">${esc(bio)}</div>
+      </div>`).join('');
+    if (data.keywords?.length) h += `<div class="ri mt2"><div style="font-size:.7rem;color:var(--text2);margin-bottom:6px;">🔑 কীওয়ার্ড:</div><div style="display:flex;flex-wrap:wrap;gap:5px;">${data.keywords.map(k=>`<span class="tag tp">${esc(k)}</span>`).join('')}</div></div>`;
+    if (data.profile_tips?.length) h += `<div class="ri mt2"><div style="font-weight:700;color:#fff;margin-bottom:7px;">💡 টিপস:</div>${data.profile_tips.map(t=>`<div style="font-size:.83rem;color:var(--text3);padding:3px 0;">• ${esc(t)}</div>`).join('')}</div>`;
+
+  // ── কোর্স আউটলাইন ──────────────────────────────────
+  } else if (curT === 'course_outline' && data.modules) {
+    h = `<div class="ri mb2" style="text-align:center;background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(255,101,132,.07));">
+      <div style="font-family:var(--fh);font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:5px;">${esc(data.title||'')}</div>
+      ${data.tagline?`<div style="font-size:.84rem;color:var(--text2);margin-bottom:8px;">${esc(data.tagline)}</div>`:''}
+      ${data.price_bdt?`<div style="font-family:var(--fh);font-size:1.5rem;font-weight:800;color:var(--gold);">৳${esc(data.price_bdt)}</div>`:''}
+    </div>`;
+    h += (data.modules||[]).map((mod,i) => `
+      <div class="ri mt1">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px;">
+          <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;color:#fff;flex-shrink:0;">${mod.number||i+1}</div>
+          <div style="font-weight:700;color:#fff;font-size:.9rem;">${esc(mod.title)}</div>
+          ${mod.duration?`<span class="tag tgr" style="margin-left:auto;font-size:.67rem;">⏱️ ${esc(mod.duration)}</span>`:''}
+        </div>
+        <div style="padding-left:36px;">${(mod.lessons||[]).map(l=>`<div style="font-size:.81rem;color:var(--text3);padding:2px 0;">📌 ${esc(l)}</div>`).join('')}</div>
+      </div>`).join('');
+    if (data.sales_points?.length) h += `<div class="ri mt2"><div style="font-weight:700;color:var(--accent3);margin-bottom:6px;">✅ বিক্রয় পয়েন্ট:</div>${data.sales_points.map(s=>`<div style="font-size:.83rem;color:var(--text3);padding:2px 0;">✅ ${esc(s)}</div>`).join('')}</div>`;
+
+  // ── এনগেজমেন্ট রিপ্লাই ────────────────────────────
+  } else if (curT === 'engagement_reply') {
+    if (data.comment_replies?.length) {
+      h += `<div style="font-family:var(--fh);font-weight:800;color:#fff;margin-bottom:10px;">💬 কমেন্ট রিপ্লাই</div>`;
+      h += data.comment_replies.map((r,i) => `
+        <div class="ri" style="margin-bottom:8px;">
+          <div style="font-size:.7rem;color:var(--text2);margin-bottom:4px;">${esc(r.type||`রিপ্লাই ${i+1}`)}</div>
+          <div style="font-size:.85rem;color:var(--text3);line-height:1.7;">${esc(r.reply)}</div>
+        </div>`).join('');
+    }
+    if (data.dm_replies?.length) {
+      const stageColor = {awareness:'tgr',interest:'tp',desire:'tgo',action:'tg'};
+      const stageLabel = {awareness:'সচেতনতা',interest:'আগ্রহ',desire:'ইচ্ছা',action:'ক্রয়'};
+      h += `<div style="font-family:var(--fh);font-weight:800;color:#fff;margin-top:18px;margin-bottom:10px;">📩 DM রিপ্লাই</div>`;
+      h += data.dm_replies.map((r,i) => `
+        <div class="ri" style="margin-bottom:8px;">
+          <span class="tag ${stageColor[r.stage]||'tgr'}" style="margin-bottom:6px;display:inline-flex;">${stageLabel[r.stage]||r.stage||`ধাপ ${i+1}`}</span>
+          <div style="font-size:.85rem;color:var(--text3);line-height:1.7;margin-top:5px;">${esc(r.message)}</div>
+        </div>`).join('');
+    }
+
+  // ── কন্টেন্ট অ্যানালাইসিস ─────────────────────────
+  } else if (curT === 'content_analysis') {
+    if (data.scores) {
+      const scoreColor = (n) => n>=8?'var(--accent3)':n>=6?'var(--gold)':'var(--accent2)';
+      const scoreLabel = {hook:'হুক',retention:'ধরে রাখা',engagement:'এনগেজমেন্ট',cta:'CTA'};
+      h += `<div class="ri mb2"><div style="font-weight:700;color:#fff;margin-bottom:12px;">📊 স্কোর</div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
+          ${Object.entries(data.scores).map(([k,v])=>`
+          <div style="text-align:center;background:var(--bg2);border-radius:var(--r2);padding:12px;">
+            <div style="font-family:var(--fh);font-size:1.8rem;font-weight:800;color:${scoreColor(v)};">${v}</div>
+            <div style="font-size:.72rem;color:var(--text2);">${scoreLabel[k]||k}</div>
+          </div>`).join('')}
+        </div></div>`;
+    }
+    if (data.problems?.length) {
+      h += `<div class="ri mb2"><div style="font-weight:700;color:var(--accent2);margin-bottom:8px;">⚠️ সমস্যা</div>
+        ${data.problems.map(p=>`<div style="font-size:.83rem;color:var(--text3);padding:3px 0;">❌ ${esc(p)}</div>`).join('')}</div>`;
+    }
+    if (data.solutions?.length) {
+      h += `<div class="ri mb2"><div style="font-weight:700;color:var(--accent3);margin-bottom:8px;">✅ সমাধান</div>
+        ${data.solutions.map(s=>`<div style="padding:6px 0;border-bottom:1px solid var(--border);">
+          <div style="font-weight:600;color:#fff;font-size:.85rem;">${s.step||''} ${esc(s.title||'')}</div>
+          <div style="font-size:.8rem;color:var(--text2);margin-top:2px;">${esc(s.action||'')}</div>
+        </div>`).join('')}</div>`;
+    }
+    if (data.quick_wins?.length) {
+      h += `<div class="alert a-s"><div style="font-weight:700;margin-bottom:6px;">⚡ দ্রুত উপায়</div>
+        ${data.quick_wins.map(w=>`<div style="font-size:.82rem;padding:2px 0;">✅ ${esc(w)}</div>`).join('')}</div>`;
+    }
+
+  // ── ফানেল বিল্ডার ──────────────────────────────────
+  } else if (curT === 'funnel_builder' && data.funnel) {
+    const stages = [
+      {key:'awareness',  ico:'👁️', label:'সচেতনতা (Awareness)',    color:'#6c63ff'},
+      {key:'interest',   ico:'🤔', label:'আগ্রহ (Interest)',         color:'#43e97b'},
+      {key:'desire',     ico:'❤️', label:'ইচ্ছা (Desire)',            color:'#f5c518'},
+      {key:'action',     ico:'🛒', label:'ক্রয় (Action)',            color:'#ff6584'},
+    ];
+    h = stages.map(s => {
+      const st = data.funnel[s.key]||{};
+      return `<div class="ri" style="border-left:3px solid ${s.color};border-radius:0 var(--r2) var(--r2) 0;margin-bottom:10px;">
+        <div style="font-weight:700;color:${s.color};margin-bottom:8px;">${s.ico} ${s.label}</div>
+        ${st.content?`<div style="font-size:.84rem;color:var(--text3);margin-bottom:5px;line-height:1.6;">${esc(st.content)}</div>`:''}
+        ${st.example?`<div style="font-size:.79rem;color:var(--text2);">উদাহরণ: ${esc(st.example)}</div>`:''}
+        ${st.lead_magnet?`<div style="font-size:.79rem;color:var(--accent3);">🎁 Lead Magnet: ${esc(st.lead_magnet)}</div>`:''}
+        ${st.social_proof?`<div style="font-size:.79rem;color:var(--gold);">⭐ ${esc(st.social_proof)}</div>`:''}
+        ${st.cta?`<div style="font-size:.82rem;font-weight:600;color:#fff;margin-top:6px;">📢 CTA: ${esc(st.cta)}</div>`:''}
+        ${st.offer?`<div style="font-size:.79rem;color:var(--text2);">অফার: ${esc(st.offer)}</div>`:''}
+        ${st.urgency?`<div style="font-size:.78rem;color:var(--accent2);">⏰ ${esc(st.urgency)}</div>`:''}
+      </div>`;
+    }).join('');
+    if (data.monthly_target) h += `<div class="alert a-s mt2">🎯 মাসিক লক্ষ্য: ${esc(data.monthly_target)}</div>`;
+
+  // ── fallback (যদি কোনো কাঠামো না থাকে) ────────────
   } else {
-    h = `<pre style="color:var(--text2);font-size:.79rem;overflow-x:auto;white-space:pre-wrap;">${JSON.stringify(data,null,2)}</pre>`;
+    // Try to render any object nicely instead of raw JSON
+    h = Object.entries(data).map(([key, val]) => {
+      const display = Array.isArray(val)
+        ? val.map(v => typeof v === 'object' ? Object.values(v).join(' — ') : String(v)).join('<br>')
+        : typeof val === 'object' ? JSON.stringify(val, null, 2) : String(val);
+      return `<div class="ri mb2"><div style="font-size:.7rem;color:var(--text2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;">${esc(key)}</div><div style="font-size:.85rem;color:var(--text3);line-height:1.7;">${display}</div></div>`;
+    }).join('');
   }
   body.innerHTML = h;
 }
