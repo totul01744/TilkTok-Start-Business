@@ -561,25 +561,50 @@ const DB = {
 
 /* ══ AUTH ══ */
 function doLogin() {
-  const pass = document.getElementById('lpass').value;
-  const correct = localStorage.getItem('c2b_admin_pass') || ADMIN_PASSWORD;
+  const pass = document.getElementById('lpass').value.trim();
+  if (!pass) return;
+
+  // Firebase আগে init হয়েছে কিনা চেক করো
+  if (!fdb) {
+    const ok = fbInit();
+    if (!ok) {
+      T.err('Firebase সংযোগ সমস্যা! config.js চেক করুন।');
+      return;
+    }
+  }
+
+  let correct;
+  try {
+    correct = localStorage.getItem('c2b_admin_pass') || ADMIN_PASSWORD;
+  } catch(e) {
+    correct = 'Totul1122@'; // fallback
+  }
+
   if (pass === correct) {
     localStorage.setItem('c2b_adm', '1');
+    document.getElementById('lerr').classList.add('hidden');
     bootAdmin();
   } else {
     document.getElementById('lerr').classList.remove('hidden');
+    document.getElementById('lpass').value = '';
+    document.getElementById('lpass').focus();
   }
 }
 function doLogout() { localStorage.removeItem('c2b_adm'); location.reload(); }
 
 async function bootAdmin() {
-  document.getElementById('loginWrap').classList.add('hidden');
-  document.getElementById('admApp').classList.remove('hidden');
-  document.getElementById('dashDate').textContent = new Date().toLocaleDateString('bn-BD', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-  await refresh();
-  buildDrb();
-  loadSettings();
-  startLiveBadges();
+  try {
+    document.getElementById('loginWrap').classList.add('hidden');
+    document.getElementById('admApp').classList.remove('hidden');
+    document.getElementById('dashDate').textContent = new Date().toLocaleDateString('bn-BD', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+    await refresh();
+    buildDrb();
+    loadSettings();
+    startLiveBadges();
+  } catch(e) {
+    console.error('bootAdmin error:', e);
+    T.err('লোড সমস্যা: ' + e.message);
+  }
 }
 
 /* ══ LIVE BADGES ══ */
@@ -1102,7 +1127,7 @@ async function saveProd() {
     else { const id='p'+Date.now(); await DB.set('products/'+id, {...data,id,createdAt:new Date().toISOString(),active:true}); T.ok('যোগ হয়েছে ✅'); }
     Modal.hide('prodMo'); renderProds(); refresh();
   } catch(e) { T.err('সমস্যা: '+e.message); }
-}}
+}
 async function toggleProd(id,active) { await DB.update('products/'+id,{active:!active}); renderProds(); T.ok(active?'অফ করা হয়েছে':'চালু করা হয়েছে'); }
 async function delProd(id) { if(!confirm('মুছবেন?'))return; await DB.remove('products/'+id); renderProds(); refresh(); T.ok('মুছা হয়েছে'); }
 
@@ -1136,16 +1161,30 @@ document.addEventListener('DOMContentLoaded', () => {
   T._i();
   document.querySelectorAll('.mo').forEach(o => o.addEventListener('click', e => { if(e.target===o) o.classList.add('hidden'); }));
 
-  const fbOK = fbInit();
-  if (!fbOK) {
-    alert('Firebase config সমস্যা! config.js চেক করুন।');
-    return;
+  // Firebase init চেষ্টা করো, fail হলেও login page দেখাও
+  try {
+    fbInit();
+  } catch(e) {
+    console.warn('Firebase init warning:', e.message);
   }
 
   document.getElementById('lpass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+  document.getElementById('lpass').focus();
 
+  // আগে লগইন ছিল কিনা চেক করো
   if (localStorage.getItem('c2b_adm') === '1') {
-    bootAdmin();
+    // Firebase ready না হলে অপেক্ষা করো
+    if (fdb) {
+      bootAdmin();
+    } else {
+      // Firebase init retry
+      const ok = fbInit();
+      if (ok) {
+        bootAdmin();
+      } else {
+        localStorage.removeItem('c2b_adm'); // stale session clear
+      }
+    }
   }
 });
 </script>
